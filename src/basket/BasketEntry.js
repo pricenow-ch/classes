@@ -1,7 +1,7 @@
 import DateHelper from '../DateHelper'
 import moment from 'moment-timezone'
 import UserData from './UserData'
-import definitions from '../../../../src/definitions'
+import definitions from '../../../../../src/definitions'
 
 export default class BasketEntry {
   constructor(params) {

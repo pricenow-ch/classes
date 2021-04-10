@@ -78,8 +78,8 @@ export default class AppDestination extends Destination {
       // BELLWALD
       case config.destinations.bellwald:
         this.setCustomDesign(
-          require('../../../../src/assets/destinations/headerImage/bellwald.jpg'),
-          require('../../../../src/assets/destinations/backgroundImage/bellwald.jpg'),
+          require('../../../../../src/assets/destinations/headerImage/bellwald.jpg'),
+          require('../../../../../src/assets/destinations/backgroundImage/bellwald.jpg'),
           '#d50612',
           '#f7cdd0'
         )
@@ -87,8 +87,8 @@ export default class AppDestination extends Destination {
       // VALS
       case config.destinations.vals:
         this.setCustomDesign(
-          require('../../../../src/assets/destinations/headerImage/vals.jpg'),
-          require('../../../../src/assets/destinations/backgroundImage/vals.jpg'),
+          require('../../../../../src/assets/destinations/headerImage/vals.jpg'),
+          require('../../../../../src/assets/destinations/backgroundImage/vals.jpg'),
           '#40605a',
           '#40605a'
         )
@@ -96,8 +96,8 @@ export default class AppDestination extends Destination {
       // NIESEN
       case config.destinations.niesen:
         this.setCustomDesign(
-          require('../../../../src/assets/destinations/headerImage/niesen.jpg'),
-          require('../../../../src/assets/destinations/backgroundImage/niesen.jpg'),
+          require('../../../../../src/assets/destinations/headerImage/niesen.jpg'),
+          require('../../../../../src/assets/destinations/backgroundImage/niesen.jpg'),
           '#004183',
           '#004183'
         )
@@ -105,8 +105,8 @@ export default class AppDestination extends Destination {
       // CHAESERRUGG
       case config.destinations.chaeserrugg:
         this.setCustomDesign(
-          require('../../../../src/assets/destinations/headerImage/chaeserrugg.jpg'),
-          require('../../../../src/assets/destinations/backgroundImage/chaeserrugg.jpg'),
+          require('../../../../../src/assets/destinations/headerImage/chaeserrugg.jpg'),
+          require('../../../../../src/assets/destinations/backgroundImage/chaeserrugg.jpg'),
           '#909090',
           '#909090'
         )
@@ -114,8 +114,8 @@ export default class AppDestination extends Destination {
       // MOOSALPREGION
       case config.destinations.moosalpregion:
         this.setCustomDesign(
-          require('../../../../src/assets/destinations/headerImage/moosalpregion.jpg'),
-          require('../../../../src/assets/destinations/backgroundImage/moosalpregion.jpg'),
+          require('../../../../../src/assets/destinations/headerImage/moosalpregion.jpg'),
+          require('../../../../../src/assets/destinations/backgroundImage/moosalpregion.jpg'),
           '#78B6E2',
           '#78B6E2'
         )
@@ -123,8 +123,8 @@ export default class AppDestination extends Destination {
       // DEFAULT
       default:
         this.setCustomDesign(
-          require('../../../../src/assets/destinations/headerImage/default.jpg'),
-          require('../../../../src/assets/destinations/backgroundImage/bellwald.jpg'),
+          require('../../../../../src/assets/destinations/headerImage/default.jpg'),
+          require('../../../../../src/assets/destinations/backgroundImage/bellwald.jpg'),
           '#1b3e5e',
           '#f7cdd0'
         )

@@ -1,5 +1,5 @@
 import moment from 'moment'
-import store from '../../../../src/store/store'
+import store from '../../../../../src/store/store'
 import CashDeskPrice from './CashDeskPrice'
 
 export default class CashDeskPriceService {

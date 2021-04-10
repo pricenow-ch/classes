@@ -1,6 +1,6 @@
 import Products from '../products/Products'
 import ShopModule from './ShopModule'
-import definitions from '../../../../src/definitions'
+import definitions from '../../../../../src/definitions'
 import EventHelper from '../events/EventHelper'
 import EventsModule from './modules/events/EventsModule'
 import Events from '../events/Events'

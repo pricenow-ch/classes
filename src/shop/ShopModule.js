@@ -4,7 +4,7 @@ import StepperHeader from './StepperHeader'
 import moduleConfigurations from '../../../shopConfiguration/index.js'
 import definitions from '../../../definitions'
 import moment from 'moment'
-import router from '../../../../src/router'
+import router from '../../../../../src/router'
 
 export default class ShopModule {
   constructor(params) {

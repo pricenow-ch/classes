@@ -1,4 +1,4 @@
-import store from '../../../../src/store/store'
+import store from '../../../../../src/store/store'
 import moment from 'moment'
 import MaximumEarlyBookingDiscount from './MaximumEarlyBookingDiscount'
 
