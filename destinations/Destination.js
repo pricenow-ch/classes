@@ -60,21 +60,21 @@ export default class Destination {
   // base url to the api
   getShopApi(withRegion = true, slug = this.slug) {
     if (withRegion) {
-      return config.apiUrl + slug + '/'
-    } else return config.apiUrl
+      return `${process.env.VUE_APP_SHOP_API_URL}/slug/`
+    } else return process.env.VUE_APP_SHOP_API_URL
   }
 
   // base url to the price engine api
   getPeApi(slug = this.slug) {
     if (!slug) {
-      return config.peApiUrl
+      return process.env.VUE_APP_PE_API_URL
     }
-    return config.peApiUrl + slug + '/'
+    return `${process.env.VUE_APP_PE_API_URL}/slug/`
   }
 
   // base url to the price engine api
   getBasePeApi() {
-    return config.peApiUrl
+    return process.env.VUE_APP_PE_API_URL
   }
 
   /**

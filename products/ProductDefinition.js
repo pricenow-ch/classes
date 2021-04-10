@@ -256,9 +256,10 @@ export default class ProductDefinition {
     if (latestBookingTime === null) return true
 
     // calc latest booking time today
-    let todayMoment = moment().tz(config.timezone)
+    const timezone = process.env.VUE_APP_TIMEZONE || 'Europe/Zurich'
+    let todayMoment = moment().tz(timezone)
     let maximalBookingMoment = moment
-      .tz(bookingDateInstance, config.timezone)
+      .tz(bookingDateInstance, timezone)
       .hours(0)
       .minutes(0)
       .seconds(0)
