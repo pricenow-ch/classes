@@ -1,4 +1,4 @@
-const DateRange = require('./Authentication')
+const DateRange = require('./DateRange')
 
 module.exports = {
   DateRange,
