@@ -37,7 +37,7 @@ export default class AppDestination extends Destination {
 
   async init() {
     // load the slug
-    await this.loadSlug()
+    this.loadSlug()
     // set logo after slug was loaded
     this.setLogo()
     // loading header image
@@ -50,23 +50,14 @@ export default class AppDestination extends Destination {
    * parsing the subdomain
    */
   loadSlug() {
-    // get subdomain starting and end index
-    let fullHostName = window.location.hostname //'pricing.test.pricenow.ch'// window.location.hostname
-    let subdomain = fullHostName
-
-    if (fullHostName !== 'localhost') {
-      subdomain = fullHostName.substring(0, fullHostName.match(/\./).index)
-    }
-
     // iterate destinations
     for (let destination in config.destinations) {
-      if (subdomain === destination) {
+      if (process.env.VUE_APP_DESTINATION === destination) {
         this.slug = config.destinations[destination]
       }
     }
 
-    if (!this.slug) this.slug = config.destinations['undefined']
-    return Promise
+    return this.slug || config.destinations['undefined']
   }
 
   /**
