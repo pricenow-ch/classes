@@ -1,4 +1,4 @@
-import DateHelper from './DateHelper'
+import DateHelper from '../DateHelper'
 
 export default class ExtraRide {
   constructor(params) {

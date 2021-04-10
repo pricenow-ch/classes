@@ -1,5 +1,5 @@
 /* Provides state information for skidata and axess */
-import Card from '../Card'
+import Card from '../card/Card'
 
 export default class ExternalTicketProviderState {
   constructor(params, type) {

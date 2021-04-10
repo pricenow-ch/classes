@@ -1,6 +1,6 @@
 import User from './User'
 import UserDestinations from '../destinations/UserDestinations'
-import Card from '../Card'
+import Card from '../card/Card'
 import UserBookings from '../bookings/UserBookings'
 
 /**

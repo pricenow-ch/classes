@@ -1,4 +1,4 @@
-import Card from '../Card'
+import Card from '../card/Card'
 import Salutations from '../salutations/Salutations'
 import Salutation from '../salutations/Salutation'
 
