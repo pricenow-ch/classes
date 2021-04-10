@@ -1,10 +1,10 @@
 import Attributes from './Attributes'
 import DateHelper from '../DateHelper'
-import store from '@/store/store'
+import store from '../../../../src/store/store'
 import Product from './Product'
 import moment from 'moment-timezone'
 import Price from './Price'
-import definitions from '@/definitions'
+import definitions from '../../../../src/definitions'
 import RequiredProductDefinitions from './RequiredProductDefinitions'
 
 export default class ProductDefinition {

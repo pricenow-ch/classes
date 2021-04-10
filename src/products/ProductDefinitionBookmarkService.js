@@ -1,4 +1,4 @@
-import store from '@/store/store'
+import store from '../../../../src/store/store'
 
 /**
  * handles the favorites/bookmarks fetching and storing persistently

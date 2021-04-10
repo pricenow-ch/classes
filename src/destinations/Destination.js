@@ -1,4 +1,4 @@
-import config from '@/config'
+import config from '../../../config'
 
 export default class Destination {
   constructor(params) {
@@ -26,14 +26,14 @@ export default class Destination {
     try {
       // allow dynamic file type endings
       const context = require.context(
-        '@/assets/destinations/logo/',
+        '../../../../src/assets/destinations/logo/',
         false,
         /\.(png|jpe?g|svg)$/
       )
       const url = context.keys().find((key) => key.includes(this.slug))
       this.logo = context(url)
     } catch (e) {
-      this.logo = require('@/assets/destinations/logo/default.png')
+      this.logo = require('../../../../src/assets/destinations/logo/default.png')
     }
   }
 
@@ -45,7 +45,7 @@ export default class Destination {
   // for example in the basket
   getDefaultProductImage() {
     try {
-      return require('@/assets/destinations/defaultProductImage/' +
+      return require('../../../../src/assets/destinations/defaultProductImage/' +
         this.slug +
         '.jpg')
     } catch (e) {

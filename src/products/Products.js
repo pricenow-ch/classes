@@ -1,4 +1,4 @@
-import store from '@/store/store'
+import store from '../../../../src/store/store'
 import Product from './Product'
 import _ from 'lodash'
 import DateHelper from '../DateHelper'

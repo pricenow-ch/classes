@@ -1,6 +1,6 @@
 import XLSX from 'xlsx'
 import XlsxHelper from '../XLSX/XlsxHelper'
-import store from '@/store/store'
+import store from '../../../../src/store/store'
 import DateHelper from '../DateHelper'
 
 export default class VoucherExport {

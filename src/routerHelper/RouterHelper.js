@@ -3,7 +3,7 @@
  * divides routes into different routing sections: backend (backend pe and backend shop) and user profile routes (where login is required)
  */
 import PermissionHandler from './PermissionHandler'
-import store from '@/store/store'
+import store from '../../../../src/store/store'
 export default class RouterHelper {
   constructor($router) {
     this.$router = $router

@@ -1,5 +1,5 @@
 import Destination from './Destination'
-import store from '@/store/store'
+import store from '../../../../src/store/store'
 import DateHelper from '../DateHelper'
 /**
  * Child class of destination used mostly in AppUserInstance. Maybe also in the filter of the pricing engine.
