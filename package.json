@@ -1,6 +1,6 @@
 {
   "name": "@pricenow/classes",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Shared classes for the frontends",
   "main": "src/index.js",
   "scripts": {
