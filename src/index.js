@@ -11,6 +11,7 @@ const destinations = require('./destinations')
 const entityTranslations = require('./entityTranslations')
 const events = require('./events')
 const externalUrl = require('./externalUrl')
+const extraRide = require('./extraRide')
 const files = require('./files')
 const formRequest = require('./formRequest')
 const navigationStores = require('./navigationStores')
@@ -27,17 +28,11 @@ const vats = require('./vats')
 const vouchers = require('./vouchers')
 const vuetify = require('./VuetifyHelper')
 const xlsx = require('./XLSX')
-const Card = require('./Card')
 const DateHelper = require('./DateHelper')
-const ExtraRide = require('./ExtraRide')
-const ExtraRides = require('./ExtraRides')
 const NumberHelper = require('./NumberHelper')
 
 module.exports = {
-  Card,
   DateHelper,
-  ExtraRide,
-  ExtraRides,
   NumberHelper,
   ...analytics,
   ...authentication,
@@ -52,6 +47,7 @@ module.exports = {
   ...entityTranslations,
   ...events,
   ...externalUrl,
+  ...extraRide,
   ...files,
   ...formRequest,
   ...navigationStores,
