@@ -1,4 +1,4 @@
-import definitions from '../../../definitions'
+import definitions from '@/definitions'
 import BookingState from './BookingState'
 
 /**

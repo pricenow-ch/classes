@@ -1,7 +1,7 @@
 /**
  * holds the custom data in a basket entry to store data like selected card id or booking state
  */
-import definitions from '../../../definitions'
+import definitions from '@/definitions'
 import User from '../user/User.js'
 
 export default class UserData {

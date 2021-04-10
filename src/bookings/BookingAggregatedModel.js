@@ -1,5 +1,5 @@
+import Event from '../events/Event'
 import ProductCapacity from '../products/ProductCapacity'
-import Event from '../../classes/events/Event.js'
 
 export default class BookingAggregatedModel {
   constructor(params) {

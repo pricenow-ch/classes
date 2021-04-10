@@ -4,12 +4,12 @@ import store from '@/store/store'
 import Product from './Product'
 import moment from 'moment-timezone'
 import Price from './Price'
-import definitions from '../../../definitions'
-import config from '../../../config'
+import definitions from '@/definitions'
 import RequiredProductDefinitions from './RequiredProductDefinitions'
 
 export default class ProductDefinition {
-  constructor(params) {
+  constructor(params, timezone) {
+    this.timezone = timezone
     this.id = params.id ? params.id : null
     this.name = params.name ? params.name : null
     this.skidataId = params.skidataId ? params.skidataId : null
@@ -256,9 +256,9 @@ export default class ProductDefinition {
     if (latestBookingTime === null) return true
 
     // calc latest booking time today
-    let todayMoment = moment().tz(config.timezone)
+    let todayMoment = moment().tz(this.timezone)
     let maximalBookingMoment = moment
-      .tz(bookingDateInstance, config.timezone)
+      .tz(bookingDateInstance, this.timezone)
       .hours(0)
       .minutes(0)
       .seconds(0)

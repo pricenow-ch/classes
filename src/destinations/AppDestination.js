@@ -1,5 +1,5 @@
 import Destination from './Destination'
-import config from '../../../config.js'
+import config from '@/config.js'
 import AppSeasons from './AppSeasons'
 
 /**
