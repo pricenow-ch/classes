@@ -37,7 +37,7 @@ export default class AppDestination extends Destination {
 
   async init() {
     // load the slug
-    this.loadSlug()
+    await this.loadSlug()
     // set logo after slug was loaded
     this.setLogo()
     // loading header image
@@ -57,7 +57,8 @@ export default class AppDestination extends Destination {
       }
     }
 
-    return this.slug || config.destinations['undefined']
+    if (!this.slug) this.slug = config.destinations['undefined']
+    return Promise
   }
 
   /**
