@@ -1,7 +1,7 @@
 import XLSX from 'xlsx'
-import XlsxHelper from '@/classes/XLSX/XlsxHelper'
+import XlsxHelper from '../XLSX/XlsxHelper'
 import store from '@/store/store'
-import DateHelper from '@/classes/DateHelper'
+import DateHelper from '../DateHelper'
 
 export default class VoucherExport {
   async getVouchersForExportUntil(lastDate) {

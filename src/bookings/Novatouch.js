@@ -1,4 +1,4 @@
-import ExternalTicketProviderState from '@/classes/bookings/ExternalTicketProviderState'
+import ExternalTicketProviderState from './ExternalTicketProviderState'
 
 export default class Novatouch extends ExternalTicketProviderState {
   constructor(params) {

@@ -1,6 +1,6 @@
 import store from '@/store/store'
 import moment from 'moment'
-import MaximumEarlyBookingDiscount from '@/classes/products/MaximumEarlyBookingDiscount'
+import MaximumEarlyBookingDiscount from './MaximumEarlyBookingDiscount'
 
 export default class MaximumEarlyBookingDiscountService {
   /**

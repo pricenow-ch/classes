@@ -5,8 +5,8 @@ import Skidata from './Skidata'
 import Event from '../events/Event.js'
 import Vats from '../vats/Vats'
 import Novatouch from './Novatouch'
-import Axess from '@/classes/bookings/Axess'
-import Swisspass from '@/classes/bookings/Swisspass'
+import Axess from './Axess'
+import Swisspass from './Swisspass'
 
 export default class BookingEntry {
   constructor(params) {

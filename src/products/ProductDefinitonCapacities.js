@@ -1,6 +1,6 @@
 import store from '@/store/store'
 import moment from 'moment'
-import ExpectedDemand from '@/classes/products/ExpectedDemand'
+import ExpectedDemand from './ExpectedDemand'
 
 // loads realized demand => old pattern => to be refactored
 export default class ProductDefinitionCapacities {

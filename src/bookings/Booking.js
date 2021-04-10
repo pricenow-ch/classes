@@ -5,7 +5,7 @@ import BookingStates from './BookingStates'
 import GroupDiscounts from '../basket/GroupDiscounts'
 import Vats from '../vats/Vats'
 import Destination from '../destinations/Destination'
-import Payment from '@/classes/bookings/Payment'
+import Payment from './Payment'
 
 export default class Booking {
   constructor(params) {

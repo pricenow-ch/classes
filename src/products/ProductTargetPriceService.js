@@ -1,6 +1,6 @@
 import moment from 'moment'
 import store from '@/store/store'
-import TargetPrice from '@/classes/products/ProductTargetPrice'
+import TargetPrice from './ProductTargetPrice'
 
 export default class ProductTargetPriceService {
   /**

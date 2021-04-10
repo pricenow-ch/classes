@@ -1,5 +1,5 @@
 /** api interface class to talk with the api **/
-import Season from '@/classes/season/Season'
+import Season from '../season/Season'
 
 export default class AxessManagementService {
   /**

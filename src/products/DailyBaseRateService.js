@@ -1,6 +1,6 @@
 import moment from 'moment'
 import store from '@/store/store'
-import DailyBaseRate from '@/classes/products/DailyBaseRate'
+import DailyBaseRate from './DailyBaseRate'
 
 /**
  * Daily Base Rate Service

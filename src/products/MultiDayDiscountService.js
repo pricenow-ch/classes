@@ -1,6 +1,6 @@
 import store from '@/store/store'
 import moment from 'moment'
-import MultiDayDiscount from '@/classes/products/MultiDayDiscount'
+import MultiDayDiscount from './MultiDayDiscount'
 
 export default class CurrentPostedPriceService {
   /**

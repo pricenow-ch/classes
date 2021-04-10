@@ -1,6 +1,6 @@
 import store from '@/store/store'
 import moment from 'moment'
-import CurrentPostedPrice from '@/classes/products/CurrentPostedPrice'
+import CurrentPostedPrice from './CurrentPostedPrice'
 
 export default class PriceHistoryService {
   /**

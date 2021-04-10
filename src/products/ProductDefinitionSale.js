@@ -1,7 +1,7 @@
 /**
  * admin sales endpoint model
  */
-import Sale from '@/classes/products/Sale'
+import Sale from './Sale'
 
 export default class ProductDefinitionSale {
   constructor(params) {

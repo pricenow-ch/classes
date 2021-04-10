@@ -1,4 +1,4 @@
-import ProductSeason from '@/classes/season/ProductSeason'
+import ProductSeason from './ProductSeason'
 
 export default class Season {
   constructor(singleSeason, destinationInstance = null) {

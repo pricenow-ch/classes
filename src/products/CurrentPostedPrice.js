@@ -1,4 +1,4 @@
-import Price from '@/classes/products/Price'
+import Price from './Price'
 import moment from 'moment'
 
 /**
