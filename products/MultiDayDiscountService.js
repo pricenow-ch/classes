@@ -21,8 +21,8 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     let multiDayDiscounts = []
     try {
-      const { status, data } = await axios.get(
-        baseUrl + 'admin/multi_day_discount',
+      const { status, data } = await peInstance.get(
+        '/admin/multi_day_discount',
         {
           params: {
             from: moment(from).format('YYYY-MM-DD'),
@@ -122,7 +122,7 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     try {
       const id = multiDayDiscountObj.customMultiDayDiscountId
-      await axios.delete(`/admin/multi_day_discount/${id}`)
+      await peInstance.delete(`/admin/multi_day_discount/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

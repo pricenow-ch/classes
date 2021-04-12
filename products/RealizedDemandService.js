@@ -1,6 +1,7 @@
 import store from '../../store/store'
 import moment from 'moment'
 import RealizedDemand from '@/classes/products/RealizedDemand'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class RealizedDemandService {
   /**
@@ -19,7 +20,7 @@ export default class RealizedDemandService {
     /* global axios */
     let realizedDemand = {}
     try {
-      const { status, data } = await axios.get('/admin/realized_demand', {
+      const { status, data } = await peInstance.get('/admin/realized_demand', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),
