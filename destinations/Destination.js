@@ -60,7 +60,7 @@ export default class Destination {
   // base url to the api
   getShopApi(withRegion = true, slug = this.slug) {
     if (withRegion) {
-      return `${process.env.VUE_APP_SHOP_API_URL}/slug/`
+      return `${process.env.VUE_APP_SHOP_API_URL}/${slug}/`
     } else return process.env.VUE_APP_SHOP_API_URL
   }
 
@@ -69,7 +69,7 @@ export default class Destination {
     if (!slug) {
       return process.env.VUE_APP_PE_API_URL
     }
-    return `${process.env.VUE_APP_PE_API_URL}/slug/`
+    return `${process.env.VUE_APP_PE_API_URL}/${slug}/`
   }
 
   // base url to the price engine api
