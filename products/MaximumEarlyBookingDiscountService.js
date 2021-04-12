@@ -39,7 +39,7 @@ export default class MaximumEarlyBookingDiscountService {
       )
 
       if (status === 200) {
-        maxEarlyBookingsDiscounts = data.map(
+        maxEarlyBookingDiscounts = data.map(
           (earlyBooking) => new MaximumEarlyBookingDiscount(earlyBooking)
         )
       } else {
