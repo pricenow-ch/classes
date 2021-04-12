@@ -7,6 +7,7 @@ import Price from './Price'
 import definitions from '../../../definitions'
 import config from '../../../config'
 import RequiredProductDefinitions from './RequiredProductDefinitions'
+import { peInstance } from '../../utils/axiosInstance'
 
 export default class ProductDefinition {
   constructor(params) {
@@ -98,17 +99,14 @@ export default class ProductDefinition {
     this.fromDateInstance = from
     this.toDateInstance = to
 
-    let baseUrl = destinationInstance
-      ? store.getters
-          .getCurrentDestinationInstance()
-          .getPeApi(destinationInstance.getSlug())
-      : store.getters.getCurrentDestinationInstance().getPeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        baseUrl + 'products/definition/' + this.id + '/prices',
+      const response = await peInstance.get(
+        `${destinationInstance?.getSlug() || ''}/products/definition/${
+          this.id
+        }/prices`,
         {
           params: {
             from: DateHelper.shiftLocalToUtcIsoString(this.fromDateInstance),

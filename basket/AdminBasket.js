@@ -1,3 +1,4 @@
+import { peInstance } from '../../utils/axiosInstance'
 import Basket from './Basket'
 import GroupDiscounts from './GroupDiscounts'
 
@@ -17,11 +18,7 @@ export default class AdminBasket extends Basket {
     }
     EventBus.$emit('spinnerShow')
     try {
-      const response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          uuid
-      )
+      const response = await peInstance.get(`/baskets/${uuid}`)
       await this.parseApiData(response.data)
       return true
     } catch (e) {

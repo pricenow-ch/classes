@@ -8,6 +8,7 @@ import definitions from '../../../definitions'
 import Events from '../events/Events.js'
 import ExtendedAttributes from './ExtendedAttributes'
 import Price from './Price'
+import { peInstance } from '../../utils/axiosInstance'
 
 export default class Product {
   constructor(params) {
@@ -94,12 +95,8 @@ export default class Product {
       /* global EventBus axios */
       EventBus.$emit('spinnerShow')
       try {
-        let response = await axios.get(
-          store.getters.getCurrentDestinationInstance().getPeApi() +
-            'products/' +
-            this.id
-        )
-        let productData = response.data
+        const response = await peInstance.get(`/products/${this.id}`)
+        const productData = response.data
         this.constructor(productData)
         if (productData.productDefinitions)
           await this.addProductDefinitions(productData.productDefinitions)
@@ -136,20 +133,14 @@ export default class Product {
 
   async loadPrices(fromDateInstance, toDateInstance) {
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'products/' +
-          this.id +
-          '/prices',
-        {
-          params: {
-            from: DateHelper.shiftLocalToUtcIsoString(fromDateInstance),
-            to: DateHelper.shiftLocalToUtcIsoString(toDateInstance),
-          },
-        }
-      )
-      let prices = response.data
-      let prodDefsIdsAdded = []
+      const response = await peInstance.get(`/products/${this.id}/prices`, {
+        params: {
+          from: DateHelper.shiftLocalToUtcIsoString(fromDateInstance),
+          to: DateHelper.shiftLocalToUtcIsoString(toDateInstance),
+        },
+      })
+      const prices = response.data
+      const prodDefsIdsAdded = []
       // assign prices to product definitions
       for (let i = 0; i < prices.length; i++) {
         let currentProductDefinitionId = prices[i].productDefinition.id
@@ -354,11 +345,8 @@ export default class Product {
     EventBus.$emit('spinnerShow', i18n.t('product.loadingValidityDates'))
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'products/' +
-          this.id +
-          '/validity_dates'
+      const response = await peInstance.get(
+        `/products/${this.id}/validity_dates`
       )
 
       this.validityDates = response.data.validityDates.sort()
