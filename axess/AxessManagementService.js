@@ -46,7 +46,7 @@ export default class AxessManagementService {
       return i18n.t('axessManagementService.noDestinationProvided')
     }
     try {
-      await peInstance.patch(`'/admin/imports/axess/newSeasons`, undefined, {
+      await peInstance.patch(`/admin/imports/axess/newSeasons`, undefined, {
         params: {
           destinationNames: destinationSlug,
         },
