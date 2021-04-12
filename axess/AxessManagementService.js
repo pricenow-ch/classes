@@ -17,11 +17,14 @@ export default class AxessManagementService {
       return false
     }
     try {
-      const { data } = await peInstance(false).get('/admin/imports/axess/newSeasons', {
-        params: {
-          destinationNames: destinationSlug,
-        },
-      })
+      const { data } = await peInstance(false).get(
+        '/admin/imports/axess/newSeasons',
+        {
+          params: {
+            destinationNames: destinationSlug,
+          },
+        }
+      )
       // create model instances
       // iterate seasons
       let peSeasons = []

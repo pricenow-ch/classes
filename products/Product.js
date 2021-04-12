@@ -369,7 +369,9 @@ export default class Product {
     try {
       const response = await peInstance(false).put(
         `/admin/${this.id}/validity_dates`,
-        { validityDates: validDatesArray }
+        {
+          validityDates: validDatesArray,
+        }
       )
       this.validityDates = response.data.validityDates.sort()
       EventBus.$emit(

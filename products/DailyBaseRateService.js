@@ -20,13 +20,16 @@ export default class DailyBaseRateService {
     EventBus.$emit('spinnerShow')
     let baseRates = []
     try {
-      const { data, status } = await peInstance(false).get('/admin/daily_base_rates', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-          productIds: productIds.join(','),
-        },
-      })
+      const { data, status } = await peInstance(false).get(
+        '/admin/daily_base_rates',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+            productIds: productIds.join(','),
+          },
+        }
+      )
 
       if (status === 200) {
         baseRates = data.map((baseRate) => new DailyBaseRate(baseRate))

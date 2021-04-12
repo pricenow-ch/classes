@@ -20,12 +20,15 @@ export default class ProductDefinitionPrices {
     try {
       this.prices = {}
       this.loading = true
-      const { data, status } = await peInstance(false).get('/admin/prices/daily', {
-        params: {
-          productIds: prodIds.join(','),
-          date: moment(date).format('YYYY-MM-DD'),
-        },
-      })
+      const { data, status } = await peInstance(false).get(
+        '/admin/prices/daily',
+        {
+          params: {
+            productIds: prodIds.join(','),
+            date: moment(date).format('YYYY-MM-DD'),
+          },
+        }
+      )
 
       if (status === 200) {
         data.prices.forEach((price) => {

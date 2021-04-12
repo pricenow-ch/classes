@@ -20,13 +20,16 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     let prices = []
     try {
-      const { data, status } = await peInstance(false).get('/admin/prices/current', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-          prodDefIds: productDefinitionIds.join(','),
-        },
-      })
+      const { data, status } = await peInstance(false).get(
+        '/admin/prices/current',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+            prodDefIds: productDefinitionIds.join(','),
+          },
+        }
+      )
 
       if (status === 200) {
         prices = data.prices.map(
