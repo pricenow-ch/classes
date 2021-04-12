@@ -367,11 +367,8 @@ export default class Product {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow', i18n.t('product.updatingValidityDates'))
     try {
-      let response = await axios.put(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/' +
-          this.id +
-          '/validity_dates',
+      const response = await peInstance.put(
+        `/admin/${this.id}/validity_dates`,
         { validityDates: validDatesArray }
       )
       this.validityDates = response.data.validityDates.sort()
@@ -392,12 +389,9 @@ export default class Product {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow', i18n.t('product.updatingValidityDates'))
     try {
-      await axios.put(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/products/' +
-          this.id,
-        { active: !this.active }
-      )
+      await peInstance.put(`/admin/products/${this.id}`, {
+        active: !this.active,
+      })
       this.active = !this.active
     } catch (e) {
       EventBus.$emit('notify', i18n.t('singleProductView.errorUpdatingActive'))

@@ -1,5 +1,6 @@
 /** api interface class to talk with the api **/
 import Season from '@/classes/season/Season'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class AxessManagementService {
   /**
@@ -16,19 +17,15 @@ export default class AxessManagementService {
       return false
     }
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/imports/axess/newSeasons',
-        {
-          params: {
-            destinationNames: destinationSlug,
-          },
-        }
-      )
+      const { data } = await peInstance.get('/admin/imports/axess/newSeasons', {
+        params: {
+          destinationNames: destinationSlug,
+        },
+      })
       // create model instances
       // iterate seasons
       let peSeasons = []
-      const rawSeasons = response.data
+      const rawSeasons = data
       for (const rawSeason of rawSeasons) {
         peSeasons.push(new Season(rawSeason))
       }
@@ -49,11 +46,11 @@ export default class AxessManagementService {
       return i18n.t('axessManagementService.noDestinationProvided')
     }
     try {
-      await axios.patch(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/imports/axess/newSeasons?destinationNames=' +
-          destinationSlug
-      )
+      await peInstance.patch(`'/admin/imports/axess/newSeasons`, undefined, {
+        params: {
+          destinationNames: destinationSlug,
+        },
+      })
       return true
     } catch (error) {
       return error.response.data.error

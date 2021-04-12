@@ -1,4 +1,4 @@
-import { shopInstance } from '../utils/axiosInstance'
+import { peInstance, shopInstance } from '../utils/axiosInstance'
 import FileModel from './FileModel'
 
 export default class FileUploadService {
@@ -53,9 +53,8 @@ export default class FileUploadService {
       /* global EventBus axios i18n */
       EventBus.$emit('spinnerShow', i18n.t('fileUploadService.processingExcel'))
 
-      let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
       try {
-        await axios.post(baseUrl + 'admin/imports', formData, {
+        await peInstance.post('/admin/imports', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

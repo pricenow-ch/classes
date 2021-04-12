@@ -1,6 +1,7 @@
 import store from '../../store/store'
 import moment from 'moment'
 import CurrentPostedPrice from '@/classes/products/CurrentPostedPrice'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class PriceHistoryService {
   /**
@@ -11,15 +12,13 @@ export default class PriceHistoryService {
    * @returns {Promise<[]>}
    */
   async fetchHistory(date = new Date(), productDefinitionIds = []) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
-
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let prices = []
     try {
       const dateStr = moment(date).format('YYYY-MM-DD')
-      let response = await axios.get(
-        baseUrl + `admin/prices/historical/${dateStr}`,
+      const { status, data } = await peInstance.get(
+        `admin/prices/historical/${dateStr}`,
         {
           params: {
             prodDefIds: productDefinitionIds.join(','),
@@ -27,10 +26,8 @@ export default class PriceHistoryService {
         }
       )
 
-      if (response.status === 200) {
-        response.data.prices.forEach((price) => {
-          prices.push(new CurrentPostedPrice(price))
-        })
+      if (status === 200) {
+        prices = data.prices.map((price) => new CurrentPostedPrice(price))
       } else {
         EventBus.$emit('notify')
       }

@@ -1,6 +1,7 @@
 import store from '../../store/store'
 import moment from 'moment'
 import Price from '@/classes/products/Price'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class ProductDefinitionPrices {
   constructor() {
@@ -16,19 +17,18 @@ export default class ProductDefinitionPrices {
    * @returns {Promise<PromiseConstructor>}
    */
   async getAllProductDefinitionPricesOnDate(date, prodIds) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     try {
       this.prices = {}
       this.loading = true
-      let response = await axios.get(baseUrl + 'admin/prices/daily', {
+      const { data, status } = await peInstance.get('/admin/prices/daily', {
         params: {
           productIds: prodIds.join(','),
           date: moment(date).format('YYYY-MM-DD'),
         },
       })
 
-      if (response.status === 200) {
-        response.data.prices.forEach((price) => {
+      if (status === 200) {
+        data.prices.forEach((price) => {
           this.prices[price.productDefinition.id] = {}
           this.prices[price.productDefinition.id][price.validAt] = new Price(
             price

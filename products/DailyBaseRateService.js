@@ -1,6 +1,7 @@
 import moment from 'moment'
 import store from '@/store/store'
 import DailyBaseRate from '@/classes/products/DailyBaseRate'
+import { peInstance } from '../utils/axiosInstance'
 
 /**
  * Daily Base Rate Service
@@ -16,12 +17,11 @@ export default class DailyBaseRateService {
    * @returns {Promise<[]>}
    */
   async fetchBetween(from = new Date(), to = new Date(), productIds = []) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let baseRates = []
     try {
-      let response = await axios.get(baseUrl + 'admin/daily_base_rates', {
+      const { data, status } = await peInstance.get('/admin/daily_base_rates', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),
@@ -29,10 +29,8 @@ export default class DailyBaseRateService {
         },
       })
 
-      if (response.status === 200) {
-        response.data.forEach((baseRate) => {
-          baseRates.push(new DailyBaseRate(baseRate))
-        })
+      if (status === 200) {
+        baseRates = data.map((baseRate) => new DailyBaseRate(baseRate))
       } else {
         EventBus.$emit('notify')
       }
@@ -67,11 +65,10 @@ export default class DailyBaseRateService {
    * @returns {Promise<void>}
    */
   async createCustomDailyBaseRate(dailyBaseRateObj, newDailyBaseRate) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(baseUrl + 'admin/daily_base_rates', {
+      await peInstance.post('/admin/daily_base_rates', {
         date: dailyBaseRateObj.date,
         dailyBaseRate: newDailyBaseRate,
         productId: dailyBaseRateObj.productId,
@@ -91,12 +88,11 @@ export default class DailyBaseRateService {
    * @returns {Promise<void>}
    */
   async updateCustomDailyBaseRate(dailyBaseRateObj, newDailyBaseRate) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = dailyBaseRateObj.customBaseRateId
-      await axios.put(baseUrl + 'admin/daily_base_rates/' + id, {
+      await peInstance.put(`/admin/daily_base_rates/${id}`, {
         dailyBaseRate: newDailyBaseRate,
       })
     } catch (e) {
@@ -114,12 +110,11 @@ export default class DailyBaseRateService {
    * @returns {Promise<void>}
    */
   async reset(dailyBaseRateObj) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = dailyBaseRateObj.customBaseRateId
-      await axios.delete(baseUrl + 'admin/daily_base_rates/' + id)
+      await peInstance.delete(`/admin/daily_base_rates/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

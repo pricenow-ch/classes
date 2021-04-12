@@ -178,28 +178,19 @@ export default class Products extends EventHelper {
     let from = await this.getFirstSeasonStart(considerPriceCalculationTime)
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/prices',
-        {
-          params: {
-            from: DateHelper.shiftLocalToSimpleDateString(from),
-            to: DateHelper.shiftLocalToSimpleDateString(from),
-            destinationNames: store.getters
-              .getCurrentDestinationInstance()
-              .getSlug(),
-          },
-        }
-      )
+      const { data } = await peInstance.get('/admin/prices', {
+        params: {
+          from: DateHelper.shiftLocalToSimpleDateString(from),
+          to: DateHelper.shiftLocalToSimpleDateString(from),
+          destinationNames: store.getters
+            .getCurrentDestinationInstance()
+            .getSlug(),
+        },
+      })
 
-      if (response && response.data) {
+      if (data) {
         // assign prices from pe to each product definition
-        await this.parsePrices(response.data)
-      } else {
-        // retry to load prices
-        setTimeout(() => {
-          this.loadPrices()
-        }, 10000)
+        await this.parsePrices(data)
       }
     } catch (e) {
       // retry to fetch prices

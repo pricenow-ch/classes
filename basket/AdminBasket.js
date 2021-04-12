@@ -39,11 +39,8 @@ export default class AdminBasket extends Basket {
         : discountAmount * 100
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/' +
-          this.getUuid() +
-          '/group_discounts',
+      let response = await peInstance.post(
+        `/admin/${this.getUuid()}/group_discounts`,
         {
           kind: discountType,
           amount: amount,
@@ -67,14 +64,12 @@ export default class AdminBasket extends Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/' +
-          this.getUuid() +
-          '/' +
-          store.getters.getCurrentDestinationInstance().getSlug() +
-          '/group_discounts/' +
-          groupDiscountId
+      let response = await peInstance.delete(
+        `/admin/${this.getUuid()}/${
+          process.env.VUE_APP_DESITNATION
+        }/group_discounts/${store.getters
+          .getCurrentDestinationInstance()
+          .getSlug()}`
       )
 
       await this.parseApiData(response.data)

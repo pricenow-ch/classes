@@ -178,15 +178,11 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/custom_prices',
-        {
-          productDefinitionId: this.getId(),
-          date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
-          price: price * 100,
-        }
-      )
+      let response = await peInstance.post('/admin/custom_prices', {
+        productDefinitionId: this.getId(),
+        date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
+        price: price * 100,
+      })
 
       if (response.status === 200) {
         // notify user
@@ -212,16 +208,12 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/custom_prices',
-        {
-          data: {
-            productDefinitionId: this.getId(),
-            date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
-          },
-        }
-      )
+      let response = await peInstance.delete('/admin/custom_prices', {
+        data: {
+          productDefinitionId: this.getId(),
+          date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
+        },
+      })
 
       if (response.status === 200) {
         // notify user
