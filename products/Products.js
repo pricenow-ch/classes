@@ -4,7 +4,7 @@ import _ from 'lodash'
 import DateHelper from '../DateHelper'
 import Price from './Price'
 import EventHelper from '../events/EventHelper'
-import { peInstance, shopInstance } from '../../utils/axiosInstance'
+import { peInstance, shopInstance } from '../utils/axiosInstance'
 
 export default class Products extends EventHelper {
   constructor(param = {}) {

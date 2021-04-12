@@ -5,7 +5,7 @@ import UserData from './UserData'
 import Vouchers from '../vouchers/Vouchers'
 import Vats from '../vats/Vats'
 import _ from 'lodash'
-import { peInstance } from '../../utils/axiosInstance'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class Basket {
   constructor() {

@@ -8,7 +8,7 @@ import definitions from '../../../definitions'
 import Events from '../events/Events.js'
 import ExtendedAttributes from './ExtendedAttributes'
 import Price from './Price'
-import { peInstance, shopInstance } from '../../utils/axiosInstance'
+import { peInstance, shopInstance } from '../utils/axiosInstance'
 
 export default class Product {
   constructor(params) {

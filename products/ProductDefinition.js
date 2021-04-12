@@ -5,9 +5,8 @@ import Product from './Product'
 import moment from 'moment-timezone'
 import Price from './Price'
 import definitions from '../../../definitions'
-import config from '../../../config'
 import RequiredProductDefinitions from './RequiredProductDefinitions'
-import { peInstance } from '../../utils/axiosInstance'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class ProductDefinition {
   constructor(params) {

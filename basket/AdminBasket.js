@@ -1,4 +1,4 @@
-import { peInstance } from '../../utils/axiosInstance'
+import { peInstance } from '../utils/axiosInstance'
 import Basket from './Basket'
 import GroupDiscounts from './GroupDiscounts'
 
