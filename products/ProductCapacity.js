@@ -1,6 +1,7 @@
 /**
  * the capacity data for a given product
  */
+import { shopInstance } from '../utils/axiosInstance'
 import DailyCapacity from './DailyCapacity'
 
 export default class ProductCapacity {
@@ -38,10 +39,8 @@ export default class ProductCapacity {
     // prepare sort order
     let sortOrder = this.getSortOrderFromProduct(product, key, value)
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/product/' +
-          this.pe_productId,
+      await shopInstance().post(
+        `/admin/capacity/product/${this.pe_productId}`,
         {
           capacity,
           key,
@@ -72,10 +71,8 @@ export default class ProductCapacity {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/product/' +
-          this.pe_productId
+      await shopInstance().delete(
+        `/admin/capacity/product/${this.pe_productId}`
       )
 
       EventBus.$emit(
@@ -107,10 +104,8 @@ export default class ProductCapacity {
     let value = capacityValue.value
     let sortOrder = this.getSortOrderFromProduct(product, key, value)
     try {
-      await axios.patch(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/product/' +
-          this.pe_productId,
+      await shopInstance().patch(
+        `/admin/capacity/product/${this.pe_productId}`,
         {
           capacity: capacityValue.capacity,
           key,

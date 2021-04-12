@@ -1,6 +1,7 @@
 import store from '../../store/store'
 import moment from 'moment'
 import ExpectedDemand from '@/classes/products/ExpectedDemand'
+import { peInstance } from '../utils/axiosInstance'
 
 // loads realized demand => old pattern => to be refactored
 export default class ProductDefinitionCapacities {
@@ -21,23 +22,27 @@ export default class ProductDefinitionCapacities {
     to,
     destinationInstance = null
   ) {
-    let destSlug = store.getters.getDestinationInstanceSlug(destinationInstance)
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
+    const destSlug = store.getters.getDestinationInstanceSlug(
+      destinationInstance
+    )
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
 
     try {
       this.capacities = {}
-      let response = await axios.get(baseUrl + 'admin/expected_demands/', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-        },
-      })
+      const { status, data } = await peInstance(false).get(
+        '/admin/expected_demands/',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+          },
+        }
+      )
 
-      if (response.status === 200) {
+      if (status === 200) {
         this.capacities[destSlug] = {}
-        response.data.productDefinitions.forEach((prodDef) => {
+        data.productDefinitions.forEach((prodDef) => {
           const demand = prodDef?.expectedDemands[0]
           this.capacities[destSlug][prodDef.id] = {}
           this.capacities[destSlug][prodDef.id][
@@ -81,26 +86,27 @@ export default class ProductDefinitionCapacities {
     to,
     destinations = []
   ) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
-
     try {
       this.capacities = {}
       this.loading = true
-      let response = await axios.get(baseUrl + 'admin/realized_demand/batch', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-          destinationNames: destinations
-            .map((dest) => dest.getSlug())
-            .join(','),
-        },
-      })
+      const { data, status } = await peInstance(false).get(
+        '/admin/realized_demand/batch',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+            destinationNames: destinations
+              .map((dest) => dest.getSlug())
+              .join(','),
+          },
+        }
+      )
 
       destinations.forEach((dest) => {
         this.capacities[dest.slug] = {}
       })
-      if (response.status === 200) {
-        const realizedDemand = response.data
+      if (status === 200) {
+        const realizedDemand = data
         for (let prodDefId in realizedDemand) {
           this.capacities[prodDefId] = {}
           realizedDemand[prodDefId].forEach((demandOnDate) => {

@@ -1,5 +1,6 @@
 import Cancellation from './Cancellation'
 import DataTable from '../VuetifyHelper/DataTable'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class Cancellations extends DataTable {
   constructor(store) {
@@ -39,20 +40,13 @@ export default class Cancellations extends DataTable {
     }
 
     try {
-      const dest = this.store.getters.getCurrentDestinationInstance()
       this.loading = true
-      let response = await axios.get(
-        dest.getShopApi() +
-          'cancellations/' +
-          cancellationTypeId +
-          '/' +
-          page +
-          '/' +
-          limit
+      const { data } = await shopInstance().get(
+        `/cancellations/${cancellationTypeId}/${page}/${limit}`
       )
 
       // iterate data
-      response.data.forEach((cancellation) => {
+      data.forEach((cancellation) => {
         this.cancellations.push(new Cancellation(cancellation))
       })
     } catch (e) {
@@ -75,19 +69,16 @@ export default class Cancellations extends DataTable {
     }
 
     try {
-      const dest = this.store.getters.getCurrentDestinationInstance()
       this.loading = true
-      let response = await axios.get(
-        dest.getShopApi() +
-          'cancellations/filter?' +
-          'from=' +
-          from +
-          '&to=' +
-          to
-      )
+      const { data } = await shopInstance().get(`/cancellations/filter`, {
+        params: {
+          from,
+          to,
+        },
+      })
 
       // iterate data
-      response.data.forEach((cancellation) => {
+      data.forEach((cancellation) => {
         this.cancellations.push(new Cancellation(cancellation))
       })
     } catch (e) {

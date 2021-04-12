@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import UserRoles from './UserRoles'
 
 export default class UsersRoles {
@@ -9,11 +10,8 @@ export default class UsersRoles {
   async loadUsersRoles() {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/role/user'
-      )
-      await this.parseApiData(response.data)
+      const { data } = await shopInstance().get('/admin/role/user')
+      await this.parseApiData(data)
       return Promise.resolve(true)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('UsersRoles.couldNotBeLoaded'))

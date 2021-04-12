@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class EntityTranslation {
   constructor(params) {
     this._id = params.id || null
@@ -22,14 +24,8 @@ export default class EntityTranslation {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/productTranslation/' +
-          type +
-          '/' +
-          typeId +
-          '/' +
-          this.language,
+      const { data } = await shopInstance().post(
+        `/admin/productTranslation/${type}/${typeId}/${this.language}`,
         {
           title: this.title,
           mediumText: this.mediumText,
@@ -38,7 +34,7 @@ export default class EntityTranslation {
         }
       )
 
-      this.id = response.data.id
+      this.id = data.id
     } catch (e) {
       EventBus.$emit('notify', i18n.t('entityTranslation.entityNotCreated'))
     } finally {

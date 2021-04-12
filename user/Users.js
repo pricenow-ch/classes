@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import UserBookings from '../bookings/UserBookings'
 
 /**
@@ -19,23 +20,17 @@ export default class Users {
    * @returns {Promise<[]|Array>}
    */
   async searchUsersWithBookings(term, withBookings = false) {
-    this._userBookings = []
-    let url = withBookings ? 'admin/booking/search/' : 'admin/user/search/'
+    const url = withBookings ? '/admin/booking/search/' : '/admin/user/search/'
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          url +
-          encodeURI(term),
-        {
-          params: {
-            mailRequired: true,
-          },
-        }
-      )
-      response.data.forEach((rawSearchResult) => {
-        this._userBookings.push(new UserBookings(rawSearchResult))
+      const { data } = await shopInstance().get(`${url}${encodeURI(term)}`, {
+        params: {
+          mailRequired: true,
+        },
       })
+      this._userBookings = data.map(
+        (rawSearchResult) => new UserBookings(rawSearchResult)
+      )
     } catch (e) {
       EventBus.$emit('notify', e.response)
     }

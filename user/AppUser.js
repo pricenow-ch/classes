@@ -2,6 +2,7 @@ import User from './User'
 import UserDestinations from '../destinations/UserDestinations'
 import Card from '../Card'
 import UserBookings from '../bookings/UserBookings'
+import { shopInstance } from '../utils/axiosInstance'
 
 /**
  * containing all extra information about the logged in user such as regions etc.
@@ -47,23 +48,11 @@ export default class AppUser extends User {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'linkedProfiles/' +
-          true
-      )
+      const { data } = await shopInstance().get('/linkedProfiles/true')
 
-      // reset shadow users
-      this.shadowUserInstances = []
-
-      // iterate users
-      let shadowUsers = response.data
-      for (let i = 0; i < shadowUsers.length; i++) {
-        let shadowUser = shadowUsers[i].user
-
-        // user can not be null (api bug)
-        if (shadowUser) this.shadowUserInstances.push(new User(shadowUser))
-      }
+      this.shadowUserInstances = data
+        .filter((d) => !!d.user)
+        .map((shadowUser) => new User(shadowUser.user))
     } catch (e) {
       EventBus.$emit('notify', e.response)
     } finally {
@@ -80,9 +69,7 @@ export default class AppUser extends User {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'user/self'
-      )
+      await shopInstance().delete('/user/self')
       return Promise.resolve(true)
     } catch (e) {
       EventBus.$emit('notify', e.response)

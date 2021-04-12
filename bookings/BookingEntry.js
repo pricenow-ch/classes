@@ -7,6 +7,7 @@ import Vats from '../vats/Vats'
 import Novatouch from './Novatouch'
 import Axess from '@/classes/bookings/Axess'
 import Swisspass from '@/classes/bookings/Swisspass'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class BookingEntry {
   constructor(params) {
@@ -98,10 +99,8 @@ export default class BookingEntry {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.put(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/bookingEntry/updateCustomFields/' +
-          this.id,
+      await shopInstance().put(
+        `admin/bookingEntry/updateCustomFields/${this.id}`,
         {
           allocationNumber:
             this.allocationNumber === '' ? null : this.allocationNumber,

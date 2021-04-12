@@ -6,6 +6,7 @@ import GroupDiscounts from '../basket/GroupDiscounts'
 import Vats from '../vats/Vats'
 import Destination from '../destinations/Destination'
 import Payment from '@/classes/bookings/Payment'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class Booking {
   constructor(params) {
@@ -50,15 +51,11 @@ export default class Booking {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'cancel/entries',
-        {
-          data: {
-            entries: bookingEntryIds,
-          },
-        }
-      )
+      const response = await shopInstance.delete('/cancel/entries', {
+        data: {
+          entries: bookingEntryIds,
+        },
+      })
 
       if (response.status === 200) return true
       else return false
@@ -88,17 +85,13 @@ export default class Booking {
     }
 
     try {
-      let response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/cancel/entries',
-        {
-          data: {
-            entries: bookingEntries,
-            voucherValue: voucherValue * 100,
-            cancelReason: cancelReason,
-          },
-        }
-      )
+      const response = await shopInstance.delete('/admin/cancel/entries', {
+        data: {
+          entries: bookingEntries,
+          voucherValue: voucherValue * 100,
+          cancelReason: cancelReason,
+        },
+      })
 
       if (response.status === 200) return true
       else if (response.status === 201) return response.data
@@ -159,19 +152,14 @@ export default class Booking {
       EventBus.$emit('spinnerShow')
 
       try {
-        let response = await axios.get(
-          store.getters.getCurrentDestinationInstance().getShopApi(false) +
-            'pdf/' +
-            this.getId(),
-          {
-            responseType: 'blob',
-          }
-        )
+        const { data } = await shopInstance(false).get(`/pdf/${this.getId()}`, {
+          responseType: 'blob',
+        })
 
         // https://thewebtier.com/snippets/download-files-with-axios/
         // download pdf
-        let url = window.URL.createObjectURL(new Blob([response.data]))
-        let link = document.createElement('a')
+        const url = window.URL.createObjectURL(new Blob([data]))
+        const link = document.createElement('a')
         link.href = url
         link.setAttribute('download', 'printATHome.pdf') //or any other extension
         document.body.appendChild(link)
@@ -194,13 +182,10 @@ export default class Booking {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/booking/' +
-          this.id +
-          '/payWithCash'
+      const { data } = await shopInstance().post(
+        `/admin/booking/${this.id}/payWithCash`
       )
-      let encashedAmount = response.data.cash
+      const encashedAmount = data.cash
       if (encashedAmount === expectedAmount)
         EventBus.$emit(
           'notify',
@@ -247,13 +232,11 @@ export default class Booking {
       EventBus.$emit('spinnerShow')
 
       try {
-        let response = await axios.get(
-          store.getters.getCurrentDestinationInstance().getShopApi() +
-            'admin/booking/' +
-            this.getId()
+        const { data } = await shopInstance().get(
+          `/admin/booking/${this.getId()}`
         )
 
-        await this.parseSingleBooking(response.data)
+        await this.parseSingleBooking(data)
       } catch (e) {
         /* global EventBus */
         EventBus.$emit('notify', e.response)
@@ -272,13 +255,11 @@ export default class Booking {
   async saveNewBasket() {
     EventBus.$emit('spinnerShow')
     try {
-      const response = await axios.patch(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/booking/basket/' +
-          this.id
+      const { data } = await shopInstance().patch(
+        `/admin/booking/basket/${this.id}`
       )
       EventBus.$emit('notify', i18n.t('booking.bookingChanged'), 'success')
-      return response.data.bookingId
+      return data.bookingId
     } catch (e) {
       // set back to old state
       EventBus.$emit('notify', i18n.t('booking.bookingNotChanged'))
@@ -356,14 +337,9 @@ export default class Booking {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.patch(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/booking/' +
-          this.id,
-        {
-          note: this.getNote(),
-        }
-      )
+      await shopInstance().patch(`/admin/booking/${this.id}`, {
+        note: this.getNote(),
+      })
 
       EventBus.$emit('notify', i18n.t('booking.noteSaved'), 'success')
       return Promise.resolve(true)

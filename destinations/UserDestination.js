@@ -1,6 +1,6 @@
 import Destination from './Destination'
-import store from '../../store/store'
 import DateHelper from '../DateHelper'
+import { peInstance } from '../utils/axiosInstance'
 /**
  * Child class of destination used mostly in AppUserInstance. Maybe also in the filter of the pricing engine.
  */
@@ -42,13 +42,10 @@ export default class UserDestination extends Destination {
     this.fromDateInstance = from
     this.toDateInstance = to
 
-    let baseUrl = store.getters
-      .getCurrentDestinationInstance()
-      .getBasePeApi() /* global EventBus axios */
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(baseUrl + 'admin/expected_demands', {
+      const response = await peInstance(false).get('/admin/expected_demands', {
         params: {
           from: DateHelper.shiftLocalToUtcIsoString(this.fromDateInstance),
           to: DateHelper.shiftLocalToUtcIsoString(this.toDateInstance),

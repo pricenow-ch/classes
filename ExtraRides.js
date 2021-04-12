@@ -1,3 +1,4 @@
+import { shopInstance } from './utils/axiosInstance'
 import DateHelper from './DateHelper'
 import ExtraRide from './ExtraRide'
 
@@ -47,15 +48,11 @@ export default class ExtraRides {
   async getExtraRideByDate(startDate, endDate) {
     // expects array as params
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/extraRide/' +
-          startDate +
-          '/' +
-          endDate
+      const { data } = await shopInstance().get(
+        `/admin/extraRide/${startDate}/${endDate}`
       )
 
-      response.data.forEach((params) => {
+      data.forEach((params) => {
         this.rides.push(new ExtraRide(params))
       })
     } catch (e) {
@@ -67,11 +64,7 @@ export default class ExtraRides {
 
   async getExtraRideById(id) {
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/extraRide/' +
-          id
-      )
+      let response = await shopInstance().get(`/admin/extraRide/${id}`)
       if (response.status === 200) {
         return new ExtraRide(response.data)
       }
@@ -96,9 +89,8 @@ export default class ExtraRides {
     }
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/extraRide',
+      const response = await shopInstance().post(
+        '/admin/extraRide',
         returnParamsObject(ascentDate, descentDate, comment)
       )
 
@@ -127,10 +119,8 @@ export default class ExtraRides {
     }
 
     try {
-      let response = await axios.patch(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/extraRide/' +
-          id,
+      let response = await shopInstance().patch(
+        `/admin/extraRide/${id}`,
         returnParamsObject(ascentDate, descentDate, comment)
       )
 
@@ -150,11 +140,7 @@ export default class ExtraRides {
 
   async deleteExtraRide(id) {
     try {
-      let response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/extraRide/' +
-          id
-      )
+      const response = await shopInstance().delete(`/admin/extraRide/${id}`)
 
       if (response.status === 200) {
         EventBus.$emit(

@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import Events from './Events'
 
 /**
@@ -24,8 +25,8 @@ export default class EventHelper {
     if (adminMode) url = 'admin/' + url
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() + url,
+      const { data } = await shopInstance().get(
+        `${adminMode ? '/admin' : ''}/events`,
         {
           params: {
             timePeriod: timePeriod,
@@ -35,7 +36,7 @@ export default class EventHelper {
         }
       )
 
-      let eventsInstance = new Events(response.data)
+      let eventsInstance = new Events(data)
 
       if (showSpinner) EventBus.$emit('spinnerHide')
       return await this.mapEventsToProducts(products, eventsInstance)

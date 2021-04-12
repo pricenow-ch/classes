@@ -5,6 +5,7 @@ import UserData from './UserData'
 import Vouchers from '../vouchers/Vouchers'
 import Vats from '../vats/Vats'
 import _ from 'lodash'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class Basket {
   constructor() {
@@ -40,9 +41,7 @@ export default class Basket {
   async createBasket() {
     /* global axios store */
     try {
-      const response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getPeApi() + 'baskets'
-      )
+      const response = await peInstance().post('/baskets')
       await this.parseApiData(response.data)
       EventBus.$emit('changed:basketUuid', this.uuid)
 
@@ -57,11 +56,7 @@ export default class Basket {
   async loadBasket(uuid) {
     /* global axios store */
     try {
-      const response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          uuid
-      )
+      const response = await peInstance().get(`/baskets/${uuid}`)
       await this.parseApiData(response.data)
 
       this.causeWeCareActiveInDestination = this.causeWeCare
@@ -109,11 +104,8 @@ export default class Basket {
     // check for api basket first
     if (!this.uuid) await this.createBasket()
     try {
-      const response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          this.uuid +
-          '/entries',
+      const response = await peInstance().post(
+        `/baskets/${uuid}/entries`,
         payload
       )
       await this.parseApiData(response.data)
@@ -159,17 +151,11 @@ export default class Basket {
     }
 
     try {
-      const response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          this.uuid +
-          '/entries',
-        {
-          productDefinitionId: definition.getId(),
-          validFrom: DateHelper.shiftLocalToUtcIsoString(startDateInstance),
-          userData: userData,
-        }
-      )
+      const response = await peInstance().post(`/baskets/${uuid}/entries`, {
+        productDefinitionId: definition.getId(),
+        validFrom: DateHelper.shiftLocalToUtcIsoString(startDateInstance),
+        userData: userData,
+      })
 
       await this.parseApiData(response.data, updateCurrentUrlQuery)
       EventBus.$emit('spinnerHide')
@@ -192,12 +178,8 @@ export default class Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          this.uuid +
-          '/entries/' +
-          basketEntryId
+      const response = await peInstance().delete(
+        `/baskets/${uuid}/entries/${basketEntryId}`
       )
 
       // update basket instance
@@ -235,11 +217,8 @@ export default class Basket {
     })
 
     try {
-      const response = await axios.put(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          this.uuid +
-          '/entries',
+      const response = await peInstance().put(
+        `/baskets/${uuid}/entries/`,
         preparedBasketEntries
       )
       await this.parseApiData(response.data)
@@ -298,12 +277,8 @@ export default class Basket {
         .getUserData()
         .setCompleteForCheckout(basketEntryInstance)
       try {
-        const response = await axios.put(
-          store.getters.getCurrentDestinationInstance().getPeApi() +
-            'baskets/' +
-            this.uuid +
-            '/entries/' +
-            basketEntryInstance.getId(),
+        const response = await peInstance().put(
+          `/baskets/${uuid}/entries/${basketEntryInstance.getId()}`,
           {
             productDefinitionId: basketEntryInstance.getProductDefinitionId(),
             validFrom: DateHelper.shiftLocalToUtcIsoString(
@@ -334,12 +309,8 @@ export default class Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await axios.put(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          this.uuid +
-          '/discounts/' +
-          this.askuserForDiscount[0].id,
+      const response = await peInstance().put(
+        `/baskets/${this.uuid}/discounts/${this.askuserForDiscount[0].id}`,
         {
           status: answer,
         }
@@ -518,11 +489,8 @@ export default class Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await axios.put(
-        store.getters.getCurrentDestinationInstance().getPeApi() +
-          'baskets/' +
-          this.uuid +
-          '/causeWeCare',
+      const response = await peInstance().put(
+        `/baskets/${this.uuid}/causeWeCare`,
         {
           causeWeCare: causeWeCare,
         }

@@ -5,8 +5,8 @@ import Product from './Product'
 import moment from 'moment-timezone'
 import Price from './Price'
 import definitions from '../../../definitions'
-import config from '../../../config'
 import RequiredProductDefinitions from './RequiredProductDefinitions'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class ProductDefinition {
   constructor(params) {
@@ -98,17 +98,12 @@ export default class ProductDefinition {
     this.fromDateInstance = from
     this.toDateInstance = to
 
-    let baseUrl = destinationInstance
-      ? store.getters
-          .getCurrentDestinationInstance()
-          .getPeApi(destinationInstance.getSlug())
-      : store.getters.getCurrentDestinationInstance().getPeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        baseUrl + 'products/definition/' + this.id + '/prices',
+      const response = await peInstance().get(
+        `/products/definition/${this.id}/prices`,
         {
           params: {
             from: DateHelper.shiftLocalToUtcIsoString(this.fromDateInstance),
@@ -181,15 +176,11 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/custom_prices',
-        {
-          productDefinitionId: this.getId(),
-          date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
-          price: price * 100,
-        }
-      )
+      let response = await peInstance(false).post('/admin/custom_prices', {
+        productDefinitionId: this.getId(),
+        date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
+        price: price * 100,
+      })
 
       if (response.status === 200) {
         // notify user
@@ -215,16 +206,12 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.delete(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/custom_prices',
-        {
-          data: {
-            productDefinitionId: this.getId(),
-            date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
-          },
-        }
-      )
+      let response = await peInstance(false).delete('/admin/custom_prices', {
+        data: {
+          productDefinitionId: this.getId(),
+          date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
+        },
+      })
 
       if (response.status === 200) {
         // notify user

@@ -1,6 +1,7 @@
 import Destination from './Destination'
 import config from '../../../config.js'
 import AppSeasons from './AppSeasons'
+import { shopInstance } from '../utils/axiosInstance'
 
 /**
  * Defines the current destination params for the shop. Like colors or logos, icons etc. depending on the destination.
@@ -125,20 +126,17 @@ export default class AppDestination extends Destination {
 
     /* global EventBus axios store */
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'region'
-      )
-      let apiData = response.data
+      const { data } = await shopInstance().get('/region')
 
       // parse api data
-      if (apiData.hasOwnProperty('name')) this.name = apiData.name
-      if (apiData.hasOwnProperty('street')) this.address = apiData.street
-      if (apiData.hasOwnProperty('zip')) this.zip = apiData.zip
-      if (apiData.hasOwnProperty('city')) this.city = apiData.city
-      if (apiData.hasOwnProperty('mail')) this.mail = apiData.mail
-      if (apiData.hasOwnProperty('website')) this.website = apiData.website
-      if (apiData.hasOwnProperty('tel')) this.tel = apiData.tel
-      if (apiData.hasOwnProperty('currency')) this.currency = apiData.currency
+      if (data.hasOwnProperty('name')) this.name = data.name
+      if (data.hasOwnProperty('street')) this.address = data.street
+      if (data.hasOwnProperty('zip')) this.zip = data.zip
+      if (data.hasOwnProperty('city')) this.city = data.city
+      if (data.hasOwnProperty('mail')) this.mail = data.mail
+      if (data.hasOwnProperty('website')) this.website = data.website
+      if (data.hasOwnProperty('tel')) this.tel = data.tel
+      if (data.hasOwnProperty('currency')) this.currency = data.currency
     } catch (e) {
       EventBus.$emit('notify', e.response)
     }

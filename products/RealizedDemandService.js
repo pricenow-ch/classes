@@ -1,6 +1,7 @@
 import store from '../../store/store'
 import moment from 'moment'
 import RealizedDemand from '@/classes/products/RealizedDemand'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class RealizedDemandService {
   /**
@@ -16,24 +17,25 @@ export default class RealizedDemandService {
     to = new Date(),
     productDefinitionIds = []
   ) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
-
     /* global axios */
     let realizedDemand = {}
     try {
-      let response = await axios.get(baseUrl + 'admin/realized_demand', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-          prodDefIds: productDefinitionIds.join(','),
-          destinationNames: store.getters
-            .getCurrentDestinationInstance()
-            .getSlug(),
-        },
-      })
+      const { status, data } = await peInstance(false).get(
+        '/admin/realized_demand',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+            prodDefIds: productDefinitionIds.join(','),
+            destinationNames: store.getters
+              .getCurrentDestinationInstance()
+              .getSlug(),
+          },
+        }
+      )
 
-      if (response.status === 200) {
-        realizedDemand = new RealizedDemand(response.data)
+      if (status === 200) {
+        realizedDemand = new RealizedDemand(data)
       } else {
         EventBus.$emit('notify')
       }

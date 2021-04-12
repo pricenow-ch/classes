@@ -1,4 +1,5 @@
 import definitions from '../../../definitions'
+import { shopInstance } from '../utils/axiosInstance'
 import BookingState from './BookingState'
 
 /**
@@ -45,14 +46,9 @@ export default class BookingStates {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.patch(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/booking/' +
-          bookingId,
-        {
-          state: this.bookingState.state,
-        }
-      )
+      await shopInstance().patch(`/admin/booking/${bookingId}`, {
+        state: this.bookingState.state,
+      })
 
       return true
     } catch (e) {

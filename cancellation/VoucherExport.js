@@ -2,17 +2,15 @@ import XLSX from 'xlsx'
 import XlsxHelper from '@/classes/XLSX/XlsxHelper'
 import store from '@/store/store'
 import DateHelper from '@/classes/DateHelper'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class VoucherExport {
   async getVouchersForExportUntil(lastDate) {
     let reportData = null
     try {
-      const response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/export/voucher/' +
-          DateHelper.shiftLocalToUtcIsoString(lastDate)
-      )
-      reportData = response.data
+      const date = DateHelper.shiftLocalToUtcIsoString(lastDate)
+      const { data } = await shopInstance().get(`/admin/export/voucher/${date}`)
+      reportData = data
     } catch (e) {
       EventBus.$emit('notify', e)
     } finally {

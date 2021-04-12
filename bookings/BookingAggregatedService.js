@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import BookingAggregatedModel from './BookingAggregatedModel'
 
 export default class BookingAggregatedService {
@@ -17,16 +18,13 @@ export default class BookingAggregatedService {
     }
     this.aggregatedBookings = []
     try {
-      let url =
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-        'admin/bookingEntry/sum?' +
-        'from=' +
-        from +
-        '&to=' +
-        to
-
-      let response = await axios.get(url)
-      response.data.forEach((raw) => {
+      const { data } = await shopInstance.get(`/admin/bookingEntry/sum`, {
+        params: {
+          from,
+          to,
+        },
+      })
+      data.forEach((raw) => {
         this.aggregatedBookings.push(new BookingAggregatedModel(raw))
       })
     } catch (e) {

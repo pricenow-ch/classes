@@ -4,6 +4,7 @@ import _ from 'lodash'
 import DateHelper from '../DateHelper'
 import Price from './Price'
 import EventHelper from '../events/EventHelper'
+import { peInstance, shopInstance } from '../utils/axiosInstance'
 
 export default class Products extends EventHelper {
   constructor(param = {}) {
@@ -16,19 +17,15 @@ export default class Products extends EventHelper {
     showSpinner = true,
     fetchInactive = false
   ) {
-    let baseUrl = destinationInstance
-      ? store.getters
-          .getCurrentDestinationInstance()
-          .getPeApi(destinationInstance.getSlug())
-      : store.getters.getCurrentDestinationInstance().getPeApi()
     /* global EventBus axios */
     if (showSpinner) EventBus.$emit('spinnerShow')
     try {
-      let url = baseUrl + 'products'
-      if (fetchInactive) {
-        url += '?inactive=1'
-      }
-      let response = await axios.get(url)
+      const response = await peInstance().get(`/products`, {
+        params: {
+          inactive: fetchInactive && '1',
+        },
+      })
+
       if (response.status === 200) {
         await this.parseApiData(
           response.data.products,
@@ -53,21 +50,19 @@ export default class Products extends EventHelper {
    * @returns {Promise<Products>}
    */
   async loadProductsForAllDestinations(destinations, fetchInactive = false) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getPeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      let url = baseUrl + 'products/destinations'
-      if (fetchInactive) {
-        url += '?inactive=1'
-      }
       // IMPORT: Map destinations over slug and not id => shop-api and pe-api don't have the same ids!
       const destinationSlugs = destinations.map((destination) => {
         return destination.slug
       })
       if (destinationSlugs.length > 0) {
-        let response = await axios.get(url, {
-          params: { destinationIdentifier: destinationSlugs.join(',') },
+        const response = await peInstance().get(`/products/destinations`, {
+          params: {
+            destinationIdentifier: destinationSlugs.join(','),
+            inactive: fetchInactive && '1',
+          },
         })
         if (response.status === 200) {
           response.data.products.forEach((apiProduct) => {
@@ -113,17 +108,14 @@ export default class Products extends EventHelper {
    */
   async loadProductsByIds() {
     EventBus.$emit('spinnerShow')
-    let productIds = this.products.map((product) => product.getId())
+    const productIds = this.products.map((product) => product.getId())
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getPeApi() + 'products',
-        {
-          params: {
-            ids: productIds + '',
-          },
-        }
-      )
+      const response = await peInstance().get('/products', {
+        params: {
+          ids: productIds + '',
+        },
+      })
 
       // parse response
       await this.parseApiData(response.data.products, true)
@@ -183,28 +175,19 @@ export default class Products extends EventHelper {
     let from = await this.getFirstSeasonStart(considerPriceCalculationTime)
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getBasePeApi() +
-          'admin/prices',
-        {
-          params: {
-            from: DateHelper.shiftLocalToSimpleDateString(from),
-            to: DateHelper.shiftLocalToSimpleDateString(from),
-            destinationNames: store.getters
-              .getCurrentDestinationInstance()
-              .getSlug(),
-          },
-        }
-      )
+      const { data } = await peInstance(false).get('/admin/prices', {
+        params: {
+          from: DateHelper.shiftLocalToSimpleDateString(from),
+          to: DateHelper.shiftLocalToSimpleDateString(from),
+          destinationNames: store.getters
+            .getCurrentDestinationInstance()
+            .getSlug(),
+        },
+      })
 
-      if (response && response.data) {
+      if (data) {
         // assign prices from pe to each product definition
-        await this.parsePrices(response.data)
-      } else {
-        // retry to load prices
-        setTimeout(() => {
-          this.loadPrices()
-        }, 10000)
+        await this.parsePrices(data)
       }
     } catch (e) {
       // retry to fetch prices
@@ -295,9 +278,8 @@ export default class Products extends EventHelper {
       }
     }
     try {
-      await axios.put(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/products/override/rulebased',
+      await shopInstance().put(
+        '/admin/capacity/products/override/rulebased',
         apiObject
       )
       EventBus.$emit(

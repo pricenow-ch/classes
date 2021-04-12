@@ -4,6 +4,7 @@ import definitions from '../../../definitions'
 import EventHelper from '../events/EventHelper'
 import EventsModule from './modules/events/EventsModule'
 import Events from '../events/Events'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class ShopModules extends EventHelper {
   constructor() {
@@ -20,9 +21,7 @@ export default class ShopModules extends EventHelper {
   async loadShopModules() {
     /* global axios EventBus store */
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'modules'
-      )
+      const response = await shopInstance().get('/modules')
 
       if (response.status === 200) {
         // parse api data

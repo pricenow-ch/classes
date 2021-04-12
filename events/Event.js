@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { shopInstance } from '../utils/axiosInstance'
 import DateHelper from '../DateHelper'
 import ExtendedAttributes from '../products/ExtendedAttributes'
 
@@ -33,12 +34,8 @@ export default class Event {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/event/' +
-          this.id
-      )
-      this.constructor(response.data[0])
+      const { data } = await shopInstance().get(`/admin/event/${this.id}`)
+      this.constructor(data[0])
       return false
     } catch (e) {
       EventBus.$emit('notify', i18n.t('event.eventCouldNotBeLoaded'))
@@ -57,21 +54,17 @@ export default class Event {
 
     try {
       // todo: startTime und endTime korrigieren gemäss Gitlab-Issue: https://gitlab.seccom.ch/skinow/SkinowBookingAPI/issues/108
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/event',
-        {
-          productId: this.productId,
-          date: this.date,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          active: false,
-          timePeriod: 'fullDay',
-        }
-      )
+      const { data } = await shopInstance().post('/admin/event', {
+        productId: this.productId,
+        date: this.date,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        active: false,
+        timePeriod: 'fullDay',
+      })
 
       // save event id
-      this.id = response.data.id
+      this.id = data.id
       this.extendedAttributes.typeId = this.id
 
       // save all translations of this event
@@ -101,17 +94,12 @@ export default class Event {
     })
 
     try {
-      await axios.patch(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/event/' +
-          this.id,
-        {
-          active: this.active,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          fileResources: apiAssetsObjs,
-        }
-      )
+      await shopInstance().patch(`/admin/event/${this.id}`, {
+        active: this.active,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        fileResources: apiAssetsObjs,
+      })
 
       // save all translations of this event
       await this.extendedAttributes.saveExtendedAttributesByKey(null)
@@ -141,11 +129,7 @@ export default class Event {
     EventBus.$emit('spinnerShow')
     let successful = false
     try {
-      await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/event/' +
-          this.id
-      )
+      await shopInstance().delete(`/admin/event/${this.id}`)
       EventBus.$emit('notify', i18n.t('event.eventUpdated'), 'success')
       successful = true
     } catch (e) {

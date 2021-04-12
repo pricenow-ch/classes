@@ -1,6 +1,6 @@
-import store from '../../store/store'
 import moment from 'moment'
 import MultiDayDiscount from '@/classes/products/MultiDayDiscount'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class CurrentPostedPriceService {
   /**
@@ -16,23 +16,25 @@ export default class CurrentPostedPriceService {
     to = new Date(),
     productDefinitionIds = []
   ) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let multiDayDiscounts = []
     try {
-      let response = await axios.get(baseUrl + 'admin/multi_day_discount', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-          prodDefIds: productDefinitionIds.join(','),
-        },
-      })
+      const { status, data } = await peInstance(false).get(
+        '/admin/multi_day_discount',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+            prodDefIds: productDefinitionIds.join(','),
+          },
+        }
+      )
 
-      if (response.status === 200) {
-        response.data.forEach((multiDayDiscount) => {
-          multiDayDiscounts.push(new MultiDayDiscount(multiDayDiscount))
-        })
+      if (status === 200) {
+        multiDayDiscounts = data.map(
+          (multiDayDiscount) => new MultiDayDiscount(multiDayDiscount)
+        )
       } else {
         EventBus.$emit('notify')
       }
@@ -70,11 +72,10 @@ export default class CurrentPostedPriceService {
    * @returns {Promise<void>}
    */
   async createNewMultiDayDiscount(multiDayDiscountObjs, newDiscountFactor) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(baseUrl + 'admin/multi_day_discount', {
+      await peInstance(false).post('/admin/multi_day_discount', {
         date: multiDayDiscountObjs.date,
         productdefinitionid: multiDayDiscountObjs.productDefinitionId,
         factor: newDiscountFactor,
@@ -94,12 +95,11 @@ export default class CurrentPostedPriceService {
    * @returns {Promise<void>}
    */
   async updateMultiDayDiscount(multiDayDiscountObj, newDiscountFactor) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = multiDayDiscountObj.customMultiDayDiscountId
-      await axios.put(baseUrl + 'admin/multi_day_discount/' + id, {
+      await peInstance(false).put(`/admin/multi_day_discount/${id}`, {
         factor: newDiscountFactor,
       })
     } catch (e) {
@@ -117,12 +117,11 @@ export default class CurrentPostedPriceService {
    * @returns {Promise<void>}
    */
   async reset(multiDayDiscountObj) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = multiDayDiscountObj.customMultiDayDiscountId
-      await axios.delete(baseUrl + 'admin/multi_day_discount/' + id)
+      await peInstance(false).delete(`/admin/multi_day_discount/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

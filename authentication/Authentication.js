@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 /**
  * class with login services.
  * To be continued.
@@ -14,10 +16,7 @@ export default class Authentication {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi(true, region) +
-          'user/agreeDataTransfer'
-      )
+      await shopInstance().post('/user/agreeDataTransfer')
       return Promise.resolve(true)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('login.errorWhileDataTransfer'))
@@ -35,10 +34,7 @@ export default class Authentication {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi(false) +
-          'regions'
-      )
+      const response = await shopInstance(false).get('/regions')
       return Promise.resolve(response.data)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('login.errorWhileDataTransfer'))

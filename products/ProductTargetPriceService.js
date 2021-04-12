@@ -1,6 +1,7 @@
 import moment from 'moment'
 import store from '@/store/store'
 import TargetPrice from '@/classes/products/ProductTargetPrice'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class ProductTargetPriceService {
   /**
@@ -12,23 +13,23 @@ export default class ProductTargetPriceService {
    * @returns {Promise<[]>}
    */
   async fetchBetween(from = new Date(), to = new Date(), prodDefIds = []) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let targetPrices = []
     try {
-      let response = await axios.get(baseUrl + 'admin/target_prices', {
-        params: {
-          from: moment(from).format('YYYY-MM-DD'),
-          to: moment(to).format('YYYY-MM-DD'),
-          prodDefIds: prodDefIds.join(','),
-        },
-      })
+      const { data, status } = await peInstance(false).get(
+        '/admin/target_prices',
+        {
+          params: {
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
+            prodDefIds: prodDefIds.join(','),
+          },
+        }
+      )
 
-      if (response.status === 200) {
-        response.data.forEach((baseRate) => {
-          targetPrices.push(new TargetPrice(baseRate))
-        })
+      if (status === 200) {
+        targetPrices = data.map((baseRate) => new TargetPrice(baseRate))
       } else {
         EventBus.$emit('notify')
       }

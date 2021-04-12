@@ -1,6 +1,6 @@
 import moment from 'moment'
-import store from '@/store/store'
-import CashDeskPrice from '@/classes/products/CashDeskPrice'
+import CashDeskPrice from './CashDeskPrice'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class CashDeskPriceService {
   /**
@@ -12,12 +12,11 @@ export default class CashDeskPriceService {
    * @returns {Promise<[]>}
    */
   async fetchBetween(from = new Date(), to = new Date(), prodDefIds = []) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let cashDeskPrices = []
     try {
-      let response = await axios.get(baseUrl + 'admin/cash_desk_price', {
+      let response = await peInstance(false).get('/admin/cash_desk_price', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),
@@ -54,11 +53,10 @@ export default class CashDeskPriceService {
    * @returns {Promise<void>}
    */
   async createCustomCashDeskPrice(cashDeskPriceObj, newPrice) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(baseUrl + 'admin/daily_base_rates', {
+      await peInstance(false).post('/admin/daily_base_rates', {
         date: cashDeskPriceObj.date,
         price: newPrice,
         productDefinitionId: cashDeskPriceObj.productDefinitionId,
@@ -78,12 +76,11 @@ export default class CashDeskPriceService {
    * @returns {Promise<void>}
    */
   async updateCustomCashDeskPrice(cashDeskPriceObj, newPrice) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const { id } = cashDeskPriceObj
-      await axios.put(baseUrl + 'admin/cash_desk_price/' + id, {
+      await peInstance(false).put('/admin/cash_desk_price/' + id, {
         price: newPrice,
       })
     } catch (e) {
@@ -101,12 +98,11 @@ export default class CashDeskPriceService {
    * @returns {Promise<void>}
    */
   async reset(cashDeskPriceObj) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = cashDeskPriceObj.id
-      await axios.delete(baseUrl + 'admin/cash_desk_price/' + id)
+      await peInstance(false).delete(`/admin/cash_desk_price/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

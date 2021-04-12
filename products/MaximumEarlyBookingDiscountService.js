@@ -1,6 +1,7 @@
 import store from '../../store/store'
 import moment from 'moment'
 import MaximumEarlyBookingDiscount from '@/classes/products/MaximumEarlyBookingDiscount'
+import { peInstance } from '../utils/axiosInstance'
 
 export default class MaximumEarlyBookingDiscountService {
   /**
@@ -17,7 +18,6 @@ export default class MaximumEarlyBookingDiscountService {
     to = new Date(),
     productDefinitionIds = []
   ) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let maxEarlyBookingDiscounts = []
@@ -31,19 +31,17 @@ export default class MaximumEarlyBookingDiscountService {
         params['priceModel'] = 'winter_3'
       }
 
-      let response = await axios.get(
-        baseUrl + 'admin/max_early_booking_discount',
+      const { status, data } = await peInstance(false).get(
+        '/admin/max_early_booking_discount',
         {
           params,
         }
       )
 
-      if (response.status === 200) {
-        response.data.forEach((earlyBooking) => {
-          maxEarlyBookingDiscounts.push(
-            new MaximumEarlyBookingDiscount(earlyBooking)
-          )
-        })
+      if (status === 200) {
+        maxEarlyBookingDiscounts = data.map(
+          (earlyBooking) => new MaximumEarlyBookingDiscount(earlyBooking)
+        )
       } else {
         EventBus.$emit('notify')
       }
@@ -84,11 +82,10 @@ export default class MaximumEarlyBookingDiscountService {
    * @returns {Promise<void>}
    */
   async createMaxEarlyBookingDiscount(maxEarlyBookingObjs, newDiscountFactor) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(baseUrl + 'admin/max_early_booking_discount', {
+      await peInstance(false).post('/admin/max_early_booking_discount', {
         date: maxEarlyBookingObjs.date,
         productdefinitionid: maxEarlyBookingObjs.productDefinitionId,
         factor: newDiscountFactor,
@@ -108,12 +105,11 @@ export default class MaximumEarlyBookingDiscountService {
    * @returns {Promise<void>}
    */
   async updateMaxEarlyBookingDiscount(maxEarlyBookingObj, newDiscountFactor) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = maxEarlyBookingObj.customMaxEarlyBookingDiscountId
-      await axios.put(baseUrl + 'admin/max_early_booking_discount/' + id, {
+      await peInstance(false).put(`/admin/max_early_booking_discount/${id}`, {
         factor: newDiscountFactor,
       })
     } catch (e) {
@@ -131,12 +127,11 @@ export default class MaximumEarlyBookingDiscountService {
    * @returns {Promise<void>}
    */
   async reset(maxEarlyBookingObj) {
-    let baseUrl = store.getters.getCurrentDestinationInstance().getBasePeApi()
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
       const id = maxEarlyBookingObj.customMaxEarlyBookingDiscountId
-      await axios.delete(baseUrl + 'admin/max_early_booking_discount/' + id)
+      await peInstance(false).delete(`/admin/max_early_booking_discount/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)
