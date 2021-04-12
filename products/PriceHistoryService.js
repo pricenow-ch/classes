@@ -1,4 +1,3 @@
-import store from '../../store/store'
 import moment from 'moment'
 import CurrentPostedPrice from '@/classes/products/CurrentPostedPrice'
 import { peInstance } from '../utils/axiosInstance'
@@ -17,7 +16,7 @@ export default class PriceHistoryService {
     let prices = []
     try {
       const dateStr = moment(date).format('YYYY-MM-DD')
-      const { status, data } = await peInstance.get(
+      const { status, data } = await peInstance(false).get(
         `admin/prices/historical/${dateStr}`,
         {
           params: {

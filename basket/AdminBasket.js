@@ -18,7 +18,7 @@ export default class AdminBasket extends Basket {
     }
     EventBus.$emit('spinnerShow')
     try {
-      const response = await peInstance.get(`/baskets/${uuid}`)
+      const response = await peInstance().get(`/baskets/${uuid}`)
       await this.parseApiData(response.data)
       return true
     } catch (e) {
@@ -39,7 +39,7 @@ export default class AdminBasket extends Basket {
         : discountAmount * 100
 
     try {
-      let response = await peInstance.post(
+      let response = await peInstance(false).post(
         `/admin/${this.getUuid()}/group_discounts`,
         {
           kind: discountType,
@@ -64,7 +64,7 @@ export default class AdminBasket extends Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await peInstance.delete(
+      let response = await peInstance(false).delete(
         `/admin/${this.getUuid()}/${
           process.env.VUE_APP_DESITNATION
         }/group_discounts/${store.getters

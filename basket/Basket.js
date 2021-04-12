@@ -41,7 +41,7 @@ export default class Basket {
   async createBasket() {
     /* global axios store */
     try {
-      const response = await peInstance.post('/baskets')
+      const response = await peInstance().post('/baskets')
       await this.parseApiData(response.data)
       EventBus.$emit('changed:basketUuid', this.uuid)
 
@@ -56,7 +56,7 @@ export default class Basket {
   async loadBasket(uuid) {
     /* global axios store */
     try {
-      const response = await peInstance.get(`/baskets/${uuid}`)
+      const response = await peInstance().get(`/baskets/${uuid}`)
       await this.parseApiData(response.data)
 
       this.causeWeCareActiveInDestination = this.causeWeCare
@@ -104,7 +104,7 @@ export default class Basket {
     // check for api basket first
     if (!this.uuid) await this.createBasket()
     try {
-      const response = await peInstance.post(
+      const response = await peInstance().post(
         `/baskets/${uuid}/entries`,
         payload
       )
@@ -151,7 +151,7 @@ export default class Basket {
     }
 
     try {
-      const response = await peInstance.post(`/baskets/${uuid}/entries`, {
+      const response = await peInstance().post(`/baskets/${uuid}/entries`, {
         productDefinitionId: definition.getId(),
         validFrom: DateHelper.shiftLocalToUtcIsoString(startDateInstance),
         userData: userData,
@@ -178,7 +178,7 @@ export default class Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await peInstance.delete(
+      const response = await peInstance().delete(
         `/baskets/${uuid}/entries/${basketEntryId}`
       )
 
@@ -217,7 +217,7 @@ export default class Basket {
     })
 
     try {
-      const response = await peInstance.put(
+      const response = await peInstance().put(
         `/baskets/${uuid}/entries/`,
         preparedBasketEntries
       )
@@ -277,7 +277,7 @@ export default class Basket {
         .getUserData()
         .setCompleteForCheckout(basketEntryInstance)
       try {
-        const response = await peInstance.put(
+        const response = await peInstance().put(
           `/baskets/${uuid}/entries/${basketEntryInstance.getId()}`,
           {
             productDefinitionId: basketEntryInstance.getProductDefinitionId(),
@@ -309,7 +309,7 @@ export default class Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await peInstance.put(
+      const response = await peInstance().put(
         `/baskets/${this.uuid}/discounts/${this.askuserForDiscount[0].id}`,
         {
           status: answer,
@@ -489,7 +489,7 @@ export default class Basket {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await peInstance.put(
+      const response = await peInstance().put(
         `/baskets/${this.uuid}/causeWeCare`,
         {
           causeWeCare: causeWeCare,

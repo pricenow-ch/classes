@@ -17,7 +17,7 @@ export default class AxessManagementService {
       return false
     }
     try {
-      const { data } = await peInstance.get('/admin/imports/axess/newSeasons', {
+      const { data } = await peInstance(false).get('/admin/imports/axess/newSeasons', {
         params: {
           destinationNames: destinationSlug,
         },
@@ -46,11 +46,15 @@ export default class AxessManagementService {
       return i18n.t('axessManagementService.noDestinationProvided')
     }
     try {
-      await peInstance.patch(`/admin/imports/axess/newSeasons`, undefined, {
-        params: {
-          destinationNames: destinationSlug,
-        },
-      })
+      await peInstance(false).patch(
+        `/admin/imports/axess/newSeasons`,
+        undefined,
+        {
+          params: {
+            destinationNames: destinationSlug,
+          },
+        }
+      )
       return true
     } catch (error) {
       return error.response.data.error

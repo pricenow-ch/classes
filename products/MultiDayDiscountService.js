@@ -1,4 +1,3 @@
-import store from '../../store/store'
 import moment from 'moment'
 import MultiDayDiscount from '@/classes/products/MultiDayDiscount'
 import { peInstance } from '../utils/axiosInstance'
@@ -21,7 +20,7 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     let multiDayDiscounts = []
     try {
-      const { status, data } = await peInstance.get(
+      const { status, data } = await peInstance(false).get(
         '/admin/multi_day_discount',
         {
           params: {
@@ -76,7 +75,7 @@ export default class CurrentPostedPriceService {
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await peInstance.post('/admin/multi_day_discount', {
+      await peInstance(false).post('/admin/multi_day_discount', {
         date: multiDayDiscountObjs.date,
         productdefinitionid: multiDayDiscountObjs.productDefinitionId,
         factor: newDiscountFactor,
@@ -100,7 +99,7 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     try {
       const id = multiDayDiscountObj.customMultiDayDiscountId
-      await peInstance.put(`/admin/multi_day_discount/${id}`, {
+      await peInstance(false).put(`/admin/multi_day_discount/${id}`, {
         factor: newDiscountFactor,
       })
     } catch (e) {
@@ -122,7 +121,7 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     try {
       const id = multiDayDiscountObj.customMultiDayDiscountId
-      await peInstance.delete(`/admin/multi_day_discount/${id}`)
+      await peInstance(false).delete(`/admin/multi_day_discount/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

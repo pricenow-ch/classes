@@ -1,6 +1,5 @@
 import moment from 'moment'
-import store from '@/store/store'
-import CashDeskPrice from '@/classes/products/CashDeskPrice'
+import CashDeskPrice from './CashDeskPrice'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class CashDeskPriceService {
@@ -17,7 +16,7 @@ export default class CashDeskPriceService {
     EventBus.$emit('spinnerShow')
     let cashDeskPrices = []
     try {
-      let response = await peInstance.get('/admin/cash_desk_price', {
+      let response = await peInstance(false).get('/admin/cash_desk_price', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),
@@ -57,7 +56,7 @@ export default class CashDeskPriceService {
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await peInstance.post('/admin/daily_base_rates', {
+      await peInstance(false).post('/admin/daily_base_rates', {
         date: cashDeskPriceObj.date,
         price: newPrice,
         productDefinitionId: cashDeskPriceObj.productDefinitionId,
@@ -81,7 +80,7 @@ export default class CashDeskPriceService {
     EventBus.$emit('spinnerShow')
     try {
       const { id } = cashDeskPriceObj
-      await peInstance.put('/admin/cash_desk_price/' + id, {
+      await peInstance(false).put('/admin/cash_desk_price/' + id, {
         price: newPrice,
       })
     } catch (e) {
@@ -103,7 +102,7 @@ export default class CashDeskPriceService {
     EventBus.$emit('spinnerShow')
     try {
       const id = cashDeskPriceObj.id
-      await peInstance.delete(`/admin/cash_desk_price/${id}`)
+      await peInstance(false).delete(`/admin/cash_desk_price/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

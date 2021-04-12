@@ -20,7 +20,7 @@ export default class RealizedDemandService {
     /* global axios */
     let realizedDemand = {}
     try {
-      const { status, data } = await peInstance.get('/admin/realized_demand', {
+      const { status, data } = await peInstance(false).get('/admin/realized_demand', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),

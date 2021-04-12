@@ -54,7 +54,7 @@ export default class FileUploadService {
       EventBus.$emit('spinnerShow', i18n.t('fileUploadService.processingExcel'))
 
       try {
-        await peInstance.post('/admin/imports', formData, {
+        await peInstance(false).post('/admin/imports', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

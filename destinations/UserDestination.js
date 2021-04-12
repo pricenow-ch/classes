@@ -1,5 +1,4 @@
 import Destination from './Destination'
-import store from '../../store/store'
 import DateHelper from '../DateHelper'
 import { peInstance } from '../utils/axiosInstance'
 /**
@@ -46,7 +45,7 @@ export default class UserDestination extends Destination {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await peInstance.get('/admin/expected_demands', {
+      const response = await peInstance(false).get('/admin/expected_demands', {
         params: {
           from: DateHelper.shiftLocalToUtcIsoString(this.fromDateInstance),
           to: DateHelper.shiftLocalToUtcIsoString(this.toDateInstance),

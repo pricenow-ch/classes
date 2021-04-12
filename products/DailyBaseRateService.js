@@ -1,6 +1,5 @@
 import moment from 'moment'
-import store from '@/store/store'
-import DailyBaseRate from '@/classes/products/DailyBaseRate'
+import DailyBaseRate from './DailyBaseRate'
 import { peInstance } from '../utils/axiosInstance'
 
 /**
@@ -21,7 +20,7 @@ export default class DailyBaseRateService {
     EventBus.$emit('spinnerShow')
     let baseRates = []
     try {
-      const { data, status } = await peInstance.get('/admin/daily_base_rates', {
+      const { data, status } = await peInstance(false).get('/admin/daily_base_rates', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),
@@ -68,7 +67,7 @@ export default class DailyBaseRateService {
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      await peInstance.post('/admin/daily_base_rates', {
+      await peInstance(false).post('/admin/daily_base_rates', {
         date: dailyBaseRateObj.date,
         dailyBaseRate: newDailyBaseRate,
         productId: dailyBaseRateObj.productId,
@@ -92,7 +91,7 @@ export default class DailyBaseRateService {
     EventBus.$emit('spinnerShow')
     try {
       const id = dailyBaseRateObj.customBaseRateId
-      await peInstance.put(`/admin/daily_base_rates/${id}`, {
+      await peInstance(false).put(`/admin/daily_base_rates/${id}`, {
         dailyBaseRate: newDailyBaseRate,
       })
     } catch (e) {
@@ -114,7 +113,7 @@ export default class DailyBaseRateService {
     EventBus.$emit('spinnerShow')
     try {
       const id = dailyBaseRateObj.customBaseRateId
-      await peInstance.delete(`/admin/daily_base_rates/${id}`)
+      await peInstance(false).delete(`/admin/daily_base_rates/${id}`)
     } catch (e) {
       console.error('err', e)
       EventBus.$emit('notify', e.response)

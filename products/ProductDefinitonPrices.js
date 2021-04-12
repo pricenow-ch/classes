@@ -20,7 +20,7 @@ export default class ProductDefinitionPrices {
     try {
       this.prices = {}
       this.loading = true
-      const { data, status } = await peInstance.get('/admin/prices/daily', {
+      const { data, status } = await peInstance(false).get('/admin/prices/daily', {
         params: {
           productIds: prodIds.join(','),
           date: moment(date).format('YYYY-MM-DD'),

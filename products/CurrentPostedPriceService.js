@@ -1,6 +1,5 @@
-import store from '../../store/store'
 import moment from 'moment'
-import CurrentPostedPrice from '@/classes/products/CurrentPostedPrice'
+import CurrentPostedPrice from './CurrentPostedPrice'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class CurrentPostedPriceService {
@@ -21,7 +20,7 @@ export default class CurrentPostedPriceService {
     EventBus.$emit('spinnerShow')
     let prices = []
     try {
-      const { data, status } = await peInstance.get('/admin/prices/current', {
+      const { data, status } = await peInstance(false).get('/admin/prices/current', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),

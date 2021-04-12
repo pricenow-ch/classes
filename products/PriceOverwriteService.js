@@ -1,4 +1,3 @@
-import store from '../../store/store'
 import DateHelper from '../DateHelper'
 import { peInstance } from '../utils/axiosInstance'
 /**
@@ -27,7 +26,7 @@ export default class PriceOverwriteService {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow')
     try {
-      await peInstance.post('/admin/custom_prices/bulk', {
+      await peInstance(false).post('/admin/custom_prices/bulk', {
         dates: this.formatDatesArray(dates),
         kind: changeType ? 'absolute' : 'relative',
         amount: amount,
@@ -62,7 +61,7 @@ export default class PriceOverwriteService {
     EventBus.$emit('spinnerShow')
     try {
       // unusual to use a body within a delete request
-      await peInstance.delete('/admin/custom_prices/bulk', {
+      await peInstance(false).delete('/admin/custom_prices/bulk', {
         data: {
           productDefinitionIds: productDefIds,
           dates: this.formatDatesArray(dates),

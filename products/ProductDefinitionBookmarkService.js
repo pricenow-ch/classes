@@ -1,4 +1,3 @@
-import store from '../../store/store'
 import { shopInstance } from '../utils/axiosInstance'
 
 /**

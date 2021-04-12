@@ -20,14 +20,11 @@ export default class Products extends EventHelper {
     /* global EventBus axios */
     if (showSpinner) EventBus.$emit('spinnerShow')
     try {
-      const response = await peInstance.get(
-        `${destinationInstance?.getSlug() || ''}/products`,
-        {
-          params: {
-            inactive: fetchInactive && '1',
-          },
-        }
-      )
+      const response = await peInstance().get(`/products`, {
+        params: {
+          inactive: fetchInactive && '1',
+        },
+      })
 
       if (response.status === 200) {
         await this.parseApiData(
@@ -61,7 +58,7 @@ export default class Products extends EventHelper {
         return destination.slug
       })
       if (destinationSlugs.length > 0) {
-        const response = await peInstance.get(`/products/destinations`, {
+        const response = await peInstance().get(`/products/destinations`, {
           params: {
             destinationIdentifier: destinationSlugs.join(','),
             inactive: fetchInactive && '1',
@@ -114,7 +111,7 @@ export default class Products extends EventHelper {
     const productIds = this.products.map((product) => product.getId())
 
     try {
-      const response = await peInstance.get('/products', {
+      const response = await peInstance().get('/products', {
         params: {
           ids: productIds + '',
         },
@@ -178,7 +175,7 @@ export default class Products extends EventHelper {
     let from = await this.getFirstSeasonStart(considerPriceCalculationTime)
 
     try {
-      const { data } = await peInstance.get('/admin/prices', {
+      const { data } = await peInstance(false).get('/admin/prices', {
         params: {
           from: DateHelper.shiftLocalToSimpleDateString(from),
           to: DateHelper.shiftLocalToSimpleDateString(from),

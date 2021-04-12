@@ -102,10 +102,8 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await peInstance.get(
-        `${destinationInstance?.getSlug() || ''}/products/definition/${
-          this.id
-        }/prices`,
+      const response = await peInstance().get(
+        `/products/definition/${this.id}/prices`,
         {
           params: {
             from: DateHelper.shiftLocalToUtcIsoString(this.fromDateInstance),
@@ -178,7 +176,7 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await peInstance.post('/admin/custom_prices', {
+      let response = await peInstance(false).post('/admin/custom_prices', {
         productDefinitionId: this.getId(),
         date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),
         price: price * 100,
@@ -208,7 +206,7 @@ export default class ProductDefinition {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await peInstance.delete('/admin/custom_prices', {
+      let response = await peInstance(false).delete('/admin/custom_prices', {
         data: {
           productDefinitionId: this.getId(),
           date: DateHelper.shiftLocalToUtcIsoString(localDateInstance),

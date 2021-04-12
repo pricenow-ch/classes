@@ -30,7 +30,7 @@ export default class ProductDefinitionCapacities {
 
     try {
       this.capacities = {}
-      const { status, data } = await peInstance.get(
+      const { status, data } = await peInstance(false).get(
         '/admin/expected_demands/',
         {
           params: {
@@ -89,7 +89,7 @@ export default class ProductDefinitionCapacities {
     try {
       this.capacities = {}
       this.loading = true
-      const { data, status } = await peInstance.get(
+      const { data, status } = await peInstance(false).get(
         '/admin/realized_demand/batch',
         {
           params: {

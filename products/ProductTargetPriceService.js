@@ -17,7 +17,7 @@ export default class ProductTargetPriceService {
     EventBus.$emit('spinnerShow')
     let targetPrices = []
     try {
-      const { data, status } = await peInstance.get('/admin/target_prices', {
+      const { data, status } = await peInstance(false).get('/admin/target_prices', {
         params: {
           from: moment(from).format('YYYY-MM-DD'),
           to: moment(to).format('YYYY-MM-DD'),
