@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import Booking from './Booking'
 
 export default class Bookings {
@@ -21,12 +22,9 @@ export default class Bookings {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'bookings/upcoming'
-      )
+      const { data } = await shopInstance().get('/bookings/upcoming')
 
-      this.upcomingBookings = await this.parseApiData(response.data)
+      this.upcomingBookings = await this.parseApiData(data)
     } catch (e) {
       EventBus.$emit('notify', e.response)
     } finally {
@@ -44,12 +42,13 @@ export default class Bookings {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'bookings/elapsed/1/300'
+      const PAGE = 1
+      const LIMIT = 300
+      const { data } = await shopInstance().get(
+        `/bookings/elapsed/${PAGE}/${LIMIT}`
       )
 
-      this.pastBookings = await this.parseApiData(response.data)
+      this.pastBookings = await this.parseApiData(data)
     } catch (e) {
       EventBus.$emit('notify', e.response)
     } finally {

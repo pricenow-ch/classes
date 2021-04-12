@@ -4,7 +4,7 @@ import _ from 'lodash'
 import DateHelper from '../DateHelper'
 import Price from './Price'
 import EventHelper from '../events/EventHelper'
-import { peInstance } from '../../utils/axiosInstance'
+import { peInstance, shopInstance } from '../../utils/axiosInstance'
 
 export default class Products extends EventHelper {
   constructor(param = {}) {
@@ -290,9 +290,8 @@ export default class Products extends EventHelper {
       }
     }
     try {
-      await axios.put(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/products/override/rulebased',
+      await shopInstance().put(
+        '/admin/capacity/products/override/rulebased',
         apiObject
       )
       EventBus.$emit(

@@ -1,6 +1,7 @@
 import Asset from './Asset'
 import _ from 'lodash'
 import EntityTranslations from '../entityTranslations/EntityTranslations'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class ExtendedAttribute {
   constructor(params) {
@@ -71,9 +72,8 @@ export default class ExtendedAttribute {
   async saveExtendedAttribute() {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/product/extendedAttributes',
+      const { data } = await shopInstance().post(
+        '/admin/product/extendedAttributes',
         {
           productId: this.pe_productId,
           key: this.key,
@@ -86,7 +86,7 @@ export default class ExtendedAttribute {
 
       // fixes the update or create error (22.05.2020)
       // update the id
-      this.id = response.data.id
+      this.id = data.id
       return Promise.resolve(response)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('extendedAttribute.saveFailed'))

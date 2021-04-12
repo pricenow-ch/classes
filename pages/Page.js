@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class Page {
   constructor(params) {
     this.id = params.id ? params.id : null
@@ -26,13 +28,9 @@ export default class Page {
       EventBus.$emit('spinnerShow')
 
       try {
-        let response = await axios.get(
-          store.getters.getCurrentDestinationInstance().getShopApi() +
-            'page/' +
-            this.id
-        )
+        const { data } = await shopInstance().get(`/page/${this.id}`)
 
-        this.body = response.data['page_revision.body']
+        this.body = data['page_revision.body']
 
         this.contentLoaded = true
       } catch (e) {

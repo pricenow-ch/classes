@@ -1,4 +1,5 @@
 import definitions from '../../definitions'
+import { shopInstance } from './utils/axiosInstance'
 
 export default class Card {
   /**
@@ -64,12 +65,8 @@ export default class Card {
         this.lastSwisspassUpdate = new Date()
 
         try {
-          let response = await axios.get(
-            store.getters.getCurrentDestinationInstance().getShopApi() +
-              'swisspass/data/' +
-              this.getCardNumber() +
-              '/' +
-              this.getZip()
+          const response = await shopInstance(true).get(
+            `/swisspass/data/${this.getCardNumber()}/${this.getZip()}`
           )
 
           // update card

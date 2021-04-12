@@ -8,7 +8,7 @@ import definitions from '../../../definitions'
 import Events from '../events/Events.js'
 import ExtendedAttributes from './ExtendedAttributes'
 import Price from './Price'
-import { peInstance } from '../../utils/axiosInstance'
+import { peInstance, shopInstance } from '../../utils/axiosInstance'
 
 export default class Product {
   constructor(params) {
@@ -205,10 +205,8 @@ export default class Product {
     if (spinner)
       EventBus.$emit('spinnerShow', i18n.t('personAdder.checkForAvailability'))
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'capacity/product/' +
-          this.id,
+      const { data } = await shopInstance().get(
+        `/capacity/product/${this.id}`,
         {
           params: {
             from: from.format('YYYY-MM-DD'),
@@ -216,7 +214,7 @@ export default class Product {
           },
         }
       )
-      this.productCapacity = new ProductCapacity(response.data)
+      this.productCapacity = new ProductCapacity(data)
       EventBus.$emit('Product:CapacityFetched')
       return Promise.resolve(this.productCapacity)
     } catch (e) {
@@ -291,17 +289,13 @@ export default class Product {
     if (showSpinner)
       EventBus.$emit('spinnerShow', i18n.t('product.loadingEvents'))
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/events/' +
-          this.id +
-          '/' +
-          from.format('YYYY-MM-DD') +
-          '/' +
-          to.format('YYYY-MM-DD')
+      const { data } = await shopInstance().get(
+        `/admin/events/${this.id}/${from.format('YYYY-MM-DD')}/${to.format(
+          'YYYY-MM-DD'
+        )}`
       )
 
-      this.events = new Events(response.data)
+      this.events = new Events(data)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('product.eventsCouldNotBeLoaded'))
     } finally {

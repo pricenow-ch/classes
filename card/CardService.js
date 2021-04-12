@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class CardService {
   async addCardToUser(card, uid) {
     // add new card to user
@@ -5,16 +7,13 @@ export default class CardService {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'skicard',
-        {
-          cardNumber: card.getCardNumber(),
-          type: card.getType(),
-          uid: uid,
-          zip: card.getZip(),
-          cardDescription: card.getCard().cardDescription,
-        }
-      )
+      await shopInstance().post('/skicard', {
+        cardNumber: card.getCardNumber(),
+        type: card.getType(),
+        uid: uid,
+        zip: card.getZip(),
+        cardDescription: card.getCard().cardDescription,
+      })
 
       EventBus.$emit('notify', i18n.t('addNewProfile.cardAdded'), 'success')
     } catch (error) {

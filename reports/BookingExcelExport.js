@@ -3,6 +3,7 @@ import DateHelper from '../DateHelper'
 import XLSX from 'xlsx'
 import XlsxHelper from '../XLSX/XlsxHelper'
 import BookingStates from '../bookings/BookingStates'
+import { shopInstance } from '../utils/axiosInstance'
 
 /**
  * Responsible for generating accounting and cause we care excel exports
@@ -22,14 +23,12 @@ export default class AccountingExcelExport {
     /* global EventBus axios store */
     let reportData = null
     try {
-      const response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/export/accounting/' +
-          DateHelper.shiftLocalToUtcIsoString(from) +
-          '/' +
-          DateHelper.shiftLocalToUtcIsoString(to)
+      const { data } = await shopInstance().get(
+        `/admin/export/accounting/${DateHelper.shiftLocalToUtcIsoString(
+          from
+        )}/${DateHelper.shiftLocalToUtcIsoString(to)}`
       )
-      reportData = response.data
+      reportData = data
     } catch (e) {
       EventBus.$emit('notify', i18n.t('reportsOverview.loadingDataFailed'))
     } finally {

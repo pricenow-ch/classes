@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class FormRequest {
   constructor(basket, subject) {
     this.basketInstance = basket
@@ -9,14 +11,10 @@ export default class FormRequest {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'contact/send',
-        {
-          subject: this.subject,
-          body: this.basketInstance.getComment(),
-        }
-      )
+      await shopInstance().post('/contact/send', {
+        subject: this.subject,
+        body: this.basketInstance.getComment(),
+      })
 
       // reset message
       this.basketInstance.comment = null

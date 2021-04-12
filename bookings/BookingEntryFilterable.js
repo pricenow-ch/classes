@@ -2,6 +2,7 @@ import BookingEntry from './BookingEntry'
 import Booking from './Booking'
 import moment from 'moment'
 import _ from 'lodash'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class BookingEntryFilterable extends BookingEntry {
   constructor(params) {
@@ -33,32 +34,19 @@ export default class BookingEntryFilterable extends BookingEntry {
     }
 
     try {
-      let url =
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-        'admin/bookingEntry/filter?' +
-        'from=' +
-        from +
-        '&to=' +
-        to
-
-      if (productId) {
-        url += '&productId=' + productId
-      }
-      if (timePeriod) {
-        url += '&timePeriod=' + timePeriod
-      }
-      if (productDefinitionId) {
-        url += '&productDefinitionId=' + productDefinitionId
-      }
-      if (state) {
-        url += '&state=' + state
-      }
-
-      let response = await axios.get(url)
-      this.filteredResults = []
-      response.data.forEach((rawSearchResult) => {
-        this.filteredResults.push(new BookingEntryFilterable(rawSearchResult))
+      const { data } = await shopInstance.get(`/admin/bookingEntry/filter`, {
+        params: {
+          from,
+          to,
+          productId,
+          timePeriod,
+          productDefinitionId,
+          state,
+        },
       })
+      this.filteredResults = data.map(
+        (rawSearchResult) => new BookingEntryFilterable(rawSearchResult)
+      )
     } catch (e) {
       /* global EventBus */
       EventBus.$emit('notify', e.response)

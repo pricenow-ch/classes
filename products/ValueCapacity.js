@@ -3,6 +3,8 @@
  * GET niesen/capacity/product/2?from=2019-08-08T00:00:00.00&to=2019-09-01T23:59:00.00
  */
 
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class ValueCapacity {
   constructor(params) {
     this.bookable = params.hasOwnProperty('bookable') ? params.bookable : null
@@ -36,10 +38,8 @@ export default class ValueCapacity {
 
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/product/override/' +
-          productInstance.getId(),
+      await shopInstance().post(
+        `/admin/capacity/product/override/${productInstance.getId()}`,
         {
           from: from,
           to: to,

@@ -1,4 +1,5 @@
 import store from '../../store/store'
+import { shopInstance } from '../utils/axiosInstance'
 
 /**
  * handles the favorites/bookmarks fetching and storing persistently
@@ -10,14 +11,11 @@ export default class ProductDefinitionBookmarkService {
    * @returns {Promise<[]>}
    */
   async fetch() {
-    const baseUrl = store.getters
-      .getCurrentDestinationInstance()
-      .getShopApi(false)
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     let bookmarks = []
     try {
-      let response = await axios.get(baseUrl + 'user/profile/favorites')
+      const response = await shopInstance(false).get('/user/profile/favorites')
 
       if (response.status === 200) {
         if (response.data) {
@@ -43,14 +41,11 @@ export default class ProductDefinitionBookmarkService {
    * @returns {[]}
    */
   async update(bookmarks) {
-    const baseUrl = store.getters
-      .getCurrentDestinationInstance()
-      .getShopApi(false)
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.patch(
-        baseUrl + 'user/profile/favorites',
+      const response = await shopInstance(false).patch(
+        '/user/profile/favorites',
         bookmarks
       )
 

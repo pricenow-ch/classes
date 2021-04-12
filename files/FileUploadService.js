@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import FileModel from './FileModel'
 
 export default class FileUploadService {
@@ -14,17 +15,12 @@ export default class FileUploadService {
       /* global EventBus axios i18n */
       EventBus.$emit('spinnerShow', i18n.t('singleProductView.uploadingImage'))
 
-      await axios
-        .post(
-          store.getters.getCurrentDestinationInstance().getShopApi() +
-            'admin/upload/image',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        )
+      await shopInstance()
+        .post('/admin/upload/image', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
         .then((response) => {
           EventBus.$emit('spinnerHide')
           uploadedFile = new FileModel(response.data)

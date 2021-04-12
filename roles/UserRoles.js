@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import User from '../user/User'
 import Roles from './Roles'
 
@@ -21,14 +22,10 @@ export default class UserRoles extends User {
   async linkRole(roleId, userId) {
     EventBus.$emit('spinnerShow')
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/role/user',
-        {
-          userId: userId,
-          roleId: roleId,
-        }
-      )
+      await shopInstance().post('/admin/role/user', {
+        userId: userId,
+        roleId: roleId,
+      })
       return Promise.resolve(true)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('roles.couldNotBeLinked'))
@@ -41,16 +38,12 @@ export default class UserRoles extends User {
   async unlinkRole(roleId, userId) {
     EventBus.$emit('spinnerShow')
     try {
-      await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/role/user',
-        {
-          data: {
-            userId: userId,
-            roleId: roleId,
-          },
-        }
-      )
+      await shopInstance().delete('/admin/role/user', {
+        data: {
+          userId: userId,
+          roleId: roleId,
+        },
+      })
       return Promise.resolve(true)
     } catch (e) {
       EventBus.$emit('notify', i18n.t('roles.couldNotBeLinked'))

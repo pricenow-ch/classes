@@ -1,6 +1,7 @@
 import ExtendedAttribute from './ExtendedAttribute'
 import store from '../../store/store'
 import _ from 'lodash'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class ExtendedAttributes {
   constructor(extendedAttributes, type, typeId) {
@@ -24,13 +25,11 @@ export default class ExtendedAttributes {
     this.extendedAttributes = []
     /* global EventBus axios store */
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'products/' +
-          this.type +
-          '?ids=' +
-          this.typeId
-      )
+      let response = await shopInstance().get(`/products/${this.type}`, {
+        params: {
+          ids: this.typeId,
+        },
+      })
 
       await this.parseApiData(response.data)
     } catch (e) {
@@ -89,10 +88,8 @@ export default class ExtendedAttributes {
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
-      const response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/product/' +
-          this.type,
+      const response = await shopInstance().post(
+        `/admin/product/${this.type}`,
         {
           productId: this.typeId,
           key: extAttrKey,

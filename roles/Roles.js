@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import Role from './Role'
 
 export default class Roles {
@@ -23,12 +24,7 @@ export default class Roles {
   async loadAvailableRolesForRegion(destination = null) {
     EventBus.$emit('spinnerShow')
     try {
-      const urlPrefix = destination
-        ? store.getters
-            .getCurrentDestinationInstance()
-            .getShopApi(true, destination)
-        : store.getters.getCurrentDestinationInstance().getShopApi()
-      let response = await axios.get(urlPrefix + 'admin/role')
+      const response = await shopInstance().get('/admin/role')
       await this.parseApiData(response.data)
       return Promise.resolve(true)
     } catch (e) {

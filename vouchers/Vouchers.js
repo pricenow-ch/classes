@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import Voucher from './Voucher'
 
 export default class Vouchers {
@@ -15,17 +16,10 @@ export default class Vouchers {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'vouchers'
-      )
+      const { data } = await shopInstance().get('/vouchers')
 
       // reset vouchers
-      this.vouchers = []
-
-      // iterate vouchers
-      for (let i = 0; i < response.data.length; i++) {
-        this.vouchers.push(new Voucher(response.data[i]))
-      }
+      this.vouchers = data.map((voucher) => new Voucher(voucher))
     } catch (e) {
       EventBus.$emit('notify', e.response)
     } finally {
@@ -47,11 +41,8 @@ export default class Vouchers {
       EventBus.$emit('spinnerShow')
 
       try {
-        let response = await axios.get(
-          store.getters.getCurrentDestinationInstance().getShopApi() +
-            'vouchers/' +
-            voucherInstance.getCode() +
-            '/validate'
+        const response = await shopInstance().get(
+          `/vouchers/${voucherInstance.getCode()}/validate`
         )
 
         if (response.status === 200) {

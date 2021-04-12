@@ -21,11 +21,7 @@ export default class FileModel {
   getImageUrl() {
     if (this.path) {
       /* global store */
-      return (
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-        'fileResource/public/' +
-        this.path
-      )
+      return `${process.env.VUE_APP_SHOP_API_URL}/${process.env.VUE_APP_DESTINATION}/fileResource/public/${this.path}`
     } else {
       return null
     }

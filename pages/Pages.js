@@ -1,3 +1,4 @@
+import { shopInstance } from '../utils/axiosInstance'
 import Page from './Page'
 
 export default class Pages {
@@ -11,19 +12,14 @@ export default class Pages {
 
     try {
       /* global store */
-      let response = await axios.get(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'pages'
-      )
-
-      // parse api data
-      let apiData = response.data
+      const { data } = await shopInstance().get('/pages')
 
       // iterate languages
-      for (let language in apiData) {
+      for (let language in data) {
         // iterate pages inside language
-        for (let b = 0; b < apiData[language].length; b++) {
+        for (let b = 0; b < data[language].length; b++) {
           // prepare params
-          let params = apiData[language][b]
+          let params = data[language][b]
           params.language = language
 
           // create new page instance

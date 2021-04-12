@@ -1,4 +1,5 @@
 import config from '../../../config'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class Destination {
   constructor(params) {
@@ -132,12 +133,9 @@ export default class Destination {
 
     EventBus.$emit('spinnerShow')
     try {
-      response = await axios.put(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'region',
-        {
-          currency: currency,
-        }
-      )
+      response = await shopInstance().put('/region', {
+        currency: currency,
+      })
     } catch (e) {
       EventBus.$emit('notify', e)
       return Promise.resolve([])

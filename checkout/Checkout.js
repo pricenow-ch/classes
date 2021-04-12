@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class Checkout {
   constructor() {
     this.basketInstance = store.getters.getBasketInstance()
@@ -21,14 +23,11 @@ export default class Checkout {
     EventBus.$emit('spinnerShow')
 
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() + 'checkout',
-        {
-          basketId: this.basketInstance.getUuid(),
-          vouchers: this.basketInstance.getVouchersAsArray(),
-          note: this.basketInstance.getComment(),
-        }
-      )
+      const response = await shopInstance().post('/checkout', {
+        basketId: this.basketInstance.getUuid(),
+        vouchers: this.basketInstance.getVouchersAsArray(),
+        note: this.basketInstance.getComment(),
+      })
       responseObject.code = response.status
     } catch (e) {
       responseObject.code = e.response.status

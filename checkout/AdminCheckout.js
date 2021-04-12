@@ -1,3 +1,5 @@
+import { shopInstance } from '../utils/axiosInstance'
+
 export default class AdminCheckout {
   constructor(basketInstance) {
     this.basketInstance = basketInstance
@@ -13,24 +15,20 @@ export default class AdminCheckout {
   async checkout(paid = false, bookingStatesInstance, note, uid) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/checkout',
-        {
-          note: note,
-          basketId: this.basketInstance.getUuid(),
-          paid: paid,
-          state: bookingStatesInstance.getBookingState().state,
-          uid: uid,
-        }
-      )
+      const { data } = await shopInstance().post('/admin/checkout', {
+        note: note,
+        basketId: this.basketInstance.getUuid(),
+        paid: paid,
+        state: bookingStatesInstance.getBookingState().state,
+        uid: uid,
+      })
 
       EventBus.$emit(
         'notify',
         i18n.t('adminCheckout.bookingCreated'),
         'success'
       )
-      return response.data.bookingId
+      return data.bookingId
     } catch (e) {
       if (e.response.status === 472) {
         // capacity sold out in the mean time
@@ -57,15 +55,11 @@ export default class AdminCheckout {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.post(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/mail/send',
-        {
-          uid: uid,
-          subject: subject,
-          body: body,
-        }
-      )
+      await shopInstance().post('/admin/mail/send', {
+        uid: uid,
+        subject: subject,
+        body: body,
+      })
 
       EventBus.$emit(
         'notify',
