@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import UserDestination from './UserDestination'
 
 export default class UserDestinations {
@@ -88,6 +89,7 @@ export default class UserDestinations {
             route.meta.requiredPermission
           )
         ) {
+          Cookies.set('destination', this.destinations[i])
           /* global store */
           store.commit('setCurrentDestinationInstance', this.destinations[i])
 

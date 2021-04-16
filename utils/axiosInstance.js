@@ -1,17 +1,30 @@
 import axios from 'axios'
-import cookies from 'js-cookie'
+import Cookies from 'js-cookie'
 
 const peInstance = (slug = true) => {
+  const destination = Cookies.get('destination')
+  let parsedDestination = {}
+  try {
+    parsedDestination = destination ? JSON.parse(destination) : {}
+  } catch (err) {
+    Cookies.remove('destination')
+    Cookies.remove('uid')
+    Cookies.remove('authorization')
+    return new Error('Error parsing destination.')
+  }
+  if (slug && !parsedDestination?.slug) {
+    return new Error('Destination not found.')
+  }
   const instance = axios.create({
     baseURL: `${process.env.VUE_APP_PE_API_URL}${
-      slug ? `/${process.env.VUE_APP_DESTINATION}` : ''
+      slug ? `/${parsedDestination.slug}` : ''
     }`,
   })
   instance.interceptors.request.use(
     function (config) {
-      const token = cookies.get('authorization')
+      const token = Cookies.get('authorization')
       if (token) {
-        config.headers.Authorization = cookies.get('authorization')
+        config.headers.Authorization = Cookies.get('authorization')
       }
       return config
     },
@@ -38,16 +51,31 @@ const peInstance = (slug = true) => {
 }
 
 const shopInstance = (slug = true) => {
+  const destination = Cookies.get('destination')
+  let parsedDestination = {}
+  try {
+    parsedDestination = destination ? JSON.parse(destination) : {}
+  } catch (err) {
+    Cookies.remove('destination')
+    Cookies.remove('uid')
+    Cookies.remove('authorization')
+    return new Error('Error parsing destination.')
+  }
+
+  if (slug && !parsedDestination?.slug) {
+    return new Error('Destination not found.')
+  }
+
   const instance = axios.create({
     baseURL: `${process.env.VUE_APP_SHOP_API_URL}${
-      slug ? `/${process.env.VUE_APP_DESTINATION}` : ''
+      slug ? `/${parsedDestination?.slug}` : ''
     }`,
   })
   instance.interceptors.request.use(
     function (config) {
-      const token = cookies.get('authorization')
+      const token = Cookies.get('authorization')
       if (token) {
-        config.headers.Authorization = cookies.get('authorization')
+        config.headers.Authorization = Cookies.get('authorization')
       }
       return config
     },
