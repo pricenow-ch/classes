@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import axiosRetry from 'axios-retry'
 
 const peInstance = (slug = true) => {
   const destination = Cookies.get('destination')
@@ -20,6 +21,8 @@ const peInstance = (slug = true) => {
       slug ? `/${parsedDestination.slug}` : ''
     }`,
   })
+  axiosRetry(instance, { retries: 1 })
+
   instance.interceptors.request.use(
     function (config) {
       const token = Cookies.get('authorization')
@@ -71,6 +74,8 @@ const shopInstance = (slug = true) => {
       slug ? `/${parsedDestination?.slug}` : ''
     }`,
   })
+  axiosRetry(instance, { retries: 1 })
+
   instance.interceptors.request.use(
     function (config) {
       const token = Cookies.get('authorization')
