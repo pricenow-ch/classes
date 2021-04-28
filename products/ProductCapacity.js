@@ -89,6 +89,32 @@ export default class ProductCapacity {
   }
 
   /**
+   * delete one singel capasity based on its value
+   * @returns {Promise<ProductCapacity>}
+   */
+  async deleteCapacity(value) {
+    /* global EventBus axios store */
+    EventBus.$emit('spinnerShow')
+
+    try {
+      await shopInstance().delete(
+        `/admin/capacity/product/${this.pe_productId}/value/${value}`
+      )
+
+      EventBus.$emit(
+        'notify',
+        i18n.t('productCapacity.capacityDeletedSuccessfully'),
+        'success'
+      )
+    } catch (e) {
+      EventBus.$emit('notify', i18n.t('notify.errorDeleteCapacity'))
+    } finally {
+      EventBus.$emit('spinnerHide')
+      return Promise.resolve(this)
+    }
+  }
+
+  /**
    * update the capacity amount
    * @param capacity
    * @param value

@@ -6,6 +6,7 @@ import Vouchers from '../vouchers/Vouchers'
 import Vats from '../vats/Vats'
 import _ from 'lodash'
 import { peInstance } from '../utils/axiosInstance'
+import BasketConditions from '../products/BasketConditions'
 
 export default class Basket {
   constructor() {
@@ -890,6 +891,55 @@ export default class Basket {
     }
 
     return basketEntries
+  }
+
+  /**
+   * Are the booking constraints over all basket entries fulfilled?
+   * Short hand method
+   * @returns {boolean}
+   */
+  basketConditionsMet() {
+    // group basket entries by date to verify the conditions isolated by date
+    const basketEntriesByDate = _.groupBy(this.basketEntries, (basketEntry) => {
+      return basketEntry.getValidFrom().getTime()
+    })
+    // check conditions for each date group
+    for (let date in basketEntriesByDate) {
+      const productDefinitions = basketEntriesByDate[date].map((basketEntry) =>
+        basketEntry.getProductDefinition()
+      )
+      const conditionsMet = this.getAllBasketConditions().basketConditionsMet(
+        productDefinitions,
+        true
+      )
+      if (!conditionsMet) return false
+    }
+    return true
+  }
+
+  /**
+   * Get all basket conditions out of the basket entries, flatten and unioned.
+   * @returns {BasketConditions}
+   */
+  getAllBasketConditions() {
+    // First get all basket conditions out of each product
+    const basketEntriesConditions = this.basketEntries.map((basketEntry) => {
+      return basketEntry
+        .getProduct()
+        .getBasketConditions()
+        .getBasketConditions()
+    })
+    // flatten them
+    const flattenBasketEntriesConditions = _.flattenDeep(
+      basketEntriesConditions
+    )
+    // remove multiple used conditions with the help of lodash's union method
+    const basketConditions = _.unionBy(
+      flattenBasketEntriesConditions,
+      (basketCondition) => basketCondition.id
+    )
+    // create the BasketConditions instance to make use of it's methods
+    return new BasketConditions(basketConditions)
   }
 
   /**
