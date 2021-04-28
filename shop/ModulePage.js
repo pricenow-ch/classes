@@ -105,12 +105,10 @@ export default class ModulePage {
     formValidationResults
   ) {
     // check if certain component is valid
-
-    if (
-      await this.getComponentById(componentId).validateComponent(
-        formValidationResults
-      )
-    ) {
+    nentHasNoErrorMessage = await this.getComponentById(
+      componentId
+    ).hasComponentErrors(formValidationResults)
+    if (componentHasNoErrorMessage === true) {
       // all forms of the component (by id) are valid
 
       // check if all components are valid
@@ -123,11 +121,16 @@ export default class ModulePage {
           activeModuleInstance.initConditionsCheck()
         }
       }
-    } else {
+    } else if (componentHasNoErrorMessage === false) {
       // the forms are invalid
       // inform user
       /* global EventBus i18n */
       EventBus.$emit('notify', i18n.t('notify.fullFillForm'), 'error', {
+        uniqueIdentifier: 'formValidationBookingProcessUniqueIdentifier',
+      })
+    } else {
+      // inform user with a custom message
+      EventBus.$emit('notify', componentHasNoErrorMessage, 'error', {
         uniqueIdentifier: 'formValidationBookingProcessUniqueIdentifier',
       })
     }

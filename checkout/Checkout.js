@@ -19,6 +19,13 @@ export default class Checkout {
       return responseObject
     }
 
+    // check basket conditions
+    const answer = this.basketInstance.basketConditionsMet()
+    if (!answer) {
+      responseObject.code = 902
+      return responseObject
+    }
+
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow')
 

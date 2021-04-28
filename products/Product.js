@@ -9,6 +9,7 @@ import Events from '../events/Events.js'
 import ExtendedAttributes from './ExtendedAttributes'
 import Price from './Price'
 import { peInstance, shopInstance } from '../utils/axiosInstance'
+import BasketConditions from './BasketConditions'
 
 export default class Product {
   constructor(params) {
@@ -83,6 +84,9 @@ export default class Product {
     this.excludeFromUiFilter = params.excludeFromUiFilter
       ? params.excludeFromUiFilter.split(',')
       : []
+    this.basketConditions = params.basketConditions
+      ? new BasketConditions(params.basketConditions)
+      : new BasketConditions([])
   }
 
   /**
@@ -435,6 +439,10 @@ export default class Product {
     return this.excludeFromUiFilter
   }
 
+  getBasketConditions() {
+    return this.basketConditions
+  }
+
   /**
    * gets a specific productDefinition by id
    * @param {number} definitionId
@@ -448,8 +456,9 @@ export default class Product {
     return filteredDefinition
   }
 
-  getAllAttributeNames(sort = true, attributesToReturn = []) {
-    let productDefinitions = this.getProductDefinitions()
+  getAllAttributeNames(sort = true) {
+    const productDefinitions = this.getProductDefinitions()
+    const attributesToReturn = []
 
     // iterate product definitions
     for (let a = 0; a < productDefinitions.length; a++) {
@@ -706,19 +715,21 @@ export default class Product {
    * useful for the calendar dropdown
    * @param attributeKey
    * @param productDefinition
+   * @param excludeAttributeKeys
    * @returns {Promise<[]>}
    */
   filterProductDefinitionsByProductDefinitionAndAttributeKey(
     attributeKey,
-    productDefinition
+    productDefinition,
+    excludeAttributeKeys = []
   ) {
     let filteredProductDefinitions = []
 
     let attributesInstance = productDefinition.getAttributes()
-    let requiredAttributeKeys = this.getRequiredAttributes(
-      attributesInstance,
-      attributeKey
-    )
+    let requiredAttributeKeys = this.getRequiredAttributes(attributesInstance, [
+      attributeKey,
+      ...excludeAttributeKeys,
+    ])
 
     // iterate product definitions
     for (let a = 0; a < this.productDefinitions.length; a++) {
@@ -766,15 +777,16 @@ export default class Product {
    * search for a new product definition, which is almost the same as the original product definition but has one
    * attribute with a changed attribute value
    * @param originalProductDefinition
-   * @param excludeAttributeKey: You can exclude an attribute key in a second search round
+   * @param excludeAttributeKeys
    * @param valueKey: if you want to exchange another value key than 'value'. For example 'peopleCount'
    * @param attributePairs: Array with attribute key and value
+   * @param includeMauiOnly
    * @returns {Promise<ProductDefinition | null>}
    */
   exchangeProductDefinitionWithAttribute(
     originalProductDefinition,
     attributePairs,
-    excludeAttributeKey = null,
+    excludeAttributeKeys = [],
     valueKey = definitions.attributeValues.value,
     includeMauiOnly = false
   ) {
@@ -792,11 +804,11 @@ export default class Product {
       includeMauiOnly
     )
 
-    if (!foundProductDefinition && excludeAttributeKey) {
+    if (!foundProductDefinition && excludeAttributeKeys.length) {
       // 2.) try with attribute exclusion
       requiredAttributes = this.getRequiredAttributes(
         originalAttributesInstance,
-        excludeAttributeKey
+        excludeAttributeKeys
       )
       foundProductDefinition = this.searchForProductDefinition(
         requiredAttributes,
@@ -923,18 +935,22 @@ export default class Product {
   /**
    * helper method
    * @param attributesInstance
-   * @returns {[]}
+   * @param attributesToExclude
+   * @returns [AttributeKeyString]
    */
-  getRequiredAttributes(attributesInstance, attributeToExclude = null) {
+  getRequiredAttributes(attributesInstance, attributesToExclude = []) {
     let requiredAttributes = []
 
     // iterate original product definition to get all required attribute keys
-    for (let attribute in attributesInstance) {
-      // avoid getting null attributes by attributesInstance[attribute]
-      if (attributesInstance[attribute] && attribute !== attributeToExclude)
-        requiredAttributes.push(attribute)
+    for (let attributeKey in attributesInstance) {
+      // skip not available attribute
+      if (!attributesInstance[attributeKey]) continue
+      const excludeThisAttribute =
+        attributesToExclude.length && attributesToExclude.includes(attributeKey)
+      if (excludeThisAttribute) continue
+      requiredAttributes.push(attributeKey)
     }
-
+    // returns an array with attribute keys:string
     return requiredAttributes
   }
 

@@ -23,7 +23,7 @@ export default class AppSeasons {
     } else if (currentDestination === 'chaeserrugg') {
       // really bad workaround, as these are not seasons!
       this.appSeasons.push(new AppSeason('winter', 'shortCutSeasonAbos.winter'))
-      // this.appSeasons.push(new AppSeason('family', 'shortCutSeasonAbos.family'))
+      this.appSeasons.push(new AppSeason('family', 'shortCutSeasonAbos.family'))
     } else if (currentDestination === 'moosalpregion') {
       this.appSeasons.push(new AppSeason('winter', 'shortCutSeasonAbos.winter'))
       this.appSeasons.push(

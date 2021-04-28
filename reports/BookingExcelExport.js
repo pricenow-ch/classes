@@ -141,7 +141,7 @@ export default class AccountingExcelExport {
 
         customer:
           bookingEntry?.user?.firstname + ' ' + bookingEntry?.user?.surname,
-
+        mail: bookingEntry?.user?.mail,
         start: vueOptions.filters.formatDate(bookingEntry?.start, 'DD/MM/YYYY'),
         end: vueOptions.filters.formatDate(bookingEntry?.end, 'DD/MM/YYYY'),
         state: bookingStateTrans,
@@ -201,6 +201,7 @@ export default class AccountingExcelExport {
       i18n.t('reportsOverview.accountingHeaders.product'),
       i18n.t('reportsOverview.accountingHeaders.productDefinition'),
       i18n.t('reportsOverview.accountingHeaders.customer'),
+      i18n.t('reportsOverview.accountingHeaders.mail'),
       i18n.t('reportsOverview.accountingHeaders.start'),
       i18n.t('reportsOverview.accountingHeaders.end'),
       i18n.t('reportsOverview.accountingHeaders.state'),

@@ -49,17 +49,23 @@ export default class PageComponent {
 
   /**
    * are all forms of this component valid? if so, set the allFormsAreValid variable to true
+   * else return false or the potential error message.
    * @param formValidationResults | Array
    * @returns {boolean}
    */
-  validateComponent(formValidationResults = []) {
+  hasComponentErrors(formValidationResults = []) {
     // check if all forms are valid
-    let incompleteForms = formValidationResults.some((result) => {
-      return result === false
-    })
-
-    if (incompleteForms) return false
-    else {
+    const errorMessageOrIncompleteForm = formValidationResults.find(
+      (result) => {
+        return result !== true
+      }
+    )
+    if (
+      errorMessageOrIncompleteForm ||
+      errorMessageOrIncompleteForm === false
+    ) {
+      return errorMessageOrIncompleteForm
+    } else {
       // all forms are valid
       this.allFormsAreValid = true
       return true

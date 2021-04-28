@@ -166,13 +166,12 @@ export default class Products extends EventHelper {
   /**
    * ADMIN FUNCTION
    * loads all prices of the current destination and assigns them to the corresponding product definitions
-   * @param considerPriceCalculationTime
    * @return {Promise<Products>}
    */
-  async loadPrices(considerPriceCalculationTime = false) {
+  async loadPrices() {
     /* global EventBus axios */
     // get first season start of all products (or today, if season started yet)
-    let from = await this.getFirstSeasonStart(considerPriceCalculationTime)
+    const from = await this.getFirstSeasonStart()
 
     try {
       const { data } = await peInstance(false).get('/admin/prices', {
@@ -533,31 +532,11 @@ export default class Products extends EventHelper {
    * Gets the first season start of all products (or the today)
    * @returns {null | Date}
    */
-  getFirstSeasonStart(considerPriceCalculationTime = false) {
-    let firstSeasonStart = null
-    if (this.products.length) {
-      for (let i = 0; i < this.products.length; i++) {
-        let tmpSeasonStart = this.products[i].getCurrentSeasonStart()
-
-        // no season start yet => first iteration
-        if (!firstSeasonStart) firstSeasonStart = tmpSeasonStart
-        else if (tmpSeasonStart.getTime() < firstSeasonStart.getTime())
-          firstSeasonStart = tmpSeasonStart
-      }
-    }
-
-    // to get already the next day after 17.00 because the pricing engine won't deliver for today
-    let today = new Date().setHours(0, 0, 0, 0)
-    let utcHours = new Date().getUTCHours()
-    if (
-      considerPriceCalculationTime &&
-      firstSeasonStart.getTime() === today &&
-      utcHours >= 16
-    ) {
-      firstSeasonStart.setDate(firstSeasonStart.getDate() + 1)
-    }
-
-    return firstSeasonStart
+  getFirstSeasonStart() {
+    const dates = this.products.map((product) =>
+      product.getCurrentSeasonStart().getTime()
+    )
+    return new Date(Math.min(...dates))
   }
 
   /**
@@ -631,7 +610,9 @@ export default class Products extends EventHelper {
     }
 
     // exclude excludeFromUiFilter
-    attributesToReturn = _.uniqBy(attributesToReturn, 'key')
+    attributesToReturn = this.getAllUniqueAttributesWithUniqueValues(
+      attributesToReturn
+    )
     excludes = _.uniq(excludes)
     for (let e = 0; e < excludes.length; e++) {
       for (let a = 0; a < attributesToReturn.length; a++) {
@@ -655,6 +636,21 @@ export default class Products extends EventHelper {
     }
 
     return attributesToReturn
+  }
+
+  getAllUniqueAttributesWithUniqueValues(attributes) {
+    const grouped = _.groupBy(attributes, (a) => a.key)
+    const unique = Object.keys(grouped).map((key) => {
+      const values = _.uniqBy(
+        grouped[key].flatMap((val) => val.values),
+        (o) => o.value
+      )
+      return {
+        key,
+        values,
+      }
+    })
+    return unique
   }
 
   // merge validity dates of all products

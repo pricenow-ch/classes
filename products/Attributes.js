@@ -30,6 +30,8 @@ export default class Attributes {
     this.peopleCount = params.peopleCount ? params.peopleCount : null
     this.tarif = params.tarif || null
     this.voucherType = params.voucherType || null
+    this.sledge = params.sledge || null
+    this.basketCondition = params.basketCondition || null
   }
 
   getAge() {
@@ -67,12 +69,27 @@ export default class Attributes {
   getTime() {
     return this.time
   }
+  
+  getSledge() {
+    return this.sledge
+  }
+
+  getBasketCondition() {
+    return this.basketCondition
+  }
 
   getTitle(key) {
     if (this[key]) {
       return i18n.t(this[key].translation)
     }
     return ''
+  }
+
+  static getTitleByValue(attributeValue) {
+    const destinationSlug = store.getters
+      .getCurrentDestinationInstance()
+      .getSlug()
+    return i18n.t(destinationSlug + '-attributes-' + attributeValue)
   }
 
   /**

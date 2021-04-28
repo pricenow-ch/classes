@@ -93,6 +93,8 @@ export default class UserData {
 
         if (
           this.media !== definitions.ticketMedia.paper ||
+          basketEntry.halfFareRequired() ||
+          basketEntry.gaRequired() ||
           basketEntry.gaOrHalfFareRequired()
         ) {
           if (this.cardId) {
@@ -127,6 +129,11 @@ export default class UserData {
    * @returns {boolean}
    */
   onlyOneReductionPossibility(basket, basketEntry, type) {
+    // If the current basket entry is required by another ticket, the product instance will not be found in the code beneath.
+    // It's also not necessary because required product definitions are linked 1:1 and no selection by user is needed though.
+    // https://pricenow.atlassian.net/browse/T1-1932
+    if (basketEntry.isRequiredEntry()) return true
+
     const productDefinitionInstance = basketEntry.getProductDefinition()
     const productId = productDefinitionInstance.getProductId()
     const productInstance = store.getters
