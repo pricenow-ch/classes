@@ -106,7 +106,7 @@ export default class Basket {
     if (!this.uuid) await this.createBasket()
     try {
       const response = await peInstance().post(
-        `/baskets/${uuid}/entries`,
+        `/baskets/${this.uuid}/entries`,
         payload
       )
       await this.parseApiData(response.data)
