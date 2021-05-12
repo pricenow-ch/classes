@@ -32,9 +32,8 @@ export default class BookingEntryFilterable extends BookingEntry {
     if (!from || !to) {
       throw new Error('from or to parameter not set!')
     }
-
     try {
-      const { data } = await shopInstance.get(`/admin/bookingEntry/filter`, {
+      const { data } = await shopInstance().get(`/admin/bookingEntry/filter`, {
         params: {
           from,
           to,

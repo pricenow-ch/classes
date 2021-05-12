@@ -18,7 +18,7 @@ export default class BookingAggregatedService {
     }
     this.aggregatedBookings = []
     try {
-      const { data } = await shopInstance.get(`/admin/bookingEntry/sum`, {
+      const { data } = await shopInstance().get(`/admin/bookingEntry/sum`, {
         params: {
           from,
           to,
