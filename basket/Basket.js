@@ -39,12 +39,16 @@ export default class Basket {
   }
 
   // api communication
-  async createBasket() {
+  async createBasket(isAdminBasket = false) {
     /* global axios store */
     try {
       const response = await peInstance().post('/baskets')
       await this.parseApiData(response.data)
-      EventBus.$emit('changed:basketUuid', this.uuid)
+
+      // save basket in cookies if not admin
+      if (!isAdminBasket) {
+        EventBus.$emit('changed:basketUuid', this.uuid)
+      }
 
       this.causeWeCareActiveInDestination = this.causeWeCare
     } catch (e) {
@@ -79,7 +83,8 @@ export default class Basket {
     amountOfProductDefintions,
     productDefinition,
     startDateInstance,
-    userData
+    userData,
+    isAdminBasket = false
   ) {
     // prepare payload
     let payload = []
@@ -90,7 +95,7 @@ export default class Basket {
         userData: userData,
       })
     }
-    return await this.addProductDefinitionsPrepared(payload)
+    return await this.addProductDefinitionsPrepared(payload, isAdminBasket)
   }
 
   /**
@@ -99,11 +104,11 @@ export default class Basket {
    * @param payload
    * @returns {Promise<boolean>}
    */
-  async addProductDefinitionsPrepared(payload) {
+  async addProductDefinitionsPrepared(payload, isAdminBasket = false) {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow')
     // check for api basket first
-    if (!this.uuid) await this.createBasket()
+    if (!this.uuid) await this.createBasket(isAdminBasket)
     try {
       const response = await peInstance().post(
         `/baskets/${this.uuid}/entries`,

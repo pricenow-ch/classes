@@ -27,11 +27,7 @@ export default class Products extends EventHelper {
       })
 
       if (response.status === 200) {
-        await this.parseApiData(
-          response.data,
-          false,
-          destinationInstance
-        )
+        await this.parseApiData(response.data, false, destinationInstance)
       } else {
         EventBus.$emit('notify')
       }
