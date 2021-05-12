@@ -20,8 +20,8 @@ export default class FileModel {
    */
   getImageUrl() {
     if (this.path) {
-      /* global store */
-      return `${process.env.VUE_APP_SHOP_API_URL}/${process.env.VUE_APP_DESTINATION}/fileResource/public/${this.path}`
+      const slug = store.getters.getCurrentDestinationInstance().getSlug()
+      return `${process.env.VUE_APP_SHOP_API_URL}/${slug}/fileResource/public/${this.path}`
     } else {
       return null
     }
