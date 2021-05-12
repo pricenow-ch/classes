@@ -69,7 +69,7 @@ export default class Attributes {
   getTime() {
     return this.time
   }
-  
+
   getSledge() {
     return this.sledge
   }

@@ -2,10 +2,9 @@ import axios from 'axios'
 import cookies from 'js-cookie'
 
 const peInstance = (slug = true) => {
+  slug = slug ? store.getters.getCurrentDestinationInstance().getSlug() : ''
   const instance = axios.create({
-    baseURL: `${process.env.VUE_APP_PE_API_URL}${
-      slug ? `/${process.env.VUE_APP_DESTINATION}` : ''
-    }`,
+    baseURL: `${process.env.VUE_APP_PE_API_URL}/${slug}`,
   })
   instance.interceptors.request.use(
     function (config) {
@@ -38,10 +37,9 @@ const peInstance = (slug = true) => {
 }
 
 const shopInstance = (slug = true) => {
+  slug = slug ? store.getters.getCurrentDestinationInstance().getSlug() : ''
   const instance = axios.create({
-    baseURL: `${process.env.VUE_APP_SHOP_API_URL}${
-      slug ? `/${process.env.VUE_APP_DESTINATION}` : ''
-    }`,
+    baseURL: `${process.env.VUE_APP_SHOP_API_URL}/${slug}`,
   })
   instance.interceptors.request.use(
     function (config) {
