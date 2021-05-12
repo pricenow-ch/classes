@@ -67,7 +67,7 @@ export default class UserDestinations {
    * @param slug
    */
   async getDestinationBySlug(slug) {
-    return await this.destinations.find((destination) => {
+    return this.destinations.find((destination) => {
       return destination.getSlug() === slug
     })
   }
