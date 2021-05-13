@@ -3,6 +3,7 @@ import UserDestinations from '../destinations/UserDestinations'
 import Card from '../Card'
 import UserBookings from '../bookings/UserBookings'
 import { shopInstance } from '../utils/axiosInstance'
+import definitions from '../../../definitions'
 
 /**
  * containing all extra information about the logged in user such as regions etc.
@@ -105,7 +106,7 @@ export default class AppUser extends User {
    * @param key
    */
   async doIHavePermissionInTheCurrentDestinationForKey(key) {
-    let currentDestination = await this.getCurrentUserDestinationInstance()
+    const currentDestination = await this.getCurrentUserDestinationInstance()
     return currentDestination.hasUserPermissionInThisDestination(key)
   }
 
@@ -117,6 +118,28 @@ export default class AppUser extends User {
     return this.userDestinationsInstance.doIHaveAnyPermissionForDestination(
       destinationSlug
     )
+  }
+
+  /**
+   * Can I switch to the pricing admin
+   * @returns {boolean}
+   */
+  async doIHavePermissionForPricingDashboard() {
+    // if you have one of these permissions, you can enter the pricing dashboard
+    const permissionsAllowForPricingDashboard = [
+      definitions.permissions.frontend.FRONTEND_ACCESS_PE_OVERVIEW,
+      definitions.permissions.frontend.FRONTEND_ACCESS_PE_DETAILS,
+      definitions.permissions.frontend.FRONTEND_ACCESS_PE_ANALYTICS,
+    ]
+    for (let i = 0; i < permissionsAllowForPricingDashboard.length; i++) {
+      const permission = permissionsAllowForPricingDashboard[i]
+      if (
+        await this.doIHavePermissionInTheCurrentDestinationForKey(permission)
+      ) {
+        return true
+      }
+    }
+    return false
   }
 
   /**

@@ -27,11 +27,7 @@ export default class Products extends EventHelper {
       })
 
       if (response.status === 200) {
-        await this.parseApiData(
-          response.data.products,
-          false,
-          destinationInstance
-        )
+        await this.parseApiData(response.data, false, destinationInstance)
       } else {
         EventBus.$emit('notify')
       }
@@ -148,7 +144,6 @@ export default class Products extends EventHelper {
         apiProduct.productDefinitions,
         productInstance
       )
-
       // if this product is already defined simply push the destination
       const index = _.findIndex(this.products, (prod) => {
         return prod.id == apiProduct.id
