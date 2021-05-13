@@ -26,7 +26,11 @@ export default class UserData {
     this.eventName = params.eventName || null
 
     // from which booking process was it added?
-    const activeModuleId = store.getters.getActiveModuleInstance()?.getId()
+    let activeModuleId = null
+    // backend frontends don't own shop modules nor the related functions in the store. check and skip.
+    if (typeof store.getters.getActiveModuleInstance === 'function') {
+      activeModuleId = store.getters.getActiveModuleInstance()?.getId()
+    }
     this.ownedByModuleId = params.ownedByModuleId || activeModuleId
   }
 

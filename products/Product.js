@@ -1194,7 +1194,11 @@ export default class Product {
   }
 
   getCurrentEventId() {
-    return store.getters.getActiveModuleInstance()?.getCurrentEventId()
+    // backend frontends don't own shop modules nor the related functions in the store. check and skip.
+    if (typeof store.getters.getActiveModuleInstance === 'function') {
+      return store.getters.getActiveModuleInstance()?.getCurrentEventId()
+    }
+    return null
   }
 
   // EXTENDED ATTRIBUTES SHORT CUTS
