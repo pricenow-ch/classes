@@ -32,7 +32,7 @@ export default class AppDestination extends Destination {
     this.currency = null
     // available seasons of this destination
     // handling the seasons. also the current season
-    this.appSeasons = new AppSeasons()
+    this.appSeasons = null
     this.init()
   }
 
@@ -43,8 +43,11 @@ export default class AppDestination extends Destination {
     this.setLogo()
     // loading header image
     this.loadingDesign()
-    // init seasons
-    this.appSeasons.init()
+    // init seasons only if not backend
+    if (this.slug !== definitions.destinations.default) {
+      this.appSeasons = new AppSeasons()
+      this.appSeasons.init()
+    }
   }
 
   /**
@@ -121,19 +124,6 @@ export default class AppDestination extends Destination {
             require('@/assets/destinations/backgroundImage/moosalpregion.jpg'),
             '#78B6E2',
             '#78B6E2'
-          )
-        } catch (e) {
-          console.log(e)
-        }
-        break
-      // DEFAULT
-      default:
-        try {
-          this.setCustomDesign(
-            require('@/assets/destinations/headerImage/default.jpg'),
-            require('@/assets/destinations/backgroundImage/bellwald.jpg'),
-            '#1b3e5e',
-            '#f7cdd0'
           )
         } catch (e) {
           console.log(e)
