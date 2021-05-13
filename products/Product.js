@@ -404,8 +404,6 @@ export default class Product {
     } finally {
       EventBus.$emit('spinnerHide')
     }
-    // reload shop modules
-    await store.dispatch('initShopModules', true)
     return Promise.resolve(this.active)
   }
 
