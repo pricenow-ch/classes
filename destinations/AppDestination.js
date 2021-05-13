@@ -70,57 +70,81 @@ export default class AppDestination extends Destination {
     switch (this.slug) {
       // BELLWALD
       case config.destinations.bellwald:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/bellwald.jpg'),
-          require('@/assets/destinations/backgroundImage/bellwald.jpg'),
-          '#d50612',
-          '#f7cdd0'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/bellwald.jpg'),
+            require('@/assets/destinations/backgroundImage/bellwald.jpg'),
+            '#d50612',
+            '#f7cdd0'
+          )
+        } catch (e) {
+          console.log(e)
+        }
         break
       // VALS
       case config.destinations.vals:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/vals.jpg'),
-          require('@/assets/destinations/backgroundImage/vals.jpg'),
-          '#40605a',
-          '#40605a'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/vals.jpg'),
+            require('@/assets/destinations/backgroundImage/vals.jpg'),
+            '#40605a',
+            '#40605a'
+          )
+        } catch (e) {
+          console.log(e)
+        }
         break
       // NIESEN
       case config.destinations.niesen:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/niesen.jpg'),
-          require('@/assets/destinations/backgroundImage/niesen.jpg'),
-          '#004183',
-          '#004183'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/niesen.jpg'),
+            require('@/assets/destinations/backgroundImage/niesen.jpg'),
+            '#004183',
+            '#004183'
+          )
+        } catch (e) {
+          console.log(e)
+        }
         break
       // CHAESERRUGG
       case config.destinations.chaeserrugg:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/chaeserrugg.jpg'),
-          require('@/assets/destinations/backgroundImage/chaeserrugg.jpg'),
-          '#909090',
-          '#909090'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/chaeserrugg.jpg'),
+            require('@/assets/destinations/backgroundImage/chaeserrugg.jpg'),
+            '#909090',
+            '#909090'
+          )
+        } catch (e) {
+          console.log(e)
+        }
         break
       // MOOSALPREGION
       case config.destinations.moosalpregion:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/moosalpregion.jpg'),
-          require('@/assets/destinations/backgroundImage/moosalpregion.jpg'),
-          '#78B6E2',
-          '#78B6E2'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/moosalpregion.jpg'),
+            require('@/assets/destinations/backgroundImage/moosalpregion.jpg'),
+            '#78B6E2',
+            '#78B6E2'
+          )
+        } catch (e) {
+          console.log(e)
+        }
         break
       // DEFAULT
       default:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/default.jpg'),
-          require('@/assets/destinations/backgroundImage/bellwald.jpg'),
-          '#1b3e5e',
-          '#f7cdd0'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/default.jpg'),
+            require('@/assets/destinations/backgroundImage/bellwald.jpg'),
+            '#1b3e5e',
+            '#f7cdd0'
+          )
+        } catch (e) {
+          console.log(e)
+        }
         break
     }
 
