@@ -1,7 +1,7 @@
 import Destination from './Destination'
-import config from '../../../config.js'
 import AppSeasons from './AppSeasons'
 import { shopInstance } from '../utils/axiosInstance'
+import definitions from '../../../definitions'
 
 /**
  * Defines the current destination params for the shop. Like colors or logos, icons etc. depending on the destination.
@@ -38,7 +38,7 @@ export default class AppDestination extends Destination {
 
   async init() {
     // load the slug
-    await this.loadSlug()
+    this.loadSlug()
     // set logo after slug was loaded
     this.setLogo()
     // loading header image
@@ -52,14 +52,7 @@ export default class AppDestination extends Destination {
    */
   loadSlug() {
     // iterate destinations
-    for (let destination in config.destinations) {
-      if (process.env.VUE_APP_DESTINATION === destination) {
-        this.slug = config.destinations[destination]
-      }
-    }
-
-    if (!this.slug) this.slug = config.destinations['undefined']
-    return Promise
+    this.slug = process.env.VUE_APP_DESTINATION
   }
 
   /**
@@ -69,7 +62,7 @@ export default class AppDestination extends Destination {
     // set primary color
     switch (this.slug) {
       // BELLWALD
-      case config.destinations.bellwald:
+      case definitions.destinations.bellwald:
         try {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/bellwald.jpg'),
@@ -82,7 +75,7 @@ export default class AppDestination extends Destination {
         }
         break
       // VALS
-      case config.destinations.vals:
+      case definitions.destinations.vals:
         try {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/vals.jpg'),
@@ -95,7 +88,7 @@ export default class AppDestination extends Destination {
         }
         break
       // NIESEN
-      case config.destinations.niesen:
+      case definitions.destinations.niesen:
         try {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/niesen.jpg'),
@@ -108,7 +101,7 @@ export default class AppDestination extends Destination {
         }
         break
       // CHAESERRUGG
-      case config.destinations.chaeserrugg:
+      case definitions.destinations.chaeserrugg:
         try {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/chaeserrugg.jpg'),
@@ -121,7 +114,7 @@ export default class AppDestination extends Destination {
         }
         break
       // MOOSALPREGION
-      case config.destinations.moosalpregion:
+      case definitions.destinations.moosalpregion:
         try {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/moosalpregion.jpg'),
