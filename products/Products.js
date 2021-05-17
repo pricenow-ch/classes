@@ -1,7 +1,7 @@
 import store from '../../store/store'
 import Product from './Product'
 import _ from 'lodash'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import Price from './Price'
 import EventHelper from '../events/EventHelper'
 import { peInstance, shopInstance } from '../utils/axiosInstance'

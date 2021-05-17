@@ -1,4 +1,4 @@
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import moment from 'moment-timezone'
 import UserData from './UserData'
 import definitions from '../../../definitions'

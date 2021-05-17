@@ -1,4 +1,4 @@
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import ProductDefinition from '../products/ProductDefinition'
 import BasketEntry from './BasketEntry'
 import UserData from './UserData'

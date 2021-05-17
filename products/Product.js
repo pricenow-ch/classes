@@ -1,6 +1,6 @@
 import store from '../../store/store'
 import ProductDefinition from './ProductDefinition'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import ProductCapacity from './ProductCapacity'
 import { isMoment } from 'moment'
 import moment from 'moment'

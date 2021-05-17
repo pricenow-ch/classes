@@ -1,4 +1,4 @@
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import { peInstance } from '../utils/axiosInstance'
 /**
  * Service which allows prices to be overwritten or reverted

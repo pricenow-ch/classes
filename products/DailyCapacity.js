@@ -2,7 +2,7 @@
  * the capacity calendar entry for a given product capacity
  */
 import ValueCapacity from './ValueCapacity'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 
 export default class DailyCapacity {
   constructor(params) {

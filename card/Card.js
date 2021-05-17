@@ -1,5 +1,5 @@
-import definitions from '../../definitions'
-import { shopInstance } from './utils/axiosInstance'
+import definitions from '../../../definitions'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class Card {
   /**

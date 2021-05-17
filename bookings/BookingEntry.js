@@ -1,5 +1,5 @@
 import User from '../user/User'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import Cancellation from '../cancellation/Cancellation'
 import Skidata from './Skidata'
 import Event from '../events/Event.js'

@@ -1,5 +1,5 @@
 import Destination from './Destination'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import { peInstance } from '../utils/axiosInstance'
 /**
  * Child class of destination used mostly in AppUserInstance. Maybe also in the filter of the pricing engine.

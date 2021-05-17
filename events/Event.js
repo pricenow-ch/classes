@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { shopInstance } from '../utils/axiosInstance'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import ExtendedAttributes from '../products/ExtendedAttributes'
 
 export default class Event {

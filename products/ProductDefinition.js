@@ -1,5 +1,5 @@
 import Attributes from './Attributes'
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 import store from '../../store/store'
 import Product from './Product'
 import moment from 'moment-timezone'

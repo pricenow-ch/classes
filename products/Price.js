@@ -1,4 +1,4 @@
-import DateHelper from '../DateHelper'
+import DateHelper from '../utils/DateHelper'
 
 /**
  * Representation of a single price from the api. For example includes a eventually custom price

@@ -1,7 +1,7 @@
 import XLSX from 'xlsx'
 import XlsxHelper from '@/classes/XLSX/XlsxHelper'
 import store from '@/store/store'
-import DateHelper from '@/classes/DateHelper'
+import DateHelper from '@/classes/utils/DateHelper'
 import { shopInstance } from '../utils/axiosInstance'
 
 export default class VoucherExport {
