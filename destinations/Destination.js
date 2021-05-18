@@ -1,4 +1,3 @@
-import config from '../../../config'
 import { shopInstance } from '../utils/axiosInstance'
 
 export default class Destination {
