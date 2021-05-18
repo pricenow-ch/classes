@@ -1,5 +1,6 @@
 import ExternalUrlModel from './ExternalUrlModel'
 import ExternalUrlRoleModel from './ExternalUrlRoleModel'
+import axios from 'axios'
 
 export default class ExternalUrlService {
   parseApiData(externalUrls) {
