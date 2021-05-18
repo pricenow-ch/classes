@@ -1,6 +1,6 @@
 import store from '../../store/store'
 import moment from 'moment'
-import MaximumEarlyBookingDiscount from '@/classes/products/MaximumEarlyBookingDiscount'
+import MaximumEarlyBookingDiscount from '@/classes-shared/products/MaximumEarlyBookingDiscount'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class MaximumEarlyBookingDiscountService {

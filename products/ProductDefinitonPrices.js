@@ -1,6 +1,6 @@
 import store from '../../store/store'
 import moment from 'moment'
-import Price from '@/classes/products/Price'
+import Price from '@/classes-shared/products/Price'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class ProductDefinitionPrices {

@@ -5,7 +5,7 @@ import BookingStates from './BookingStates'
 import GroupDiscounts from '../basket/GroupDiscounts'
 import Vats from '../vats/Vats'
 import Destination from '../destinations/Destination'
-import Payment from '@/classes/bookings/Payment'
+import Payment from '@/classes-shared/bookings/Payment'
 import { shopInstance } from '../utils/axiosInstance'
 
 export default class Booking {

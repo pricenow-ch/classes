@@ -1,7 +1,7 @@
 /*
 Model class which represents the pe product season class
  */
-import Product from '@/classes/products/Product'
+import Product from '@/classes-shared/products/Product'
 
 export default class ProductSeason extends Product {
   constructor(params) {

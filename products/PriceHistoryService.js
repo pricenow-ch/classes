@@ -1,5 +1,5 @@
 import moment from 'moment'
-import CurrentPostedPrice from '@/classes/products/CurrentPostedPrice'
+import CurrentPostedPrice from '@/classes-shared/products/CurrentPostedPrice'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class PriceHistoryService {

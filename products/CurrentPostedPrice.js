@@ -1,4 +1,4 @@
-import Price from '@/classes/products/Price'
+import Price from '@/classes-shared/products/Price'
 import moment from 'moment'
 
 /**

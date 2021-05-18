@@ -1,6 +1,6 @@
 import moment from 'moment'
 import store from '@/store/store'
-import TargetPrice from '@/classes/products/ProductTargetPrice'
+import TargetPrice from '@/classes-shared/products/ProductTargetPrice'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class ProductTargetPriceService {

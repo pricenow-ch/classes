@@ -1,4 +1,4 @@
-import ExternalTicketProviderState from '@/classes/bookings/ExternalTicketProviderState'
+import ExternalTicketProviderState from '@/classes-shared/bookings/ExternalTicketProviderState'
 
 export default class Axess extends ExternalTicketProviderState {
   constructor(params) {

@@ -1,6 +1,6 @@
 import store from '../../store/store'
 import moment from 'moment'
-import RealizedDemand from '@/classes/products/RealizedDemand'
+import RealizedDemand from '@/classes-shared/products/RealizedDemand'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class RealizedDemandService {

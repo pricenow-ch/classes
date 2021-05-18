@@ -1,5 +1,5 @@
 import moment from 'moment'
-import MultiDayDiscount from '@/classes/products/MultiDayDiscount'
+import MultiDayDiscount from '@/classes-shared/products/MultiDayDiscount'
 import { peInstance } from '../utils/axiosInstance'
 
 export default class CurrentPostedPriceService {
