@@ -157,11 +157,14 @@ export default class Basket {
     }
 
     try {
-      const response = await peInstance().post(`/baskets/${uuid}/entries`, {
-        productDefinitionId: definition.getId(),
-        validFrom: DateHelper.shiftLocalToUtcIsoString(startDateInstance),
-        userData: userData,
-      })
+      const response = await peInstance().post(
+        `/baskets/${this.uuid}/entries`,
+        {
+          productDefinitionId: definition.getId(),
+          validFrom: DateHelper.shiftLocalToUtcIsoString(startDateInstance),
+          userData: userData,
+        }
+      )
 
       await this.parseApiData(response.data, updateCurrentUrlQuery)
       EventBus.$emit('spinnerHide')
@@ -185,7 +188,7 @@ export default class Basket {
 
     try {
       const response = await peInstance().delete(
-        `/baskets/${uuid}/entries/${basketEntryId}`
+        `/baskets/${this.uuid}/entries/${basketEntryId}`
       )
 
       // update basket instance
@@ -224,7 +227,7 @@ export default class Basket {
 
     try {
       const response = await peInstance().put(
-        `/baskets/${uuid}/entries/`,
+        `/baskets/${this.uuid}/entries/`,
         preparedBasketEntries
       )
       await this.parseApiData(response.data)
@@ -284,7 +287,7 @@ export default class Basket {
         .setCompleteForCheckout(basketEntryInstance)
       try {
         const response = await peInstance().put(
-          `/baskets/${uuid}/entries/${basketEntryInstance.getId()}`,
+          `/baskets/${this.uuid}/entries/${basketEntryInstance.getId()}`,
           {
             productDefinitionId: basketEntryInstance.getProductDefinitionId(),
             validFrom: DateHelper.shiftLocalToUtcIsoString(
