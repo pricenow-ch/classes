@@ -35,6 +35,20 @@ export default class UserDestination extends Destination {
   }
 
   /**
+   * Do I have any Permission which starts with one of the permission key parts?
+   * @param permissionKeyParts: String[]
+   * @returns {*}
+   */
+  hasUserPermissionWhichStartsWith(permissionKeyParts) {
+    return this.permissions.find((permission) => {
+      // iterate all permission key parts
+      return permissionKeyParts.find((permissionKeyPart) =>
+        permission.startsWith(permissionKeyPart)
+      )
+    })
+  }
+
+  /**
    * load capacities of all productDefinitions from api
    */
   async loadCapacities(from = new Date(), to) {

@@ -125,21 +125,20 @@ export default class AppUser extends User {
    * @returns {boolean}
    */
   async doIHavePermissionForPricingDashboard() {
-    // if you have one of these permissions, you can enter the pricing dashboard
-    const permissionsAllowForPricingDashboard = [
-      definitions.permissions.frontend.FRONTEND_ACCESS_PE_OVERVIEW,
-      definitions.permissions.frontend.FRONTEND_ACCESS_PE_DETAILS,
-      definitions.permissions.frontend.FRONTEND_ACCESS_PE_ANALYTICS,
-    ]
-    for (let i = 0; i < permissionsAllowForPricingDashboard.length; i++) {
-      const permission = permissionsAllowForPricingDashboard[i]
-      if (
-        await this.doIHavePermissionInTheCurrentDestinationForKey(permission)
-      ) {
-        return true
-      }
-    }
-    return false
+    // if I have one of these permissions, I can enter the pricing dashboard
+    // if I have one of these permissions, I can enter the shop admin
+    const currentDestination = await this.getCurrentUserDestinationInstance()
+    return currentDestination.hasUserPermissionWhichStartsWith(
+      definitions.permissions.pricingDashboardWorld
+    )
+  }
+
+  async doIHavePermissionForShopAdmin() {
+    // if I have one of these permissions, I can enter the shop admin
+    const currentDestination = await this.getCurrentUserDestinationInstance()
+    return currentDestination.hasUserPermissionWhichStartsWith(
+      definitions.permissions.shopAdminWorld
+    )
   }
 
   /**
