@@ -96,7 +96,7 @@ export default class UserData {
         }
 
         if (
-          this.media !== definitions.ticketMedia.paper ||
+          !this.isPaperMedia() ||
           basketEntry.halfFareRequired() ||
           basketEntry.gaRequired() ||
           basketEntry.gaOrHalfFareRequired()
@@ -221,6 +221,14 @@ export default class UserData {
 
   getMedia() {
     return this.media
+  }
+
+  isPaperMedia() {
+    return (
+      this.media === definitions.ticketMedia.paper ||
+      this.media === definitions.ticketMedia.pickUp ||
+      this.media === definitions.ticketMedia.printAtHome
+    )
   }
 
   isSelectedMediaSwisspass() {

@@ -114,7 +114,7 @@ export default class Products extends EventHelper {
       })
 
       // parse response
-      await this.parseApiData(response.data.products, true)
+      await this.parseApiData(response.data, true)
       return Promise.resolve(response)
     } catch (e) {
       EventBus.$emit('notify', e.response)

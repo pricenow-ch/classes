@@ -109,8 +109,8 @@ export default class AppDestination extends Destination {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/chaeserrugg.jpg'),
             require('@/assets/destinations/backgroundImage/chaeserrugg.jpg'),
-            '#909090',
-            '#909090'
+            '#A4AA78',
+            '#A4AA78'
           )
         } catch (e) {
           console.log(e)

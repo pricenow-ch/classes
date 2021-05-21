@@ -1004,6 +1004,11 @@ export default class Product {
       }
     }
 
+    const isNextDateOutOfSeason = nextDate > this.currentSeasonEnd
+    if (isNextDateOutOfSeason) {
+      return null
+    }
+
     if (!capacityStartDate) {
       // initial function called
       capacityStartDate = moment(this.getCurrentSeasonStart())
