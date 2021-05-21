@@ -1,6 +1,6 @@
 import ExternalUrlModel from './ExternalUrlModel'
 import ExternalUrlRoleModel from './ExternalUrlRoleModel'
-import axios from 'axios'
+import { shopInstance } from '../utils/axiosInstance'
 
 export default class ExternalUrlService {
   parseApiData(externalUrls) {
@@ -24,7 +24,7 @@ export default class ExternalUrlService {
   async getExternalUrlsForUserByType(type, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.get(
+      const response = await shopInstance().get(
         this.getBaseUrl(slug) + 'user/externalUrls/' + type
       )
       let result = await this.parseApiData(response.data)
@@ -40,7 +40,7 @@ export default class ExternalUrlService {
   async getAllExternalUrlsForRegionByType(type, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.get(
+      let response = await shopInstance().get(
         this.getBaseUrl(slug) + 'externalUrls/' + type
       )
       let result = await this.parseApiData(response.data)
@@ -56,7 +56,7 @@ export default class ExternalUrlService {
   async addExternalUrls(model, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.post(
+      let response = await shopInstance().post(
         this.getBaseUrl(slug) + 'externalUrl',
         model,
         {
@@ -78,7 +78,7 @@ export default class ExternalUrlService {
   async updateExternalUrls(model, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.put(
+      let response = await shopInstance().put(
         this.getBaseUrl(slug) + 'externalUrl/' + model.id,
         model,
         {
@@ -99,7 +99,7 @@ export default class ExternalUrlService {
   async deleteExternalUrls(id, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.delete(
+      let response = await shopInstance().delete(
         this.getBaseUrl(slug) + 'externalUrl/' + id
       )
       return Promise.resolve(response)
@@ -114,7 +114,7 @@ export default class ExternalUrlService {
   async connectExternalUrlToRole(eUrlId, roleId, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.post(
+      let response = await shopInstance().post(
         this.getBaseUrl(slug) + 'externalUrl/' + eUrlId + '/role/' + roleId,
         {
           activate: true,
@@ -137,7 +137,7 @@ export default class ExternalUrlService {
   async disconnectExternalUrlToRole(eUrlId, roleId, slug = null) {
     EventBus.$emit('spinnerShow')
     try {
-      let response = await axios.post(
+      let response = await shopInstance().post(
         this.getBaseUrl(slug) + 'externalUrl/' + eUrlId + '/role/' + roleId,
         {
           activate: false,
