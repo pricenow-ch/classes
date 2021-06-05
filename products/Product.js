@@ -530,21 +530,26 @@ export default class Product {
     let attributes = []
     // iterate product definitions
     for (let i = 0; i < productDefinitions.length; i++) {
-      let productDefinition = productDefinitions[i]
+      const productDefinition = productDefinitions[i]
       if (considerMauiOnly && productDefinition.isMauiOnly()) continue
-      let currentAttributes = productDefinition.getAttributes()
+      const currentAttributes = productDefinition.getAttributes()
       // add attribute to attributes, if not yet added
       if (currentAttributes[key]) {
         // check capacity
-        if (
-          capacityDateInstance &&
+        const capacityAttributeValue =
+          capacityAttributeKey !== null
+            ? currentAttributes[capacityAttributeKey].value
+            : null
+
+        const hasCapacity =
           productCapacity.getStockLeft(
             capacityDateInstance,
-            currentAttributes[key].value
+            capacityAttributeValue
           ) <= 0
-        ) {
+        if (capacityDateInstance && hasCapacity) {
           continue
         }
+
         attributes = this.containsAttribute(attributes, key, currentAttributes)
       }
     }

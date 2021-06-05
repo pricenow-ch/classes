@@ -20,6 +20,7 @@ export default class Attributes {
     this.trainAdults = params.trainAdults || null
     this.trainChildren = params.trainChildren || null
     this.train = params.train || null
+    this.shuttleBus = params.shuttleBus || null
     this.meal = params.meal || null
     // to map the amount of people (eg. person1, person2 on table reservation) => not the same as peopleCount, the later is a number only
     this.personAmount = params.hasOwnProperty('personAmount')
@@ -32,6 +33,14 @@ export default class Attributes {
     this.voucherType = params.voucherType || null
     this.sledge = params.sledge || null
     this.basketCondition = params.basketCondition || null
+    this.pickUpWinterNoKeycard = params.pickUpWinterNoKeycard || null
+    this.pickUpNoKeycard = params.pickUpNoKeycard || null
+    this.sector = params.sector || null
+    this.pickUp = params.pickUp || null
+    this.restaurant = params.restaurant || null
+    this.menuChoice = params.menuChoice || null
+    this.yoga = params.yoga || null
+    this.annualPass = params.annualPass || null
   }
 
   getAge() {
