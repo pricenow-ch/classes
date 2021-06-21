@@ -70,7 +70,7 @@ export default class AppDestination extends Destination {
             '#f7cdd0'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // VALS
@@ -83,7 +83,7 @@ export default class AppDestination extends Destination {
             '#40605a'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // NIESEN
@@ -96,7 +96,7 @@ export default class AppDestination extends Destination {
             '#004183'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // CHAESERRUGG
@@ -109,7 +109,7 @@ export default class AppDestination extends Destination {
             '#A4AA78'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // MOOSALPREGION
@@ -122,7 +122,7 @@ export default class AppDestination extends Destination {
             '#78B6E2'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // NENDAZ
