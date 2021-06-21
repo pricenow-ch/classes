@@ -12,6 +12,7 @@ export default class Attributes {
     this.from = params.from ? params.from : null
     this.to = params.to ? params.to : null
     this.swisspass = params.swisspass ? params.swisspass : null
+    this.swisspassDescription = params.swisspassDescription || null
     this.time = params.time ? params.time : null
     this.room = params.room ? params.room : null
     this.train = params.train ? params.train : null
@@ -33,14 +34,12 @@ export default class Attributes {
     this.voucherType = params.voucherType || null
     this.sledge = params.sledge || null
     this.basketCondition = params.basketCondition || null
-    this.pickUpWinterNoKeycard = params.pickUpWinterNoKeycard || null
-    this.pickUpNoKeycard = params.pickUpNoKeycard || null
     this.sector = params.sector || null
-    this.pickUp = params.pickUp || null
     this.restaurant = params.restaurant || null
-    this.menuChoice = params.menuChoice || null
+    this.breakfastChoice = params.breakfastChoice || null
     this.yoga = params.yoga || null
     this.annualPass = params.annualPass || null
+    this.pickupLocation = params.pickupLocation || null
   }
 
   getAge() {
@@ -73,6 +72,10 @@ export default class Attributes {
 
   getSwisspass() {
     return this.swisspass
+  }
+
+  getPickupLocation() {
+    return this.pickupLocation
   }
 
   getTime() {

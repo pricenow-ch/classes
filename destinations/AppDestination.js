@@ -1,5 +1,4 @@
 import Destination from './Destination'
-import AppSeasons from './AppSeasons'
 import { shopInstance } from '../utils/axiosInstance'
 import definitions from '../../../definitions'
 
@@ -30,9 +29,6 @@ export default class AppDestination extends Destination {
     this.website = null
     this.tel = null
     this.currency = null
-    // available seasons of this destination
-    // handling the seasons. also the current season
-    this.appSeasons = null
     this.init()
   }
 
@@ -230,8 +226,5 @@ export default class AppDestination extends Destination {
 
   hasContact() {
     return this.getName() || this.getMail() || this.getTel()
-  }
-  getAppSeasons() {
-    return this.appSeasons
   }
 }

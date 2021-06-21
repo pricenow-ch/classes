@@ -521,13 +521,15 @@ export default class Product {
     capacityDateInstance = null
   ) {
     // consider capacity limitations
-    let productCapacity = this.getProductCapacity()
+    const productCapacity = this.getProductCapacity()
     if (capacityDateInstance && !productCapacity) {
       console.warn('Warning: No product capacity given!')
       return []
     }
 
     let attributes = []
+    // the capacity attribute key may differ from the given key
+    const capacityAttributeKey = this.getCapacityAttributeKey()
     // iterate product definitions
     for (let i = 0; i < productDefinitions.length; i++) {
       const productDefinition = productDefinitions[i]
@@ -541,12 +543,15 @@ export default class Product {
             ? currentAttributes[capacityAttributeKey].value
             : null
 
-        const hasCapacity =
+        // note: the getStockLeft() method has to be evaluated after the capacityDateInstance.
+        // otherwise the getStockLeft() method doesn't get the required date instance.
+        if (
+          capacityDateInstance &&
           productCapacity.getStockLeft(
             capacityDateInstance,
             capacityAttributeValue
           ) <= 0
-        if (capacityDateInstance && hasCapacity) {
+        ) {
           continue
         }
 
@@ -793,7 +798,7 @@ export default class Product {
     valueKey = definitions.attributeValues.value,
     includeMauiOnly = false
   ) {
-    let originalAttributesInstance = originalProductDefinition.getAttributes()
+    const originalAttributesInstance = originalProductDefinition.getAttributes()
 
     // 1.) try without attribute exclusion
     let requiredAttributes = this.getRequiredAttributes(
@@ -835,7 +840,7 @@ export default class Product {
   ) {
     // iterate product definitions
     for (let a = 0; a < this.productDefinitions.length; a++) {
-      let currentProductDefinition = this.productDefinitions[a]
+      const currentProductDefinition = this.productDefinitions[a]
 
       if (!includeMauiOnly && currentProductDefinition.isMauiOnly()) continue
 
@@ -1288,6 +1293,10 @@ export default class Product {
 
   isReservation() {
     return this.name?.startsWith('reservation')
+  }
+
+  isFee() {
+    return this.type.startsWith('fee')
   }
 
   isActive() {

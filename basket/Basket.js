@@ -131,7 +131,7 @@ export default class Basket {
    * @param startDateInstance
    * @param userData
    * @param emitBasketUpdate
-   * @param checkStatus
+   * @param updateCurrentUrlQuery
    */
   async addDefinitionToBasket(
     definition,
@@ -213,7 +213,7 @@ export default class Basket {
    */
   async updateBasketEntries(basketEntriesArray) {
     // prepare basket entries for the api
-    let preparedBasketEntries = basketEntriesArray.map((basketEntry) => {
+    const preparedBasketEntries = basketEntriesArray.map((basketEntry) => {
       basketEntry.getUserData().setCompleteForCheckout(basketEntry)
       return {
         id: basketEntry.getId(),
@@ -268,6 +268,7 @@ export default class Basket {
    * @returns {Promise<null|any>}
    * @param basketEntryInstance
    * @param showSpinner
+   * @param updateCurrentUrlQuery
    */
   async updateBasketEntry(
     basketEntryInstance,
@@ -366,12 +367,12 @@ export default class Basket {
     if (basket.hasOwnProperty('basketEntries')) {
       // reset basket entries
       this.basketEntries = []
-      let entries = basket.basketEntries
+      const entries = basket.basketEntries
       let currentVarsSet = false
 
       // iterate basket entries
       for (let i = 0; i < entries.length; i++) {
-        let entry = entries[i]
+        const entry = entries[i]
         // create product definition instance
         entry.productDefinitionInstance = new ProductDefinition(
           entry.productDefinition
@@ -416,9 +417,21 @@ export default class Basket {
     if (!currentShopModule) return false
 
     const productIdOfBasketEntry = basketEntry?.getProduct()?.getId()
-    const productIdsOfCurrentShopModule = currentShopModule
-      ?.getProductsInstance()
-      ?.getProductsIds()
+    const productsInstance = currentShopModule?.getProductsInstance()
+    const currentProductCategory = currentShopModule?.getCurrentProductCategory()
+    let productIdsOfCurrentShopModule = []
+    // if a current product category is set, only consider these products
+    // this behaviour assures that the correct product properties are set in the active shop module as current
+    if (currentProductCategory) {
+      const productsByCurrentProductCategory = productsInstance.getProductsByProductCategory(
+        currentProductCategory
+      )
+      productIdsOfCurrentShopModule = productsByCurrentProductCategory.map(
+        (product) => product.id
+      )
+    } else {
+      productIdsOfCurrentShopModule = productsInstance?.getProductsIds()
+    }
     const isEvent = basketEntry?.isEventEntry()
     const isRequiredEntry = basketEntry?.isRequiredEntry()
 
@@ -709,6 +722,32 @@ export default class Basket {
       }
     }
     return basketEntriesNotInState
+  }
+
+  /**
+   * probably the basket entries based on media don't have any uid because the pe can't know it
+   * @returns {Promise<void>}
+   */
+  async setUidForAllBasketEntriesBasedOnMedia() {
+    const basketEntriesBasedOnMedia = this.basketEntries.filter(
+      (basketEntry) => {
+        const userData = basketEntry.getUserData()
+        return !userData.getUid() && !!userData.isBasedOnMedia()
+      }
+    )
+
+    const uid = store.getters.getAppUserInstance()?.getUid()
+    basketEntriesBasedOnMedia.forEach((basketEntry) => {
+      const userData = basketEntry.getUserData()
+      const isBasedOnMedia = userData.isBasedOnMedia()
+      if (isBasedOnMedia) {
+        userData.setUid(uid)
+      }
+    })
+    if (basketEntriesBasedOnMedia.length) {
+      await this.updateBasketEntries(basketEntriesBasedOnMedia)
+    }
+    return true
   }
 
   /**

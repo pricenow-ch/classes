@@ -461,6 +461,11 @@ export default class Products extends EventHelper {
     return null
   }
 
+  /**
+   * Get an array of products filtered by the product category and sorted by the product's sort order.
+   * @param productType: String
+   * @returns {*[]}
+   */
   getProductsByProductCategory(productCategory) {
     let productsByCategory = this.products.filter(
       (product) => product.productCategory === productCategory
