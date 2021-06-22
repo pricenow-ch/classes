@@ -39,11 +39,6 @@ export default class AppDestination extends Destination {
     this.setLogo()
     // loading header image
     this.loadingDesign()
-    // init seasons only if not backend
-    if (this.slug !== definitions.destinations.default) {
-      this.appSeasons = new AppSeasons()
-      this.appSeasons.init()
-    }
   }
 
   /**
