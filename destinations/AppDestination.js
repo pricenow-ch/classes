@@ -140,6 +140,10 @@ export default class AppDestination extends Destination {
         break
     }
 
+    return Promise.resolve(this)
+  }
+
+  async loadShopData() {
     /* global EventBus axios store */
     try {
       const { data } = await shopInstance().get('/region')
@@ -156,8 +160,6 @@ export default class AppDestination extends Destination {
     } catch (e) {
       EventBus.$emit('notify', e.response)
     }
-
-    return Promise.resolve(this)
   }
 
   /**
