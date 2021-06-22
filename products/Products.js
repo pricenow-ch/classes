@@ -718,6 +718,21 @@ export default class Products extends EventHelper {
   }
 
   /**
+   * Get unique product types out of the products array
+   * @returns {*[]}
+   */
+  getUniqueProductTypes(onlyActive) {
+    const products = this.products.filter(
+      (product) => onlyActive || product.isActive()
+    )
+    const uniqueProducts = _.uniqBy(products, (product) => {
+      return product.productCategory
+    })
+
+    return uniqueProducts.map((product) => product.productCategory)
+  }
+
+  /**
    * Note that all products must have the same pricing model
    * https://pricenow.atlassian.net/jira/software/projects/T1/boards/4/backlog?selectedIssue=T1-1052
    * @returns {string}
