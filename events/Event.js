@@ -95,7 +95,7 @@ export default class Event {
 
     try {
       await shopInstance().patch(`/admin/event/${this.id}`, {
-        active: this.active,
+        active: !!this.active,
         startTime: this.startTime,
         endTime: this.endTime,
         fileResources: apiAssetsObjs,
