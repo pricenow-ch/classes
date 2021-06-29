@@ -121,7 +121,7 @@ export default class AppDestination extends Destination {
         }
         break
       // NENDAZ
-      case config.destinations.nendaz:
+      case definitions.destinations.nendaz:
         this.setCustomDesign(
           require('@/assets/destinations/headerImage/nendaz.jpg'),
           require('@/assets/destinations/backgroundImage/nendaz.jpg'),
