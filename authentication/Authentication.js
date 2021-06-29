@@ -58,7 +58,7 @@ export default class Authentication {
     }
     // remove subdomains
     const domainParts = domain.split('.')
-    return `.${domainParts[domainParts.length - 2]}.${
+    return `${domainParts[domainParts.length - 2]}.${
       domainParts[domainParts.length - 1]
     }`
   }
