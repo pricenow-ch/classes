@@ -51,7 +51,7 @@ export default class Authentication {
   static getDomain() {
     let domain = window.location.host
     // in case it's localhost, return it
-    if (domain === 'localhost') {
+    if (domain.startsWith('localhost')) {
       // remove localhost's port
       domain = domain.split(':')[0]
       return domain
