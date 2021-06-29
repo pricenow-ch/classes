@@ -12,6 +12,7 @@ export default class Attributes {
     this.from = params.from ? params.from : null
     this.to = params.to ? params.to : null
     this.swisspass = params.swisspass ? params.swisspass : null
+    this.swisspassDescription = params.swisspassDescription || null
     this.time = params.time ? params.time : null
     this.room = params.room ? params.room : null
     this.train = params.train ? params.train : null
@@ -20,6 +21,7 @@ export default class Attributes {
     this.trainAdults = params.trainAdults || null
     this.trainChildren = params.trainChildren || null
     this.train = params.train || null
+    this.shuttleBus = params.shuttleBus || null
     this.meal = params.meal || null
     // to map the amount of people (eg. person1, person2 on table reservation) => not the same as peopleCount, the later is a number only
     this.personAmount = params.hasOwnProperty('personAmount')
@@ -32,6 +34,12 @@ export default class Attributes {
     this.voucherType = params.voucherType || null
     this.sledge = params.sledge || null
     this.basketCondition = params.basketCondition || null
+    this.sector = params.sector || null
+    this.restaurant = params.restaurant || null
+    this.breakfastChoice = params.breakfastChoice || null
+    this.yoga = params.yoga || null
+    this.annualPass = params.annualPass || null
+    this.pickupLocation = params.pickupLocation || null
   }
 
   getAge() {
@@ -64,6 +72,10 @@ export default class Attributes {
 
   getSwisspass() {
     return this.swisspass
+  }
+
+  getPickupLocation() {
+    return this.pickupLocation
   }
 
   getTime() {

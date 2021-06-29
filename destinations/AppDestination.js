@@ -1,5 +1,4 @@
 import Destination from './Destination'
-import AppSeasons from './AppSeasons'
 import { shopInstance } from '../utils/axiosInstance'
 import definitions from '../../../definitions'
 
@@ -30,9 +29,6 @@ export default class AppDestination extends Destination {
     this.website = null
     this.tel = null
     this.currency = null
-    // available seasons of this destination
-    // handling the seasons. also the current season
-    this.appSeasons = null
     this.init()
   }
 
@@ -43,11 +39,6 @@ export default class AppDestination extends Destination {
     this.setLogo()
     // loading header image
     this.loadingDesign()
-    // init seasons only if not backend
-    if (this.slug !== definitions.destinations.default) {
-      this.appSeasons = new AppSeasons()
-      this.appSeasons.init()
-    }
   }
 
   /**
@@ -74,7 +65,7 @@ export default class AppDestination extends Destination {
             '#f7cdd0'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // VALS
@@ -87,7 +78,7 @@ export default class AppDestination extends Destination {
             '#40605a'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // NIESEN
@@ -100,7 +91,7 @@ export default class AppDestination extends Destination {
             '#004183'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // CHAESERRUGG
@@ -109,11 +100,11 @@ export default class AppDestination extends Destination {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/chaeserrugg.jpg'),
             require('@/assets/destinations/backgroundImage/chaeserrugg.jpg'),
-            '#909090',
-            '#909090'
+            '#A4AA78',
+            '#A4AA78'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // MOOSALPREGION
@@ -126,11 +117,33 @@ export default class AppDestination extends Destination {
             '#78B6E2'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
+        break
+      // NENDAZ
+      case definitions.destinations.nendaz:
+        this.setCustomDesign(
+          require('@/assets/destinations/headerImage/nendaz.jpg'),
+          require('@/assets/destinations/backgroundImage/nendaz.jpg'),
+          '#1b3e5e',
+          '#f7cdd0'
+        )
+        break
+      // DEFAULT
+      default:
+        this.setCustomDesign(
+          require('@/assets/destinations/headerImage/default.jpg'),
+          require('@/assets/destinations/backgroundImage/bellwald.jpg'),
+          '#1b3e5e',
+          '#f7cdd0'
+        )
         break
     }
 
+    return Promise.resolve(this)
+  }
+
+  async loadShopData() {
     /* global EventBus axios store */
     try {
       const { data } = await shopInstance().get('/region')
@@ -147,8 +160,6 @@ export default class AppDestination extends Destination {
     } catch (e) {
       EventBus.$emit('notify', e.response)
     }
-
-    return Promise.resolve(this)
   }
 
   /**
@@ -212,8 +223,5 @@ export default class AppDestination extends Destination {
 
   hasContact() {
     return this.getName() || this.getMail() || this.getTel()
-  }
-  getAppSeasons() {
-    return this.appSeasons
   }
 }

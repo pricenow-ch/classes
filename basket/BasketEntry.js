@@ -330,6 +330,11 @@ export default class BasketEntry {
     return this.requirerBasketEntryId > 0
   }
 
+  // can this basket entry be deleted manually by user
+  isDeletable() {
+    return !this.getUserData()?.isBasedOnMedia()
+  }
+
   getEventId() {
     return this.getUserData()?.getEventId()
   }

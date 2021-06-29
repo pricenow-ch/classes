@@ -26,12 +26,10 @@ export default class UserData {
     this.eventName = params.eventName || null
 
     // from which booking process was it added?
-    let activeModuleId = null
-    // backend frontends don't own shop modules nor the related functions in the store. check and skip.
-    if (typeof store.getters.getActiveModuleInstance === 'function') {
-      activeModuleId = store.getters.getActiveModuleInstance()?.getId()
-    }
+    const activeModuleId = store.getters.getActiveModuleInstance()?.getId()
     this.ownedByModuleId = params.ownedByModuleId || activeModuleId
+    // added by pe via media type
+    this.basedOnMedia = params.basedOnMedia || null
   }
 
   /**
@@ -95,12 +93,26 @@ export default class UserData {
           }
         }
 
-        if (
-          this.media !== definitions.ticketMedia.paper ||
+        if (this.media === definitions.ticketMedia.send) {
+          // send ticket home
+          this.bookingState = definitions.basketBookingState.readyForCheckout
+          return true
+        } else if (this.media === definitions.ticketMedia.onSite) {
+          // pickup on site
+          this.bookingState = definitions.basketBookingState.readyForCheckout
+          return true
+        } else if (this.isPaperMedia()) {
+          // it's paper, no card id required
+          this.bookingState = definitions.basketBookingState.readyForCheckout
+          return true
+        } else if (
+          !this.isPaperMedia() ||
           basketEntry.halfFareRequired() ||
           basketEntry.gaRequired() ||
           basketEntry.gaOrHalfFareRequired()
         ) {
+          // a card needed
+
           if (this.cardId) {
             // we've got a card id
             this.bookingState = definitions.basketBookingState.readyForCheckout
@@ -110,10 +122,6 @@ export default class UserData {
             this.bookingState = definitions.basketBookingState.needsMedium
             return false
           }
-        } else {
-          // it's paper, no card id required
-          this.bookingState = definitions.basketBookingState.readyForCheckout
-          return true
         }
       } else {
         // we are missing media type or/and uid
@@ -172,7 +180,7 @@ export default class UserData {
   }
 
   resetMedia(basketEntry) {
-    let availableMedia = basketEntry
+    const availableMedia = basketEntry
       .getProductDefinitionInstance()
       .getAvailableMedias()
     if (availableMedia.length === 1) {
@@ -223,8 +231,20 @@ export default class UserData {
     return this.media
   }
 
+  isPaperMedia() {
+    return (
+      this.media === definitions.ticketMedia.paper ||
+      this.media === definitions.ticketMedia.pickUp ||
+      this.media === definitions.ticketMedia.printAtHome
+    )
+  }
+
   isSelectedMediaSwisspass() {
     return this.media === definitions.ticketMedia.swisspass
+  }
+
+  isBasedOnMedia() {
+    return !!this.basedOnMedia
   }
 
   getUid() {

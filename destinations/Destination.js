@@ -7,7 +7,7 @@ export default class Destination {
     this.peId = null
 
     // the unique destination identifier (= subdomain)
-    this.slug = params.webIdentifier || params.identifier
+    this.slug = process.env.VUE_APP_DESTINATION
     this.name = params.name
     this.taxNr = params.taxNr || null
     this.currency = params.currency
