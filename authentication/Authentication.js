@@ -55,7 +55,16 @@ export default class Authentication {
       // remove localhost's port
       domain = domain.split(':')[0]
       return domain
+    } else if (domain.contains('vercel')) {
+      // vercel requires a third-level subdomain
+      // https://dev.to/marcellothearcane/how-i-fixed-this-one-weird-bug-2114
+      return domain
+    } else {
+      // set top level domain for pricenow.ch
+      const domainParts = domain.split('.')
+      return `${domainParts[domainParts.length - 2]}.${
+        domainParts[domainParts.length - 1]
+      }`
     }
-    return domain
   }
 }
