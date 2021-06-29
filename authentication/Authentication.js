@@ -43,4 +43,23 @@ export default class Authentication {
       EventBus.$emit('spinnerHide')
     }
   }
+
+  /**
+   * Returns the domain the application is running on.
+   * @returns {string|*}
+   */
+  static getDomain() {
+    let domain = window.location.host
+    // in case it's localhost, return it
+    if (domain === 'localhost') {
+      // remove localhost's port
+      domain = domain.split(':')[0]
+      return domain
+    }
+    // remove subdomains
+    const domainParts = domain.split('.')
+    return `${domainParts[domainParts.length - 2]}.${
+      domainParts[domainParts.length - 1]
+    }`
+  }
 }
