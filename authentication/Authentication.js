@@ -55,7 +55,7 @@ export default class Authentication {
       // remove localhost's port
       domain = domain.split(':')[0]
       return domain
-    } else if (domain.contains('vercel')) {
+    } else if (domain.includes('vercel')) {
       // vercel requires a third-level subdomain
       // https://dev.to/marcellothearcane/how-i-fixed-this-one-weird-bug-2114
       return domain
