@@ -122,21 +122,29 @@ export default class AppDestination extends Destination {
         break
       // NENDAZ
       case definitions.destinations.nendaz:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/nendaz.jpg'),
-          require('@/assets/destinations/backgroundImage/nendaz.jpg'),
-          '#1b3e5e',
-          '#f7cdd0'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/nendaz.jpg'),
+            require('@/assets/destinations/backgroundImage/nendaz.jpg'),
+            '#1b3e5e',
+            '#f7cdd0'
+          )
+        } catch (e) {
+          console.error(e)
+        }
         break
       // DEFAULT
       default:
-        this.setCustomDesign(
-          require('@/assets/destinations/headerImage/default.jpg'),
-          require('@/assets/destinations/backgroundImage/bellwald.jpg'),
-          '#1b3e5e',
-          '#f7cdd0'
-        )
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/default.jpg'),
+            require('@/assets/destinations/backgroundImage/bellwald.jpg'),
+            '#1b3e5e',
+            '#f7cdd0'
+          )
+        } catch (e) {
+          console.error(e)
+        }
         break
     }
 
