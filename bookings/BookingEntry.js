@@ -8,6 +8,7 @@ import Novatouch from './Novatouch'
 import Axess from '@/classes-shared/bookings/Axess'
 import Swisspass from '@/classes-shared/bookings/Swisspass'
 import { shopInstance } from '../utils/axiosInstance'
+import definitions from '../../../definitions'
 
 export default class BookingEntry {
   constructor(params) {
@@ -210,6 +211,14 @@ export default class BookingEntry {
     return this.getMedia() === 'swisspass'
       ? this.getSwisspass()
       : this.getExternalTicketProvider()
+  }
+
+  isPaperMedia() {
+    return (
+      this.media === definitions.ticketMedia.paper ||
+      this.media === definitions.ticketMedia.pickUp ||
+      this.media === definitions.ticketMedia.printAtHome
+    )
   }
 
   getMedia() {

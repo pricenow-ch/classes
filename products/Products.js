@@ -114,7 +114,7 @@ export default class Products extends EventHelper {
       })
 
       // parse response
-      await this.parseApiData(response.data.products, true)
+      await this.parseApiData(response.data, true)
       return Promise.resolve(response)
     } catch (e) {
       EventBus.$emit('notify', e.response)
@@ -461,6 +461,11 @@ export default class Products extends EventHelper {
     return null
   }
 
+  /**
+   * Get an array of products filtered by the product category and sorted by the product's sort order.
+   * @param productType: String
+   * @returns {*[]}
+   */
   getProductsByProductCategory(productCategory) {
     let productsByCategory = this.products.filter(
       (product) => product.productCategory === productCategory
@@ -710,6 +715,21 @@ export default class Products extends EventHelper {
 
   getProductsIds() {
     return this.products.map((product) => product.getId())
+  }
+
+  /**
+   * Get unique product types out of the products array
+   * @returns {*[]}
+   */
+  getUniqueProductTypes(onlyActive) {
+    const products = this.products.filter(
+      (product) => onlyActive || product.isActive()
+    )
+    const uniqueProducts = _.uniqBy(products, (product) => {
+      return product.productCategory
+    })
+
+    return uniqueProducts.map((product) => product.productCategory)
   }
 
   /**

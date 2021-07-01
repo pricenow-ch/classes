@@ -36,8 +36,10 @@ const peInstance = (slug = true) => {
   return instance
 }
 
-const shopInstance = (slug = true) => {
-  slug = slug ? store.getters.getCurrentDestinationInstance().getSlug() : ''
+const shopInstance = (hasSlug = true) => {
+  const slug = hasSlug
+    ? store.getters.getCurrentDestinationInstance().getSlug()
+    : ''
   const instance = axios.create({
     baseURL: `${process.env.VUE_APP_SHOP_API_URL}/${slug}`,
   })
