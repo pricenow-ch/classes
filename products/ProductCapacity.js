@@ -136,7 +136,7 @@ export default class ProductCapacity {
           capacity: capacityValue.capacity,
           key,
           value,
-          hideInCalendar: capacityValue.hideInCalendar,
+          hideInCalendar: !!capacityValue.hideInCalendar,
           sortOrder,
         }
       )
