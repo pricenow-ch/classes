@@ -54,9 +54,9 @@ export default class Products extends EventHelper {
         return destination.slug
       })
       if (destinationSlugs.length > 0) {
-        const response = await peInstance().get(`/products/destinations`, {
+        const response = await peInstance().get(`/products/pools`, {
           params: {
-            destinationIdentifier: destinationSlugs.join(','),
+            poolIdentifier: destinationSlugs.join(','),
             inactive: fetchInactive && '1',
           },
         })
