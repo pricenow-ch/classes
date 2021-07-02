@@ -40,6 +40,7 @@ export default class UserDestination extends Destination {
    * @returns {*}
    */
   hasUserPermissionWhichStartsWith(permissionKeyParts) {
+    console.log('hasUserPermissionWhichStartsWith', this)
     return this.permissions.find((permission) => {
       // iterate all permission key parts
       return permissionKeyParts.find((permissionKeyPart) =>

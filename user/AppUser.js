@@ -145,6 +145,7 @@ export default class AppUser extends User {
    * the user destination, which is the current destination from the store
    */
   getCurrentUserDestinationInstance() {
+    console.log('getCurrentUserDestinationInstance', store.getters.getCurrentDestinationInstance().getSlug())
     /* global store */
     return this.userDestinationsInstance.getDestinationBySlug(
       store.getters.getCurrentDestinationInstance().getSlug()
