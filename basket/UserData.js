@@ -26,7 +26,13 @@ export default class UserData {
     this.eventName = params.eventName || null
 
     // from which booking process was it added?
-    const activeModuleId = store.getters.getActiveModuleInstance()?.getId()
+    let activeModuleId
+    try {
+      // consider some stores don't provide the "getActiveModuleInstance()" method
+      activeModuleId = store.getters.getActiveModuleInstance()?.getId()
+    } catch (e) {
+      activeModuleId = undefined
+    }
     this.ownedByModuleId = params.ownedByModuleId || activeModuleId
     // added by pe via media type
     this.basedOnMedia = params.basedOnMedia || null
