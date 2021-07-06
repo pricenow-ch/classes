@@ -368,6 +368,8 @@ export default class Basket {
       // reset basket entries
       this.basketEntries = []
       const entries = basket.basketEntries
+      // sort Entries so the newest comes first.
+      entries.sort((firstEntry, secondEntry) => secondEntry.id - firstEntry.id)
       let currentVarsSet = false
 
       // iterate basket entries
