@@ -173,7 +173,7 @@ export default class Products extends EventHelper {
         params: {
           from: DateHelper.shiftLocalToSimpleDateString(from),
           to: DateHelper.shiftLocalToSimpleDateString(from),
-          destinationNames: store.getters
+          poolNames: store.getters
             .getCurrentDestinationInstance()
             .getSlug(),
         },
