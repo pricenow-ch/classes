@@ -48,6 +48,13 @@ export default class UserData {
       this.bookingState === definitions.basketBookingState.needsMedium ||
       this.bookingState === definitions.basketBookingState.readyForCheckout
     ) {
+      const pickupLocation = basketEntry.getProductDefinition().getAttributes()[definitions.attributeKeys.pickupLocation]
+      console.log(pickupLocation)
+      if (pickupLocation && pickupLocation.value == "none") {
+        this.bookingState = definitions.basketBookingState.needsMedium
+        return false
+      }
+
       if (this.media && this.uid) {
         // we've got media type and an uid
         // check if a swisspass was selected, if needed
