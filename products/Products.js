@@ -75,10 +75,10 @@ export default class Products extends EventHelper {
             })
             const destinationInstance = destinations.find(
               (destination) =>
-                destination.slug === apiProduct.destination.identifier
+                destination.slug === apiProduct.pool.identifier
             )
             // set different pe id
-            destinationInstance.setPeId(apiProduct.destination.id)
+            destinationInstance.setPeId(apiProduct.pool.id)
             if (index > -1) {
               this.products[index].destinations.push(destinationInstance)
             } else {
