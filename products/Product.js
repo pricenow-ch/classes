@@ -13,7 +13,6 @@ import BasketConditions from './BasketConditions'
 
 export default class Product {
   constructor(params) {
-    console.log(params)
     this.id = params.id ? params.id : null
     this.sortOrder = params.hasOwnProperty('sortOrder') ? params.sortOrder : 1
     this.name = params.name ? params.name : null
