@@ -60,7 +60,7 @@ export default class Product {
         this.currentSeasonStart = this.originalSeasonStart
     }
     this.currentSeasonEnd = params.currentAvailabilityRangeEnd
-      ? DateHelper.shiftUtcToLocal(new Date(params.currentSeasonEnd))
+      ? DateHelper.shiftUtcToLocal(new Date(params.currentAvailabilityRangeEnd))
       : null
     /**
      * To what destinations is this product related
