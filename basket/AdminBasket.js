@@ -65,11 +65,9 @@ export default class AdminBasket extends Basket {
 
     try {
       let response = await peInstance(false).delete(
-        `/admin/${this.getUuid()}/${
-          process.env.VUE_APP_DESITNATION
-        }/group_discounts/${store.getters
+        `/admin/${this.getUuid()}/${store.getters
           .getCurrentDestinationInstance()
-          .getSlug()}`
+          .getSlug()}/group_discounts/${groupDiscountId}`
       )
 
       await this.parseApiData(response.data)
