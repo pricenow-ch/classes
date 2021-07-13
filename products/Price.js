@@ -14,7 +14,6 @@ export default class Price {
       : null
     this.price = params.hasOwnProperty('price') ? params.price : null
     this.validAt = null
-
     if (params.hasOwnProperty('validAt')) {
       let priceTime = new Date(params.validAt)
       this.validAt = DateHelper.shiftUtcToLocal(priceTime)
