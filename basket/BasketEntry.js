@@ -331,6 +331,10 @@ export default class BasketEntry {
     return this.promoReduction
   }
 
+  getOriginalPrice() {
+    return this.getPrice() + this.getPromoReduction()
+  }
+
   isRequiredEntry() {
     return this.requirerBasketEntryId > 0
   }

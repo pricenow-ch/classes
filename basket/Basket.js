@@ -351,7 +351,7 @@ export default class Basket {
           promo_code: code,
         }
       )
-      await this.parseApiData(response.data.basket)
+      await this.parseApiData(response.data)
       return this
     } catch (e) {
       return false
@@ -362,7 +362,7 @@ export default class Basket {
       const response = await peInstance().delete(
         `/baskets/${this.uuid}/promo_code/${code}`
       )
-      await this.parseApiData(response.data.basket)
+      await this.parseApiData(response.data)
       return this
     } catch (e) {
       return false
@@ -734,7 +734,9 @@ export default class Basket {
           '-' +
           basketEntry.getValidFrom().getTime() +
           '-' +
-          basketEntry.getUserData().getEventId()
+          basketEntry.getUserData().getEventId() +
+          '-' +
+          basketEntry.getPrice()
         )
       })
     }
@@ -1059,7 +1061,9 @@ export default class Basket {
           '-' +
           basketEntry.getValidFrom().getTime() +
           '-' +
-          basketEntry.getUserData().getEventId()
+          basketEntry.getUserData().getEventId() +
+          '-' +
+          basketEntry.getPrice()
         )
       })
     }
