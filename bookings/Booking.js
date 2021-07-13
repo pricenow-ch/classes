@@ -85,7 +85,7 @@ export default class Booking {
     }
 
     try {
-      const response = await shopInstance.delete('/admin/cancel/entries', {
+      const response = await shopInstance().delete('/admin/cancel/entries', {
         data: {
           entries: bookingEntries,
           voucherValue: voucherValue * 100,
