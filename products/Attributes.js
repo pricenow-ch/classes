@@ -2,22 +2,23 @@ import definitions from '../../../definitions'
 
 export default class Attributes {
   constructor(params) {
-    this.age = params.age ? params.age : null
-    this.duration = params.duration ? params.duration : null
-    this.flex = params.flex ? params.flex : null
+    this.age = params.age || null
+    this.duration = params.duration || null
+    this.flex = params.flex || null
     this.performanceDiff = params.performanceDiff
       ? params.performanceDiff
       : null
-    this.route = params.route ? params.route : null
-    this.from = params.from ? params.from : null
-    this.to = params.to ? params.to : null
-    this.swisspass = params.swisspass ? params.swisspass : null
+    this.route = params.route || null
+    this.from = params.from || null
+    this.to = params.to || null
+    this.swisspass = params.swisspass || null
     this.swisspassDescription = params.swisspassDescription || null
-    this.time = params.time ? params.time : null
-    this.room = params.room ? params.room : null
-    this.train = params.train ? params.train : null
-    this.adults = params.adults ? params.adults : null
-    this.children = params.children ? params.children : null
+    this.time = params.time || null
+    this.breakfastTime = params.breakfastTime || null
+    this.room = params.room || null
+    this.train = params.train || null
+    this.adults = params.adults || null
+    this.children = params.children || null
     this.trainAdults = params.trainAdults || null
     this.trainChildren = params.trainChildren || null
     this.train = params.train || null
@@ -29,7 +30,7 @@ export default class Attributes {
       : null
 
     // needed for example in the hotel at Niesen => HotelRoomSelector.vue => changePersonCount()
-    this.peopleCount = params.peopleCount ? params.peopleCount : null
+    this.peopleCount = params.peopleCount || null
     this.tarif = params.tarif || null
     this.voucherType = params.voucherType || null
     this.sledge = params.sledge || null
