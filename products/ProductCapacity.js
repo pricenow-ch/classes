@@ -123,12 +123,8 @@ export default class ProductCapacity {
     EventBus.$emit('spinnerShow')
 
     try {
-      await axios.delete(
-        store.getters.getCurrentDestinationInstance().getShopApi() +
-          'admin/capacity/product/' +
-          this.pe_productId +
-          '/value/' +
-          value
+      await shopInstance().delete(
+        `/admin/capacity/product/${this.pe_productId}/value/${value}`
       )
 
       EventBus.$emit(
