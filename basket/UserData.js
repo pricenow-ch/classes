@@ -49,6 +49,8 @@ export default class UserData {
       this.bookingState === definitions.basketBookingState.readyForCheckout
     ) {
       if (this.media && this.uid) {
+        // Nendaz: check pickup location
+
         // we've got media type and an uid
         // check if a swisspass was selected, if needed
         const swisspassAttribute = basketEntry

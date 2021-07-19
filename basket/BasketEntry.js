@@ -10,6 +10,7 @@ export default class BasketEntry {
     if (params.price) {
       this.priceGross = params.price.gross || 0
       this.priceNet = params.price.net || 0
+      this.promoReduction = params.price.promoReduction || 0
     }
     this.productDefinitionInstance = params.hasOwnProperty(
       'productDefinitionInstance'
@@ -324,6 +325,14 @@ export default class BasketEntry {
 
   getPriceNet() {
     return this.priceNet
+  }
+
+  getPromoReduction() {
+    return this.promoReduction
+  }
+
+  getOriginalPrice() {
+    return this.getPrice() + this.getPromoReduction()
   }
 
   isRequiredEntry() {

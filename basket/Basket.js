@@ -7,6 +7,7 @@ import Vats from '../vats/Vats'
 import _ from 'lodash'
 import { peInstance } from '../utils/axiosInstance'
 import BasketConditions from '../products/BasketConditions'
+import PromoCodes from '../PromoCodes/PromoCodes'
 
 export default class Basket {
   constructor() {
@@ -23,6 +24,8 @@ export default class Basket {
 
     // Vouchers instance
     this.vouchersInstance = new Vouchers()
+    // Promo Codes
+    this.promoCodes = new PromoCodes()
     // user comment
     this.comment = null
     // co2 compensation: cause we care
@@ -336,6 +339,37 @@ export default class Basket {
   }
 
   /**
+   * Try to add a promo code
+   * @param code
+   * @returns {Promise<Basket|boolean>}
+   */
+  async addPromoCode(code) {
+    try {
+      const response = await peInstance().put(
+        `/baskets/${this.uuid}/promo_code`,
+        {
+          promo_code: code,
+        }
+      )
+      await this.parseApiData(response.data)
+      return this
+    } catch (e) {
+      return false
+    }
+  }
+  async removePromoCode(code) {
+    try {
+      const response = await peInstance().delete(
+        `/baskets/${this.uuid}/promo_code/${code}`
+      )
+      await this.parseApiData(response.data)
+      return this
+    } catch (e) {
+      return false
+    }
+  }
+
+  /**
    * create basket entry instances out of raw api data
    * @param basket
    * @param updateCurrentUrlQuery
@@ -358,6 +392,8 @@ export default class Basket {
       : []
     this.causeWeCare = basket.causeWeCare
     this.cwc = basket.cwc
+    // because of Vue's reactivity caveat
+    this.promoCodes = this.promoCodes.parseApiData(basket.promoCodes)
 
     // ask user for discount
     if (this.askuserForDiscount.length)
@@ -700,7 +736,9 @@ export default class Basket {
           '-' +
           basketEntry.getValidFrom().getTime() +
           '-' +
-          basketEntry.getUserData().getEventId()
+          basketEntry.getUserData().getEventId() +
+          '-' +
+          basketEntry.getPrice()
         )
       })
     }
@@ -1027,7 +1065,9 @@ export default class Basket {
           '-' +
           basketEntry.getValidFrom().getTime() +
           '-' +
-          basketEntry.getUserData().getEventId()
+          basketEntry.getUserData().getEventId() +
+          '-' +
+          basketEntry.getPrice()
         )
       })
     }
@@ -1054,6 +1094,10 @@ export default class Basket {
 
   getVouchersAsArray() {
     return this.vouchersInstance.getVouchersAsArray()
+  }
+
+  getPromoCodesAsArray() {
+    return this.promoCodes.getPromoCodes()
   }
 
   getUuid() {

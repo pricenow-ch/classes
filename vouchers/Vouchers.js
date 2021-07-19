@@ -37,20 +37,18 @@ export default class Vouchers {
     /* global EventBus axios store i18n */
 
     // check if voucher is already in vouchers array
-    if (!(await this.isVoucherInVouchers(voucherInstance))) {
+    if (!this.isVoucherInVouchers(voucherInstance)) {
       EventBus.$emit('spinnerShow')
 
       try {
         const response = await shopInstance().get(
           `/vouchers/${voucherInstance.getCode()}/validate`
         )
-
         if (response.status === 200) {
           // add voucher to array
           this.vouchers.push(new Voucher(response.data))
           return true
         } else if (response.status === 201) {
-          EventBus.$emit('notify', response.data.message, 'error')
           return false
         } else {
           EventBus.$emit('notify')
@@ -64,7 +62,6 @@ export default class Vouchers {
       }
     } else {
       EventBus.$emit('notify', i18n.t('purchase.voucherAlreadyAdded'))
-
       return false
     }
   }
