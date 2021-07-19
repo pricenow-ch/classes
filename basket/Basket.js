@@ -368,6 +368,8 @@ export default class Basket {
       // reset basket entries
       this.basketEntries = []
       const entries = basket.basketEntries
+      // sort Entries so the newest comes first.
+      entries.sort((firstEntry, secondEntry) => secondEntry.id - firstEntry.id)
       let currentVarsSet = false
 
       // iterate basket entries
@@ -791,13 +793,15 @@ export default class Basket {
    * @param value
    * @returns {number}
    */
-  getTotalPriceOnAttributeAndBookingState(key, value, bookingState) {
+  getTotalPriceOnAttributeAndBookingState(key, value, bookingState, productId) {
     let sum = 0
     let filteredBasketEntries = this.getBasketEntriesWithAttributeAndBookingState(
       key,
       value,
       bookingState
-    )
+    ).filter((entry) => {
+      return entry.getProductDefinitionInstance().getProductId() === productId
+    })
 
     // iterate filtered basket entries
     for (let i = 0; i < filteredBasketEntries.length; i++) {
