@@ -51,7 +51,7 @@ export default class Booking {
     EventBus.$emit('spinnerShow')
 
     try {
-      const response = await shopInstance.delete('/cancel/entries', {
+      const response = await shopInstance().delete('/cancel/entries', {
         data: {
           entries: bookingEntryIds,
         },
@@ -97,6 +97,7 @@ export default class Booking {
       else if (response.status === 201) return response.data
       else return false
     } catch (e) {
+      console.log(e)
       return false
     } finally {
       EventBus.$emit('spinnerHide')
