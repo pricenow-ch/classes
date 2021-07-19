@@ -17,7 +17,7 @@ export default class CardService {
 
       EventBus.$emit('notify', i18n.t('addNewProfile.cardAdded'), 'success')
     } catch (error) {
-      if (error.response.status === 471) {
+      if (error.response.status === 474) {
         if (card.getType() === 0) {
           EventBus.$emit(
             'notify',

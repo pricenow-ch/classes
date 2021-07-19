@@ -130,7 +130,7 @@ export default class AppDestination extends Destination {
             '#f7cdd0'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
       // DEFAULT
@@ -143,7 +143,7 @@ export default class AppDestination extends Destination {
             '#f7cdd0'
           )
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         break
     }

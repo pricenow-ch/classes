@@ -26,7 +26,13 @@ export default class UserData {
     this.eventName = params.eventName || null
 
     // from which booking process was it added?
-    const activeModuleId = store.getters.getActiveModuleInstance()?.getId()
+    let activeModuleId
+    try {
+      // consider some stores don't provide the "getActiveModuleInstance()" method
+      activeModuleId = store.getters.getActiveModuleInstance()?.getId()
+    } catch (e) {
+      activeModuleId = undefined
+    }
     this.ownedByModuleId = params.ownedByModuleId || activeModuleId
     // added by pe via media type
     this.basedOnMedia = params.basedOnMedia || null
@@ -42,6 +48,13 @@ export default class UserData {
       this.bookingState === definitions.basketBookingState.needsMedium ||
       this.bookingState === definitions.basketBookingState.readyForCheckout
     ) {
+      const pickupLocation = basketEntry.getProductDefinition().getAttributes()[definitions.attributeKeys.pickupLocation]
+      console.log(pickupLocation)
+      if (pickupLocation && pickupLocation.value == "none") {
+        this.bookingState = definitions.basketBookingState.needsMedium
+        return false
+      }
+
       if (this.media && this.uid) {
         // we've got media type and an uid
         // check if a swisspass was selected, if needed
