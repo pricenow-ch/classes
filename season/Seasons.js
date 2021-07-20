@@ -1,10 +1,8 @@
 import Season from '@/classes-shared/season/Season'
-import EventHelper from '../events/EventHelper'
 import { peInstance } from '../utils/axiosInstance'
 
-export default class Seasons extends EventHelper {
+export default class Seasons {
   constructor(param = {}) {
-    super()
     this.seasons = param.seasons ? param.seasons : []
   }
 
@@ -27,6 +25,7 @@ export default class Seasons extends EventHelper {
             poolIdentifier: destinationSlugs.join(','),
           },
         })
+
         if (response.status === 200) {
           response.data.seasons.forEach((apiSeason) => {
             const seasonInstance = new Season(apiSeason)

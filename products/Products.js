@@ -43,6 +43,7 @@ export default class Products extends EventHelper {
    * load all products in one request to prevent
    * blocking the concurrent request limit in the browser
    * @param fetchInactive
+   * @param destinations
    * @returns {Promise<Products>}
    */
   async loadProductsForAllDestinations(destinations, fetchInactive = false) {
