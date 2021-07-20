@@ -1,6 +1,6 @@
-import ProductSeason from '@/classes-shared/season/ProductSeason'
+import ProductAvailabilityRange from '@/classes-shared/season/ProductAvailabilityRange'
 
-export default class Season {
+export default class AvailabilityRange {
   constructor(singleSeason, destinationInstance = null) {
     this.id = singleSeason.id
     this.identifier = singleSeason.identifier
@@ -15,13 +15,13 @@ export default class Season {
       singleSeason.extAxessTarifBlattGueltCreated
     this.productSeasons = []
     // parse product season links
-    if (singleSeason.productSeason)
-      this.parseProductSeasons(singleSeason.productSeason)
+    if (singleSeason.ProductAvailabilityRange)
+      this.parseProductSeasons(singleSeason.ProductAvailabilityRange)
   }
 
   parseProductSeasons(rawProductSeasons) {
     for (let rawProductSeason of rawProductSeasons) {
-      this.productSeasons.push(new ProductSeason(rawProductSeason))
+      this.productSeasons.push(new ProductAvailabilityRange(rawProductSeason))
     }
   }
 
