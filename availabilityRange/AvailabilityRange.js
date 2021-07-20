@@ -1,4 +1,4 @@
-import ProductAvailabilityRange from '@/classes-shared/season/ProductAvailabilityRange'
+import ProductAvailabilityRange from '@/classes-shared/availabilityRange/ProductAvailabilityRange'
 
 export default class AvailabilityRange {
   constructor(singleSeason, destinationInstance = null) {
