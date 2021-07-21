@@ -43,7 +43,16 @@ export default class Seasons {
     return Promise.resolve(this)
   }
 
-  getSeasons() {
+  getAllSeasons() {
     return this.seasons
+  }
+
+  getFirstSeason() {
+    if (this.seasons.length) return this.seasons[0]
+    return null
+  }
+
+  getSeasonById(seasonId) {
+    return this.seasons.find((element) => element.id === seasonId)
   }
 }
