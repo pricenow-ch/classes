@@ -3,7 +3,7 @@ import { peInstance } from '../utils/axiosInstance'
 
 export default class Seasons {
   constructor(param = {}) {
-    this.seasons = param.seasons ? param.seasons : []
+    this.seasons = param.seasons || []
   }
 
   /**
@@ -48,11 +48,10 @@ export default class Seasons {
   }
 
   getFirstSeason() {
-    if (this.seasons.length) return this.seasons[0]
-    return null
+    return this.seasons.length > 0 ? this.seasons[0] : null
   }
 
   getSeasonById(seasonId) {
-    return this.seasons.find((element) => element.id === seasonId)
+    return this.seasons.find((season) => season.id === seasonId)
   }
 }
