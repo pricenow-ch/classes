@@ -50,6 +50,12 @@ export default class UserData {
     ) {
       if (this.media && this.uid) {
         // Nendaz: check pickup location
+        const pickupLocation = basketEntry.getProductDefinition().getAttributes()[definitions.attributeKeys.pickupLocation]
+
+        if (pickupLocation && pickupLocation.value == "none") {
+          this.bookingState = definitions.basketBookingState.needsMedium
+          return false
+        }
 
         // we've got media type and an uid
         // check if a swisspass was selected, if needed
