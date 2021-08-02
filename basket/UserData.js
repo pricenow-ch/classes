@@ -50,9 +50,11 @@ export default class UserData {
     ) {
       if (this.media && this.uid) {
         // Nendaz: check pickup location
-        const pickupLocation = basketEntry.getProductDefinition().getAttributes()[definitions.attributeKeys.pickupLocation]
+        const pickupLocation = basketEntry
+          .getProductDefinition()
+          .getAttributes()[definitions.attributeKeys.pickupLocation]
 
-        if (pickupLocation && pickupLocation.value == "none") {
+        if (pickupLocation && pickupLocation.value == 'none') {
           this.bookingState = definitions.basketBookingState.needsMedium
           return false
         }
