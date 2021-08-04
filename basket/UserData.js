@@ -49,17 +49,24 @@ export default class UserData {
       this.bookingState === definitions.basketBookingState.readyForCheckout
     ) {
       if (this.media && this.uid) {
+        // we've got media type and an uid
         // Nendaz: check pickup location
         const pickupLocation = basketEntry
           .getProductDefinition()
           .getAttributes()[definitions.attributeKeys.pickupLocation]
 
-        if (pickupLocation && pickupLocation.value == 'none') {
+        // pickup location only valid if media equals onSite.
+        // otherwise it can happen, that a customer selects eg. the "send" option
+        // and in the same time the pickup location is none. thus a checkout with the "send" selection would never be possible.
+        if (
+          pickupLocation &&
+          pickupLocation.value == 'none' &&
+          this.media === definitions.ticketMedia.onSite
+        ) {
           this.bookingState = definitions.basketBookingState.needsMedium
           return false
         }
 
-        // we've got media type and an uid
         // check if a swisspass was selected, if needed
         const swisspassAttribute = basketEntry
           .getProductDefinition()
