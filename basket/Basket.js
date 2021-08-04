@@ -441,7 +441,14 @@ export default class Basket {
         )
       })
     }
+    this.handleBasketMsg(basket.msg)
     return Promise
+  }
+
+  handleBasketMsg(msg) {
+    if (msg) {
+      EventBus.$emit('notify', i18n.t(`basket.${msg}`))
+    }
   }
 
   /**
