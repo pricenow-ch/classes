@@ -67,12 +67,14 @@ export default class UserData {
         if (
           swisspassAttribute &&
           swisspassAttribute.value !==
-            definitions.attributeValueContent.noSwisspass
+            definitions.attributeValueContent.noSwisspass &&
+          swisspassAttribute.value !==
+            definitions.attributeValueContent.noReduction
         ) {
           const basket = store.getters.getBasketInstance()
           // swisspass selection was not done yet
           if (
-            !basket
+            basket
               .getBasketEntriesForReduction(definitions.attributeKeys.swisspass)
               .find((basketEntryId) => basketEntryId === basketEntry.getId())
           ) {
@@ -82,8 +84,10 @@ export default class UserData {
                 basketEntry,
                 definitions.attributeKeys.swisspass
               )
-            )
+            ) {
+              this.bookingState = definitions.basketBookingState.needsMedium
               return false
+            }
           }
         }
         // check if a tarif (eg. local or guest card) was selected, if needed
