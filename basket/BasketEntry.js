@@ -314,9 +314,23 @@ export default class BasketEntry {
     return this.getUserData().uid
   }
 
-  // alias for price gross
+  getExternalIdWithProductFee() {
+    return this.getProductDefinition()
+      ?.getExternalIds()
+      ?.getExternalIdByKind('additionalProductFee')
+  }
+
+  getAdditionalProductFee() {
+    return this.getExternalIdWithProductFee()?.getValue() || 0
+  }
+
+  // the price to display in the basket
   getPrice() {
-    return this.priceGross
+    return (
+      this.priceGross -
+      parseInt(this.getAdditionalProductFee(), 10) -
+      this.getBookingFee()
+    )
   }
 
   getPriceGross() {
