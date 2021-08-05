@@ -10,6 +10,7 @@ export default class BasketEntry {
     if (params.price) {
       this.priceGross = params.price.gross || 0
       this.priceNet = params.price.net || 0
+      this.promoReduction = params.price.promoReduction || 0
     }
     this.productDefinitionInstance = params.hasOwnProperty(
       'productDefinitionInstance'
@@ -313,9 +314,23 @@ export default class BasketEntry {
     return this.getUserData().uid
   }
 
-  // alias for price gross
+  getExternalIdWithProductFee() {
+    return this.getProductDefinition()
+      ?.getExternalIds()
+      ?.getExternalIdByKind('additionalProductFee')
+  }
+
+  getAdditionalProductFee() {
+    return this.getExternalIdWithProductFee()?.getValue() || 0
+  }
+
+  // the price to display in the basket
   getPrice() {
-    return this.priceGross
+    return (
+      this.priceGross -
+      parseInt(this.getAdditionalProductFee(), 10) -
+      this.getBookingFee()
+    )
   }
 
   getPriceGross() {
@@ -324,6 +339,14 @@ export default class BasketEntry {
 
   getPriceNet() {
     return this.priceNet
+  }
+
+  getPromoReduction() {
+    return this.promoReduction
+  }
+
+  getOriginalPrice() {
+    return this.getPrice() + this.getPromoReduction()
   }
 
   isRequiredEntry() {

@@ -7,6 +7,7 @@ import Price from './Price'
 import definitions from '../../../definitions'
 import RequiredProductDefinitions from './RequiredProductDefinitions'
 import { peInstance } from '../utils/axiosInstance'
+import ExternalIds from './ExternalIds'
 
 export default class ProductDefinition {
   constructor(params) {
@@ -67,6 +68,8 @@ export default class ProductDefinition {
     // For example, 10 * 60 means that on the same day the product with this attribute can only be
     // booked until 10 o'clock
     this.latestBookingTime = params.latestBookingTime || null
+    // external ids
+    this.externalIds = new ExternalIds().parseApiData(params.externalIds)
   }
 
   /**
@@ -412,6 +415,10 @@ export default class ProductDefinition {
   }
   getLatestBookingTime() {
     return this.latestBookingTime
+  }
+
+  getExternalIds() {
+    return this.externalIds
   }
 
   /**
