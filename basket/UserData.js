@@ -93,7 +93,6 @@ export default class UserData {
               ) &&
               !this.getCardId()
             ) {
-              console.log('was here');
               this.bookingState = definitions.basketBookingState.needsMedium
               return false
             }
