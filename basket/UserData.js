@@ -74,14 +74,12 @@ export default class UserData {
         if (
           swisspassAttribute &&
           swisspassAttribute.value !==
-            definitions.attributeValueContent.noSwisspass &&
-          swisspassAttribute.value !==
-            definitions.attributeValueContent.noReduction
+            definitions.attributeValueContent.noSwisspass
         ) {
           const basket = store.getters.getBasketInstance()
           // swisspass selection was not done yet
           if (
-            basket
+            !basket
               .getBasketEntriesForReduction(definitions.attributeKeys.swisspass)
               .find((basketEntryId) => basketEntryId === basketEntry.getId())
           ) {
@@ -90,12 +88,27 @@ export default class UserData {
                 basket,
                 basketEntry,
                 definitions.attributeKeys.swisspass
-              ) &&
-              !this.getCardId()
+              )
             ) {
               this.bookingState = definitions.basketBookingState.needsMedium
               return false
             }
+          }
+
+          // set basket entry to not ready, if a swisspass attribute is present, but no card id is selected
+          if (
+            !this.getCardId() &&
+            !(
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.noReduction ||
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.noSwisspass ||
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.withHalfFareOrGANoValidation
+            )
+          ) {
+            this.bookingState = definitions.basketBookingState.needsMedium
+            return false
           }
         }
         // check if a tarif (eg. local or guest card) was selected, if needed
@@ -120,7 +133,6 @@ export default class UserData {
               return false
           }
         }
-
         if (this.media === definitions.ticketMedia.send) {
           // send ticket home
           this.bookingState = definitions.basketBookingState.readyForCheckout
@@ -140,7 +152,6 @@ export default class UserData {
           basketEntry.gaOrHalfFareRequired()
         ) {
           // a card needed
-
           if (this.cardId) {
             // we've got a card id
             this.bookingState = definitions.basketBookingState.readyForCheckout
