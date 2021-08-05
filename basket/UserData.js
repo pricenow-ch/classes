@@ -90,8 +90,10 @@ export default class UserData {
                 basket,
                 basketEntry,
                 definitions.attributeKeys.swisspass
-              )
+              ) &&
+              !this.getCardId()
             ) {
+              console.log('was here');
               this.bookingState = definitions.basketBookingState.needsMedium
               return false
             }
