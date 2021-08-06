@@ -91,6 +91,9 @@ export default class BookingEntry {
     this.vats = params.vats ? new Vats(params.vats) : new Vats([])
     // transferable
     this.transferableTicket = params.transferableTicket || null
+    // promocodes
+    this.promoCode = params.promoCode || null
+    this.promoReduction = params.promoReduction || null
 
     this.createdAt = params.createdAt || null
   }
@@ -163,6 +166,14 @@ export default class BookingEntry {
 
   getPrice() {
     return this.price
+  }
+
+  getOriginalPrice() {
+    return this.getPrice() + this.getPromoReduction()
+  }
+
+  getOriginalPriceGross() {
+    return this.getPriceGross() + this.getPromoReduction()
   }
 
   getPriceGross() {
@@ -269,5 +280,11 @@ export default class BookingEntry {
   }
   getCreationDate() {
     return this.createdAt
+  }
+  getPromoCode() {
+    return this.promoCode
+  }
+  getPromoReduction() {
+    return this.promoReduction ? parseInt(this.promoReduction, 10) : 0
   }
 }

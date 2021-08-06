@@ -49,9 +49,23 @@ export default class UserData {
       this.bookingState === definitions.basketBookingState.readyForCheckout
     ) {
       if (this.media && this.uid) {
-        // Nendaz: check pickup location
-
         // we've got media type and an uid
+        // Nendaz: check pickup location
+        // pickup location only valid if media equals onSite.
+        // otherwise it can happen, that a customer selects eg. the "send" option
+        // and in the same time the pickup location is none. thus a checkout with the "send" selection would never be possible.
+        if (this.media === definitions.ticketMedia.onSite) {
+          const pickupLocation = basketEntry
+            .getProductDefinition()
+            .getAttributes()[definitions.attributeKeys.pickupLocation]
+          //<const pickupLocation = basketEntry.getProductDefinition().getAttributes()[definitions.attributeKeys.pickupLocation]
+
+          if (pickupLocation && pickupLocation.value == 'none') {
+            this.bookingState = definitions.basketBookingState.needsMedium
+            return false
+          }
+        }
+
         // check if a swisspass was selected, if needed
         const swisspassAttribute = basketEntry
           .getProductDefinition()
@@ -74,8 +88,26 @@ export default class UserData {
                 basketEntry,
                 definitions.attributeKeys.swisspass
               )
-            )
+            ) {
+              this.bookingState = definitions.basketBookingState.needsMedium
               return false
+            }
+          }
+
+          // set basket entry to not ready, if a swisspass attribute is present, but no card id is selected
+          if (
+            !this.getCardId() &&
+            !(
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.noReduction ||
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.noSwisspass ||
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.withHalfFareOrGANoValidation
+            )
+          ) {
+            this.bookingState = definitions.basketBookingState.needsMedium
+            return false
           }
         }
         // check if a tarif (eg. local or guest card) was selected, if needed
@@ -100,7 +132,6 @@ export default class UserData {
               return false
           }
         }
-
         if (this.media === definitions.ticketMedia.send) {
           // send ticket home
           this.bookingState = definitions.basketBookingState.readyForCheckout
@@ -120,7 +151,6 @@ export default class UserData {
           basketEntry.gaOrHalfFareRequired()
         ) {
           // a card needed
-
           if (this.cardId) {
             // we've got a card id
             this.bookingState = definitions.basketBookingState.readyForCheckout
