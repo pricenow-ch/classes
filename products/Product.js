@@ -17,7 +17,7 @@ export default class Product {
     this.sortOrder = params.hasOwnProperty('sortOrder') ? params.sortOrder : 1
     this.name = params.name ? params.name : null
     this.type = params.type ? params.type : null
-    this.destinationId = params.destinationId ? params.destinationId : null
+    this.destinationId = params.poolId ? params.poolId : null
     this.description = params.description ? params.description : null
     this.createdAt = params.createdAt ? params.createdAt : null
     this.updatedAt = params.updatedAt ? params.updatedAt : null
@@ -47,19 +47,19 @@ export default class Product {
 
     // seasonality
     this.originalSeasonStart = DateHelper.shiftUtcToLocal(
-      new Date(params.currentSeasonStart)
+      new Date(params.currentAvailabilityRangeStart)
     )
     this.currentSeasonStart = new Date()
     this.currentSeasonStart.setHours(0, 0, 0, 0)
-    if (params.currentSeasonStart) {
+    if (params.currentAvailabilityRangeStart) {
       // is the season start later than today?
       if (
         this.originalSeasonStart.getTime() > this.currentSeasonStart.getTime()
       )
         this.currentSeasonStart = this.originalSeasonStart
     }
-    this.currentSeasonEnd = params.currentSeasonEnd
-      ? DateHelper.shiftUtcToLocal(new Date(params.currentSeasonEnd))
+    this.currentSeasonEnd = params.currentAvailabilityRangeEnd
+      ? DateHelper.shiftUtcToLocal(new Date(params.currentAvailabilityRangeEnd))
       : null
     /**
      * To what destinations is this product related

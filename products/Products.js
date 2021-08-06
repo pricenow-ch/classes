@@ -43,6 +43,7 @@ export default class Products extends EventHelper {
    * load all products in one request to prevent
    * blocking the concurrent request limit in the browser
    * @param fetchInactive
+   * @param destinations
    * @returns {Promise<Products>}
    */
   async loadProductsForAllDestinations(destinations, fetchInactive = false) {
@@ -54,9 +55,9 @@ export default class Products extends EventHelper {
         return destination.slug
       })
       if (destinationSlugs.length > 0) {
-        const response = await peInstance().get(`/products/destinations`, {
+        const response = await peInstance().get(`/products/pools`, {
           params: {
-            destinationIdentifier: destinationSlugs.join(','),
+            poolIdentifier: destinationSlugs.join(','),
             inactive: fetchInactive && '1',
           },
         })
@@ -74,11 +75,10 @@ export default class Products extends EventHelper {
               return prod.id == apiProduct.id
             })
             const destinationInstance = destinations.find(
-              (destination) =>
-                destination.slug === apiProduct.destination.identifier
+              (destination) => destination.slug === apiProduct.pool.identifier
             )
             // set different pe id
-            destinationInstance.setPeId(apiProduct.destination.id)
+            destinationInstance.setPeId(apiProduct.pool.id)
             if (index > -1) {
               this.products[index].destinations.push(destinationInstance)
             } else {
@@ -173,9 +173,7 @@ export default class Products extends EventHelper {
         params: {
           from: DateHelper.shiftLocalToSimpleDateString(from),
           to: DateHelper.shiftLocalToSimpleDateString(from),
-          destinationNames: store.getters
-            .getCurrentDestinationInstance()
-            .getSlug(),
+          poolNames: store.getters.getCurrentDestinationInstance().getSlug(),
         },
       })
 
