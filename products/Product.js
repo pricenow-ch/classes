@@ -1080,7 +1080,9 @@ export default class Product {
    * @returns {null|*}
    */
   getNextDateFromList(dateInstance, availableDates = this.getAvailableDates()) {
-    return availableDates.find((availableDate) => availableDate.getTime() > dateInstance.getTime())
+    return availableDates.find(
+      (availableDate) => availableDate.getTime() > dateInstance.getTime()
+    )
   }
 
   /**
