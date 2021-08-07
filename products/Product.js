@@ -46,6 +46,7 @@ export default class Product {
     )
 
     // seasonality + validity dates
+    this.validityDates = params.validityDates?.sort()
     this.availabilityRanges = new AvailabilityRanges().parseApiData(
       params.productAvailabilityRange,
       params.validityDates?.sort()
@@ -939,6 +940,18 @@ export default class Product {
     return this.originalSeasonStart
   }
 
+  getAvailabilityDateRanges() {
+    return this.availabilityRanges
+  }
+
+  /**
+   * returns an array with all available dates depending on the "availability ranges" and the "validity dates"
+   * available types: 'date', 'moment', 'dateString' (YYYY-MM-DD)
+   */
+  getAvailableDates(type = 'date') {
+    return this.getAvailabilityDateRanges().getDateList(type)
+  }
+
   getCurrentSeasonStart() {
     const availableDates = this.getAvailableDates()
     const todayMs = new Date().setHours(0, 0, 0, 0)
@@ -954,18 +967,6 @@ export default class Product {
   getCurrentSeasonEnd() {
     const dateList = this.getAvailableDates()
     return dateList[dateList.length - 1]
-  }
-
-  getAvailabilityDateRanges() {
-    return this.availabilityRanges
-  }
-
-  /**
-   * returns an array with all available dates depending on the "availability ranges" and the "validity dates"
-   * available types: 'date', 'moment', 'dateString' (YYYY-MM-DD)
-   */
-  getAvailableDates(type = 'date') {
-    this.getAvailabilityDateRanges().getDateList(type)
   }
 
   /**
