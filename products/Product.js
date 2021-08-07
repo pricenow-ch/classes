@@ -10,6 +10,7 @@ import ExtendedAttributes from './ExtendedAttributes'
 import Price from './Price'
 import { peInstance, shopInstance } from '../utils/axiosInstance'
 import BasketConditions from './BasketConditions'
+import AvailabilityRanges from '../availabilityRange/AvailabilityRanges'
 
 export default class Product {
   constructor(params) {
@@ -46,18 +47,16 @@ export default class Product {
     )
 
     // seasonality
+    this.availabilityRanges = new AvailabilityRanges().parseApiData(
+      params.productAvailabilityRange
+    )
+
+    // todo: can we remove this?
     this.originalSeasonStart = DateHelper.shiftUtcToLocal(
       new Date(params.currentAvailabilityRangeStart)
     )
-    this.currentSeasonStart = new Date()
-    this.currentSeasonStart.setHours(0, 0, 0, 0)
-    if (params.currentAvailabilityRangeStart) {
-      // is the season start later than today?
-      if (
-        this.originalSeasonStart.getTime() > this.currentSeasonStart.getTime()
-      )
-        this.currentSeasonStart = this.originalSeasonStart
-    }
+
+    // todo: remove
     this.currentSeasonEnd = params.currentAvailabilityRangeEnd
       ? DateHelper.shiftUtcToLocal(new Date(params.currentAvailabilityRangeEnd))
       : null
@@ -327,33 +326,6 @@ export default class Product {
     })
 
     return this.productDefinitions
-  }
-
-  /***
-   * load the dates on which this product is
-   * available
-   * @returns {Promise<events>}
-   */
-  async fetchValidityDates() {
-    /* global EventBus axios store */
-    if (!this.name)
-      throw new Error(
-        'product name missing in fetchValidityDates in Product.js!'
-      )
-    EventBus.$emit('spinnerShow', i18n.t('product.loadingValidityDates'))
-
-    try {
-      const response = await peInstance().get(
-        `/products/${this.id}/validity_dates`
-      )
-
-      this.validityDates = response.data.validityDates.sort()
-    } catch (e) {
-      EventBus.$emit('notify', i18n.t('product.errorUpdatingValidityDates'))
-    } finally {
-      EventBus.$emit('spinnerHide')
-    }
-    return Promise.resolve(this.validityDates)
   }
 
   /***
@@ -962,16 +934,46 @@ export default class Product {
     return requiredAttributes
   }
 
+  // todo: where is original season start used?
   getOriginalSeasonStart() {
     return this.originalSeasonStart
   }
 
   getCurrentSeasonStart() {
-    return this.currentSeasonStart
+    const availableDates = this.getAvailableDates()
+    const todayMs = new Date().setHours(0, 0, 0, 0)
+    return availableDates.find((availableDate) => {
+      const availableDateMs = availableDate.setHours(0, 0, 0, 0)
+      if (availableDateMs >= todayMs) {
+        return true
+      }
+    })
   }
 
   getCurrentSeasonEnd() {
     return this.currentSeasonEnd
+  }
+
+  /**
+   * returns an array with all available dates depending on the "availability ranges" and the "validity dates"
+   * available types: 'date', 'moment', 'dateString' (YYYY-MM-DD)
+   */
+  getAvailableDates(type = 'date') {
+    // validity dates overrides date list from availability range
+    if (this.validityDates.length) {
+      return this.validityDates.map((validityDate) => {
+        if (type === 'moment') {
+          return moment(validityDate).hour(0).minute(0).second(0).millisecond(0)
+        }
+        if (type === 'dateString') {
+          return moment(validityDate).format('YYYY-MM-DD')
+        }
+        return new Date(new Date(validityDate).setHours(0, 0, 0, 0))
+      })
+    }
+
+    // if no validity dates available get date list
+    return this.availabilityRanges.getDateList(type)
   }
 
   /**
@@ -995,7 +997,6 @@ export default class Product {
     nextDate = null,
     capacityEndDate = null,
     notify = true,
-    capacityStartDate = null,
     ignoreLatestBookingTime = false,
     ignoreCapacity = false,
     productDefinition = this.getStandardProductDefinition(),
@@ -1014,56 +1015,27 @@ export default class Product {
       }
     }
 
-    const isNextDateOutOfSeason = nextDate > this.currentSeasonEnd
+    const availableDates = this.getAvailableDates()
+    const isNextDateOutOfSeason = !availableDates.find((availableDate) => {
+      if (availableDate.getTime() === nextDate.valueOf()) return true
+    })
     if (isNextDateOutOfSeason) {
       return null
     }
 
-    if (!capacityStartDate) {
-      // initial function called
-      capacityStartDate = moment(this.getCurrentSeasonStart())
-    }
-
-    // 1.) Get next possible date
-    if (this.validityDates.length) {
-      // is current date in validity dates?
-      let inValidityDates = this.validityDates.find((validityDate) => {
-        let validityDateInstance = new Date(validityDate)
-        validityDateInstance.setHours(0, 0, 0, 0)
-        return validityDateInstance.getTime() === nextDate.valueOf()
-      })
-
-      // next date is not in validity dates. get next date from validity dates
-      if (!inValidityDates) {
-        let tmpNextDateMs = nextDate.valueOf()
-        for (let i = 0; i < this.validityDates.length; i++) {
-          if (new Date(this.validityDates[i]).getTime() > nextDate.valueOf()) {
-            nextDate = moment(this.validityDates[i])
-            // fix 25.03.2020: Also set a new capacity start date, to prevent capacity span is > 62 days
-            capacityStartDate = nextDate
-            break
-          }
-        }
-
-        // no validity date found to the end of season
-        if (nextDate.valueOf() === tmpNextDateMs) {
-          if (notify)
-            EventBus.$emit('notify', i18n.t('product.noBookingDateLeft'))
-          return null
-        }
-      }
-    }
-
     // 2.) is latest booking time constraint full filled?
+    let nextDateFromList = this.getNextDateFromList(
+      nextDate.toDate(),
+      availableDates
+    )
     if (
       !ignoreLatestBookingTime &&
       !(await productDefinition.isLatestBookingTimeOk(nextDate.toDate(), false))
     ) {
       return await this.getNextPossibleBookingDate(
-        nextDate.add(1, 'd'),
+        nextDateFromList,
         capacityEndDate,
         notify,
-        capacityStartDate,
         ignoreLatestBookingTime,
         ignoreCapacity,
         productDefinition,
@@ -1078,10 +1050,7 @@ export default class Product {
       capacityEndDate = moment(nextDate).add(30, 'd')
     }
     // lazy load capacities
-    let response = await this.fetchCapacities(
-      capacityStartDate,
-      capacityEndDate
-    )
+    let response = await this.fetchCapacities(nextDate, capacityEndDate)
     if (!response) return null
     // check capacity
     if (checkCapacityOverAllProductDefinitions) {
@@ -1099,15 +1068,31 @@ export default class Product {
 
     // capacity is not ok => re-call method
     return await this.getNextPossibleBookingDate(
-      nextDate.add(1, 'd'),
+      nextDateFromList,
       capacityEndDate,
       notify,
-      capacityStartDate,
       ignoreLatestBookingTime,
       ignoreCapacity,
       productDefinition,
       checkCapacityOverAllProductDefinitions
     )
+  }
+
+  /**
+   * helper function to get the next date of available dates
+   * @param dateInstance
+   * @param availableDates
+   * @returns {null|*}
+   */
+  getNextDateFromList(dateInstance, availableDates = this.getAvailableDates()) {
+    const indexOfCurrentDate = availableDates.findIndex((currentDate) => {
+      currentDate.getTime() === dateInstance.getTime()
+    })
+    // date instance is the last date in the date list.
+    if (indexOfCurrentDate + 1 >= availableDates.length) {
+      return null
+    }
+    return availableDates[indexOfCurrentDate + 1]
   }
 
   /**

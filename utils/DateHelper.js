@@ -26,4 +26,16 @@ export default class DateHelper {
     )
     return dateInstance
   }
+
+  static getDateList(fromDate, toDate) {
+    let dateList = []
+    for (
+      let currentDate = new Date(fromDate);
+      currentDate <= toDate;
+      currentDate.setDate(currentDate.getDate() + 1)
+    ) {
+      dateList.push(new Date(currentDate))
+    }
+    return dateList
+  }
 }
