@@ -50,6 +50,8 @@ export default class Product {
     this.availabilityRanges = new AvailabilityRanges().parseApiData(
       params.productAvailabilityRange
     )
+    // available dates (validity dates or date array from availability ranges)
+    this.availableDates = this.initAvailableDates()
 
     // todo: can we remove this?
     this.originalSeasonStart = DateHelper.shiftUtcToLocal(
@@ -86,6 +88,22 @@ export default class Product {
     this.basketConditions = params.basketConditions
       ? new BasketConditions(params.basketConditions)
       : new BasketConditions([])
+  }
+
+  /**
+   * initialize list of available dates of this product
+   * taking in account validity dates and available date ranges
+   * @returns {Date[]|(*|moment.Moment)[]|(*|string)[]|Array}
+   */
+  initAvailableDates() {
+    // validity dates overrides date list from availability range
+    if (this.validityDates.length) {
+      return this.validityDates.map((validityDate) => {
+        return new Date(new Date(validityDate).setHours(0, 0, 0, 0))
+      })
+    }
+    // if no validity dates available get date list
+    return this.availabilityRanges.getDateList()
   }
 
   /**
@@ -951,7 +969,8 @@ export default class Product {
   }
 
   getCurrentSeasonEnd() {
-    return this.currentSeasonEnd
+    const dateList = this.getAvailableDates()
+    return dateList[dateList.length - 1]
   }
 
   /**
@@ -959,21 +978,16 @@ export default class Product {
    * available types: 'date', 'moment', 'dateString' (YYYY-MM-DD)
    */
   getAvailableDates(type = 'date') {
-    // validity dates overrides date list from availability range
-    if (this.validityDates.length) {
-      return this.validityDates.map((validityDate) => {
-        if (type === 'moment') {
-          return moment(validityDate).hour(0).minute(0).second(0).millisecond(0)
-        }
-        if (type === 'dateString') {
-          return moment(validityDate).format('YYYY-MM-DD')
-        }
-        return new Date(new Date(validityDate).setHours(0, 0, 0, 0))
-      })
-    }
-
-    // if no validity dates available get date list
-    return this.availabilityRanges.getDateList(type)
+    if (type === 'date') return this.availableDates
+    return this.availableDates.map((availableDate) => {
+      if (type === 'moment') {
+        return moment(availableDate).hour(0).minute(0).second(0).millisecond(0)
+      }
+      if (type === 'dateString') {
+        return moment(availableDate).format('YYYY-MM-DD')
+      }
+      return availableDate
+    })
   }
 
   /**
