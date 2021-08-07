@@ -30,7 +30,7 @@ export default class DateHelper {
   static getDateList(fromDate, toDate) {
     let dateList = []
     for (
-      let currentDate = fromDate;
+      let currentDate = new Date(fromDate);
       currentDate <= toDate;
       currentDate.setDate(currentDate.getDate() + 1)
     ) {

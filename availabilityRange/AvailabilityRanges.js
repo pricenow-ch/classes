@@ -8,13 +8,17 @@ export default class AvailabilityRanges {
     this.availabilityRanges = availabilityRanges
   }
 
-  parseApiData(apiData) {
+  parseApiData(apiData, validityDates = []) {
     if (!apiData) return this
     this.availabilityRanges = []
     // expecting data structure from api: [{availabilityRange: {}}, {availabilityRange: {}}]
     apiData.forEach((availabilityRange) => {
       this.availabilityRanges.push(
-        new AvailabilityRange(availabilityRange.availabilityRange)
+        new AvailabilityRange(
+          availabilityRange.availabilityRange,
+          null,
+          validityDates
+        )
       )
     })
     return this
@@ -42,5 +46,19 @@ export default class AvailabilityRanges {
     if (type === 'dateString')
       return dateList.map((dateList) => moment(dateList).format('YYYY-MM-DD'))
     return dateList
+  }
+
+  getValidityDates() {
+    let validityDates = []
+    this.getAvailabilityRanges().forEach((availabilityRange) => {
+      validityDates = [
+        ...validityDates,
+        ...availabilityRange.getValidityDates(),
+      ]
+    })
+    validityDates = _.uniqBy(validityDates, (validityDate) =>
+      new Date(validityDate).getTime()
+    )
+    return validityDates
   }
 }
