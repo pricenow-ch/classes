@@ -1021,6 +1021,8 @@ export default class Product {
       nextDate.toDate(),
       availableDates
     )
+    if (!nextDateFromList) return null
+    nextDateFromList = moment(nextDateFromList)
     if (
       !ignoreLatestBookingTime &&
       !(await productDefinition.isLatestBookingTimeOk(nextDate.toDate(), false))
@@ -1078,14 +1080,7 @@ export default class Product {
    * @returns {null|*}
    */
   getNextDateFromList(dateInstance, availableDates = this.getAvailableDates()) {
-    const indexOfCurrentDate = availableDates.findIndex((currentDate) => {
-      currentDate.getTime() === dateInstance.getTime()
-    })
-    // date instance is the last date in the date list.
-    if (indexOfCurrentDate + 1 >= availableDates.length) {
-      return null
-    }
-    return availableDates[indexOfCurrentDate + 1]
+    return availableDates.find((availableDate) => availableDate.getTime() > dateInstance.getTime())
   }
 
   /**
