@@ -48,7 +48,7 @@ export default class AvailabilityRanges {
     return dateList
   }
 
-  getValidityDates() {
+  getValidityDates(type = 'date') {
     let validityDates = []
     this.getAvailabilityRanges().forEach((availabilityRange) => {
       validityDates = [
@@ -59,6 +59,11 @@ export default class AvailabilityRanges {
     validityDates = _.uniqBy(validityDates, (validityDate) =>
       new Date(validityDate).getTime()
     )
+    if (type === 'dateString') {
+      return validityDates.map((validityDate) =>
+        moment(validityDate).format('YYYY-MM-DD')
+      )
+    }
     return validityDates
   }
 }
