@@ -74,6 +74,11 @@ export default class AvailabilityRanges {
     validityDates = _.uniqBy(validityDates, (validityDate) =>
       new Date(validityDate).getTime()
     )
+    // this sort function is crucial. Other function depending on them, searching for the next higher date to book
+    // e.g. Products.getNextDateFromList()
+    validityDates.sort((a, b) => {
+      return a - b
+    })
     if (type === 'dateString') {
       return validityDates.map((validityDate) =>
         moment(validityDate).format('YYYY-MM-DD')

@@ -1060,7 +1060,6 @@ export default class Product {
       if (this.isCapacityOk(nextDate.toDate(), productDefinition))
         return nextDate // next date found
     }
-
     // capacity is not ok => re-call method
     return await this.getNextPossibleBookingDate(
       nextDateFromList,
@@ -1080,9 +1079,9 @@ export default class Product {
    * @returns {null|*}
    */
   getNextDateFromList(dateInstance, availableDates = this.getAvailableDates()) {
-    return availableDates.find(
-      (availableDate) => availableDate.getTime() > dateInstance.getTime()
-    )
+    return availableDates.find((availableDate) => {
+      return availableDate.getTime() > dateInstance.getTime()
+    })
   }
 
   /**
