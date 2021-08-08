@@ -84,9 +84,6 @@ export default class AvailabilityRange {
   }
 
   getDateList() {
-    if (this.validityDates.length) {
-      return this.validityDates
-    }
     return DateHelper.getDateList(this.from, this.to)
   }
 

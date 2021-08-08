@@ -28,10 +28,20 @@ export default class AvailabilityRanges {
     return this.availabilityRanges
   }
 
+  doesAnyAvailabilityRangeHasValidityDates() {
+    return !!this.availabilityRanges.find((availabilityRange) => {
+      return availabilityRange.getValidityDates()?.length
+    })
+  }
+
   /**
-   * Returns a list of dates inside the availability ranges
+   * Returns a list of dates inside the availability ranges (taking into account validityDates and availabilityRange)
+   * if any validity dates are available: return them. else get a merged list of dates from the availability ranges
    */
   getDateList(type = 'date') {
+    if (this.doesAnyAvailabilityRangeHasValidityDates()) {
+      return this.getValidityDates(type)
+    }
     let dateList = []
     this.availabilityRanges.forEach((availabilityRange) => {
       dateList = [...dateList, ...availabilityRange.getDateList()]
@@ -48,6 +58,11 @@ export default class AvailabilityRanges {
     return dateList
   }
 
+  /**
+   * Get only the validity dates
+   * @param type
+   * @returns {string[]|Array}
+   */
   getValidityDates(type = 'date') {
     let validityDates = []
     this.getAvailabilityRanges().forEach((availabilityRange) => {
