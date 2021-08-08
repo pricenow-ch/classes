@@ -538,17 +538,6 @@ export default class Products extends EventHelper {
   }
 
   /**
-   * get earliest season start date over all products
-   * @return {Date}
-   */
-  getMinSeasonStart() {
-    let dates = this.products.map((product) =>
-      product.getOriginalSeasonStart().getTime()
-    )
-    return new Date(Math.min(...dates))
-  }
-
-  /**
    * Get latest season end date over all products
    * @return {Date}
    */

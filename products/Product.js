@@ -51,10 +51,6 @@ export default class Product {
       params.productAvailabilityRange,
       params.validityDates?.sort()
     )
-    // todo: can we remove this?
-    this.originalSeasonStart = DateHelper.shiftUtcToLocal(
-      new Date(params.currentAvailabilityRangeStart)
-    )
     /**
      * To what destinations is this product related
      * @requires Array
@@ -927,11 +923,6 @@ export default class Product {
     }
     // returns an array with attribute keys:string
     return requiredAttributes
-  }
-
-  // todo: where is original season start used?
-  getOriginalSeasonStart() {
-    return this.originalSeasonStart
   }
 
   getAvailabilityDateRanges() {
