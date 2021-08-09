@@ -976,6 +976,8 @@ export default class Product {
       !ignoreLatestBookingTime &&
       !(await productDefinition.isLatestBookingTimeOk(nextDate.toDate(), false))
     ) {
+      // avoid endless loop
+      if (availableDates.length === 1) return null
       return await this.getNextPossibleBookingDate(
         nextDateFromList,
         capacityEndDate,
@@ -1009,6 +1011,8 @@ export default class Product {
       if (this.isCapacityOk(nextDate.toDate(), productDefinition))
         return nextDate // next date found
     }
+    // avoid endless loop
+    if (availableDates.length === 1) return null
     // capacity is not ok => re-call method
     return await this.getNextPossibleBookingDate(
       nextDateFromList,
@@ -1028,6 +1032,7 @@ export default class Product {
    * @returns {null|*}
    */
   getNextDateFromList(dateInstance, availableDates = this.getAvailableDates()) {
+    if (availableDates.length === 1) return availableDates[0]
     return availableDates.find((availableDate) => {
       return availableDate.getTime() > dateInstance.getTime()
     })
