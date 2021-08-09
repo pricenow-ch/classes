@@ -319,41 +319,6 @@ export default class Product {
     return this.productDefinitions
   }
 
-  /***
-   * update the valid dates for a product
-   * available
-   * Note: dates have to be in the following format: "2020-01-01"
-   * @param {String[]} validDatesArray
-   * @returns {Promise<events>}
-   */
-  async updateValidityDates(validDatesArray = []) {
-    if (!this.name)
-      throw new Error(
-        'product name missing in updateValidityDates in Product.js!'
-      )
-    /* global EventBus axios store */
-    EventBus.$emit('spinnerShow', i18n.t('product.updatingValidityDates'))
-    try {
-      const response = await peInstance(false).put(
-        `/admin/${this.id}/validity_dates`,
-        {
-          validityDates: validDatesArray,
-        }
-      )
-      this.validityDates = response.data.validityDates.sort()
-      EventBus.$emit(
-        'notify',
-        i18n.t('product.updatedValidityDates'),
-        'success'
-      )
-    } catch (e) {
-      EventBus.$emit('notify', i18n.t('product.errorUpdatingValidityDates'))
-    } finally {
-      EventBus.$emit('spinnerHide')
-    }
-    return this.validityDates
-  }
-
   async inverseIsActive() {
     /* global EventBus axios store */
     EventBus.$emit('spinnerShow', i18n.t('product.updatingValidityDates'))
@@ -929,6 +894,10 @@ export default class Product {
     return this.availabilityRanges
   }
 
+  getValidityDates() {
+    return this.validityDates
+  }
+
   /**
    * returns an array with all available dates depending on the "availability ranges" and the "validity dates"
    * available types: 'date', 'moment', 'dateString' (YYYY-MM-DD)
@@ -1277,10 +1246,6 @@ export default class Product {
     return i18n.t('productCategories.' + this.productCategory)
   }
 
-  getValidityDates() {
-    return this.validityDates
-  }
-
   getCapacityAttributeKey() {
     return this.capacityAttributeKey
   }
@@ -1343,5 +1308,11 @@ export default class Product {
 
   set priceModel(value) {
     this._priceModel = value
+  }
+
+  // set a new array with validity dates from api
+  setValidityDates(validityDates) {
+    this.validityDates = validityDates?.sort()
+    this.availabilityRanges.setValidityDates(validityDates)
   }
 }

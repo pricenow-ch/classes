@@ -14,7 +14,8 @@ export default class AvailabilityRange {
       singleSeason.extAxessTarifBlattGueltCreated
     this.productSeasons = []
     // Type: Date
-    this.validityDates = this.initValidityDates(validityDates)
+    this.validityDates = []
+    this.initValidityDates(validityDates)
     // parse product season links
     // todo: rename and avoid circular structure
     if (singleSeason.ProductAvailabilityRange)
@@ -27,7 +28,7 @@ export default class AvailabilityRange {
     validityDates = validityDates.map(
       (validityDate) => new Date(new Date(validityDate).setHours(0, 0, 0, 0))
     )
-    return validityDates.filter((validityDate) => {
+    this.validityDates = validityDates.filter((validityDate) => {
       return (
         validityDate.getTime() >= this.from.getTime() &&
         validityDate.getTime() <= this.to.getTime()

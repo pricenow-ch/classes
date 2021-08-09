@@ -45,9 +45,7 @@ export default class AdminBasket extends Basket {
           kind: discountType,
           amount: amount,
           description: discountDescription,
-          destinationName: store.getters
-            .getCurrentDestinationInstance()
-            .getSlug(),
+          poolName: store.getters.getCurrentDestinationInstance().getSlug(),
         }
       )
 

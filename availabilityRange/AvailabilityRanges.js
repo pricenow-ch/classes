@@ -24,6 +24,13 @@ export default class AvailabilityRanges {
     return this
   }
 
+  // update validity dates with api data
+  setValidityDates(validityDates) {
+    this.availabilityRanges.forEach((availabilityRange) => {
+      availabilityRange.initValidityDates(validityDates)
+    })
+  }
+
   getAvailabilityRanges() {
     return this.availabilityRanges
   }
