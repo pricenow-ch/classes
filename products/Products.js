@@ -538,17 +538,6 @@ export default class Products extends EventHelper {
   }
 
   /**
-   * get earliest season start date over all products
-   * @return {Date}
-   */
-  getMinSeasonStart() {
-    let dates = this.products.map((product) =>
-      product.getOriginalSeasonStart().getTime()
-    )
-    return new Date(Math.min(...dates))
-  }
-
-  /**
    * Get latest season end date over all products
    * @return {Date}
    */
@@ -651,16 +640,16 @@ export default class Products extends EventHelper {
     return unique
   }
 
-  // merge validity dates of all products
-  getValidityDates() {
-    let allValidityDates = []
+  // merge available dates of all products
+  getAvailableDates(type = 'date') {
+    let allAvailableDates = []
     for (let i = 0; i < this.products.length; i++) {
-      allValidityDates = [
-        ...allValidityDates,
-        ...this.products[i].getValidityDates(),
+      allAvailableDates = [
+        ...allAvailableDates,
+        ...this.products[i].getAvailableDates(type),
       ]
     }
-    return _.uniq(allValidityDates)
+    return _.uniq(allAvailableDates)
   }
 
   /**
