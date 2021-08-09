@@ -640,16 +640,16 @@ export default class Products extends EventHelper {
     return unique
   }
 
-  // merge validity dates of all products
-  getValidityDates() {
-    let allValidityDates = []
+  // merge available dates of all products
+  getAvailableDates(type = 'date') {
+    let allAvailableDates = []
     for (let i = 0; i < this.products.length; i++) {
-      allValidityDates = [
-        ...allValidityDates,
-        ...this.products[i].getValidityDates(),
+      allAvailableDates = [
+        ...allAvailableDates,
+        ...this.products[i].getAvailableDates(type),
       ]
     }
-    return _.uniq(allValidityDates)
+    return _.uniq(allAvailableDates)
   }
 
   /**

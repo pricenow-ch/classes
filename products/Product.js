@@ -46,7 +46,6 @@ export default class Product {
     )
 
     // seasonality + validity dates
-    this.validityDates = params.validityDates?.sort()
     this.availabilityRanges = new AvailabilityRanges().parseApiData(
       params.productAvailabilityRange,
       params.validityDates?.sort()
@@ -894,10 +893,6 @@ export default class Product {
     return this.availabilityRanges
   }
 
-  getValidityDates() {
-    return this.validityDates
-  }
-
   /**
    * returns an array with all available dates depending on the "availability ranges" and the "validity dates"
    * available types: 'date', 'moment', 'dateString' (YYYY-MM-DD)
@@ -1312,7 +1307,6 @@ export default class Product {
 
   // set a new array with validity dates from api
   setValidityDates(validityDates) {
-    this.validityDates = validityDates?.sort()
     this.availabilityRanges.setValidityDates(validityDates)
   }
 }
