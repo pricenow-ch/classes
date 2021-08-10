@@ -83,11 +83,10 @@ export default class ExtendedAttribute {
           fileResources: this.prepareApiFileRessources(),
         }
       )
-
       // fixes the update or create error (22.05.2020)
       // update the id
       this.id = data.id
-      return Promise.resolve(response)
+      return data.response
     } catch (e) {
       EventBus.$emit('notify', i18n.t('extendedAttribute.saveFailed'))
     } finally {
