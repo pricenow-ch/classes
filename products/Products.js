@@ -43,6 +43,7 @@ export default class Products extends EventHelper {
    * load all products in one request to prevent
    * blocking the concurrent request limit in the browser
    * @param fetchInactive
+   * @param destinations
    * @returns {Promise<Products>}
    */
   async loadProductsForAllDestinations(destinations, fetchInactive = false) {
@@ -54,9 +55,9 @@ export default class Products extends EventHelper {
         return destination.slug
       })
       if (destinationSlugs.length > 0) {
-        const response = await peInstance().get(`/products/destinations`, {
+        const response = await peInstance().get(`/products/pools`, {
           params: {
-            destinationIdentifier: destinationSlugs.join(','),
+            poolIdentifier: destinationSlugs.join(','),
             inactive: fetchInactive && '1',
           },
         })
@@ -74,11 +75,10 @@ export default class Products extends EventHelper {
               return prod.id == apiProduct.id
             })
             const destinationInstance = destinations.find(
-              (destination) =>
-                destination.slug === apiProduct.destination.identifier
+              (destination) => destination.slug === apiProduct.pool.identifier
             )
             // set different pe id
-            destinationInstance.setPeId(apiProduct.destination.id)
+            destinationInstance.setPeId(apiProduct.pool.id)
             if (index > -1) {
               this.products[index].destinations.push(destinationInstance)
             } else {
@@ -173,9 +173,7 @@ export default class Products extends EventHelper {
         params: {
           from: DateHelper.shiftLocalToSimpleDateString(from),
           to: DateHelper.shiftLocalToSimpleDateString(from),
-          destinationNames: store.getters
-            .getCurrentDestinationInstance()
-            .getSlug(),
+          poolNames: store.getters.getCurrentDestinationInstance().getSlug(),
         },
       })
 
@@ -540,17 +538,6 @@ export default class Products extends EventHelper {
   }
 
   /**
-   * get earliest season start date over all products
-   * @return {Date}
-   */
-  getMinSeasonStart() {
-    let dates = this.products.map((product) =>
-      product.getOriginalSeasonStart().getTime()
-    )
-    return new Date(Math.min(...dates))
-  }
-
-  /**
    * Get latest season end date over all products
    * @return {Date}
    */
@@ -653,16 +640,16 @@ export default class Products extends EventHelper {
     return unique
   }
 
-  // merge validity dates of all products
-  getValidityDates() {
-    let allValidityDates = []
+  // merge available dates of all products
+  getAvailableDates(type = 'date') {
+    let allAvailableDates = []
     for (let i = 0; i < this.products.length; i++) {
-      allValidityDates = [
-        ...allValidityDates,
-        ...this.products[i].getValidityDates(),
+      allAvailableDates = [
+        ...allAvailableDates,
+        ...this.products[i].getAvailableDates(type),
       ]
     }
-    return _.uniq(allValidityDates)
+    return _.uniq(allAvailableDates)
   }
 
   /**
