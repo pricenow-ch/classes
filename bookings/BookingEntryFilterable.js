@@ -93,9 +93,9 @@ export default class BookingEntryFilterable extends BookingEntry {
     return this.filteredResults
   }
 
-  getTotalPeopleCount() {
+  getTotalPeopleCount(onlyPersonsComing = false) {
     return _.sumBy(
-      this.filteredResults,
+      this.getBookingEntries(onlyPersonsComing),
       (bookingEntry) => bookingEntry.peopleCount
     )
   }
