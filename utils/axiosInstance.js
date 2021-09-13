@@ -1,6 +1,5 @@
 import axios from 'axios'
 import cookies from 'js-cookie'
-import Authentication from '../../classes-shared/authentication/Authentication'
 
 const peInstance = (slug = true) => {
   slug = slug ? store.getters.getCurrentDestinationInstance().getSlug() : ''
@@ -11,7 +10,7 @@ const peInstance = (slug = true) => {
     function (config) {
       const token = cookies.get('authorization')
       if (token) {
-        config.headers.Authorization = token
+        config.headers.Authorization = cookies.get('authorization')
       }
       return config
     },
@@ -48,7 +47,7 @@ const shopInstance = (hasSlug = true) => {
     function (config) {
       const token = cookies.get('authorization')
       if (token) {
-        config.headers.Authorization = token
+        config.headers.Authorization = cookies.get('authorization')
       }
       return config
     },
