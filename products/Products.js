@@ -710,7 +710,7 @@ export default class Products extends EventHelper {
    */
   getUniqueProductTypes(onlyActive) {
     const products = this.products.filter(
-      (product) => onlyActive || product.isActive()
+      (product) => !onlyActive || product.isActive()
     )
     const uniqueProducts = _.uniqBy(products, (product) => {
       return product.productCategory
