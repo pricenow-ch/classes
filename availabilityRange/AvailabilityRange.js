@@ -56,9 +56,13 @@ export default class AvailabilityRange {
   }
 
   getDescription() {
+    return `${this.getName()} | ${this.getRangeAsString()}`
+  }
+
+  getRangeAsString() {
     const from = moment(this.from).format('DD.MM.YYYY')
     const to = moment(this.to).format('DD.MM.YYYY')
-    return `${this.getName()} | ${from} - ${to}`
+    return `${from} - ${to}`
   }
 
   getFrom() {
