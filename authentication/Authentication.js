@@ -67,12 +67,4 @@ export default class Authentication {
       }`
     }
   }
-
-  /**
-   * Returns the full subdomain the application is running on.
-   * @returns {string|*}
-   */
-  static getSubDomain() {
-    return window.location.host
-  }
 }
