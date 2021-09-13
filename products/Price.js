@@ -35,6 +35,6 @@ export default class Price {
   }
 
   isCustomPrice() {
-    return !!this.customPrice
+    return !!this.customPrice || this.customPrice === 0
   }
 }
