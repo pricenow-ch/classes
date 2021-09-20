@@ -35,6 +35,7 @@ export default class Attributes {
     this.voucherType = params.voucherType || null
     this.sledge = params.sledge || null
     this.basketCondition = params.basketCondition || null
+    this.menuChoice = params.menuChoice || null
     this.sector = params.sector || null
     this.restaurant = params.restaurant || null
     this.breakfastChoice = params.breakfastChoice || null
