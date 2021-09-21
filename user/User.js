@@ -25,11 +25,6 @@ export default class User {
     this.city = params.city ? params.city : null
     this.country = params.country ? params.country : null
     this.phone = params.phone ? params.phone : null
-    this.skiDay = params.skiDay ? params.skiDay : null
-    this.skiDestination = params.skiDestination ? params.skiDestination : null
-    this.skiMask = params.skiMask ? params.skiMask : null
-    this.education = params.education ? params.education : null
-    this.profession = params.profession ? params.profession : null
     this.mail = params.mail ? params.mail : null
     this.birthdate = params.birthdate ? params.birthdate : null
     this.language = params.language ? params.language : null
@@ -114,26 +109,6 @@ export default class User {
 
   getPhone() {
     return this.phone
-  }
-
-  getSkiDay() {
-    return this.skiDay
-  }
-
-  getSkiDestination() {
-    return this.skiDestination
-  }
-
-  getSkiMask() {
-    return this.skiMask
-  }
-
-  getEducation() {
-    return this.education
-  }
-
-  getProfession() {
-    return this.profession
   }
 
   getCards() {
