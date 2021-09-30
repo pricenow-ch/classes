@@ -106,13 +106,28 @@ export default class BasketEntry {
       definitions.attributeValues.maxYear
     )
 
-    // minAge-maxAge mode
-    if (
+    // minYear-maxYear mode
+    if (minYear && maxYear) {
+      let bdYear = new Date(bd).getFullYear()
+
+      if (bdYear >= minYear && bdYear <= maxYear) return true
+      // age check is ok
+      else if (bdYear < minYear) {
+        // too old
+        EventBus.$emit('notify', i18n.t('personalData.tooOld'))
+        return false
+      } else if (bdYear > maxYear) {
+        // too young
+        EventBus.$emit('notify', i18n.t('personalData.tooYoung'))
+        return false
+      } else return true
+    } else if (
       minAge !== null &&
       minAge !== undefined &&
       maxAge !== null &&
       maxAge !== undefined
     ) {
+      // minAge-maxAge mode
       // calc users age in years
       let usersAge = moment(this.getValidFrom()).diff(bd, 'years')
 
@@ -127,21 +142,6 @@ export default class BasketEntry {
         EventBus.$emit('notify', i18n.t('personalData.tooOld'))
         return false
       } else return false
-    } else if (minYear && maxYear) {
-      // minYear-maxYear mode
-      let bdYear = new Date(bd).getFullYear()
-
-      if (bdYear >= minYear && bdYear <= maxYear) return true
-      // age check is ok
-      else if (bdYear < minYear) {
-        // too old
-        EventBus.$emit('notify', i18n.t('personalData.tooOld'))
-        return false
-      } else if (bdYear > maxYear) {
-        // too young
-        EventBus.$emit('notify', i18n.t('personalData.tooYoung'))
-        return false
-      } else return true
     } else return true // no age check required
   }
 
