@@ -52,7 +52,9 @@ export default class Seasons {
       return null
     }
 
-    return this.seasons.reduce((newest, season) => newest = newest.to > season.to ? newest : season)
+    return this.seasons.reduce(
+      (newest, season) => (newest = newest.to > season.to ? newest : season)
+    )
   }
 
   getSeasonById(seasonId) {
