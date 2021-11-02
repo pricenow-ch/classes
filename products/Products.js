@@ -46,7 +46,11 @@ export default class Products extends EventHelper {
    * @param destinations
    * @returns {Promise<Products>}
    */
-  async loadProductsForAllDestinations(destinations, fetchInactive = false) {
+  async loadProductsForAllDestinations(
+    destinations,
+    fetchInactive = false,
+    extendedAttributes = false
+  ) {
     /* global EventBus axios */
     EventBus.$emit('spinnerShow')
     try {
@@ -54,8 +58,14 @@ export default class Products extends EventHelper {
       const destinationSlugs = destinations.map((destination) => {
         return destination.slug
       })
+      let url = '/products/pools'
+      let slug = true
+      if (extendedAttributes) {
+        url = '/admin/products/pools/extended'
+        slug = false
+      }
       if (destinationSlugs.length > 0) {
-        const response = await peInstance().get(`/products/pools`, {
+        const response = await peInstance(slug).get(url, {
           params: {
             poolIdentifier: destinationSlugs.join(','),
             inactive: fetchInactive && '1',
