@@ -133,6 +133,19 @@ export default class AppDestination extends Destination {
           console.error(e)
         }
         break
+      // Männlichen
+      case definitions.destinations.maennlichen:
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/maennlichen.jpg'),
+            require('@/assets/destinations/backgroundImage/maennlichen.jpg'),
+            '#cc0000',
+            '#cc0000'
+          )
+        } catch (e) {
+          console.error(e)
+        }
+        break
       // DEFAULT
       default:
         try {
