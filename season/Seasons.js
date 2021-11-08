@@ -48,7 +48,13 @@ export default class Seasons {
   }
 
   getFirstSeason() {
-    return this.seasons.length > 0 ? this.seasons[0] : null
+    if (this.seasons.length <= 0) {
+      return null
+    }
+
+    return this.seasons.reduce(
+      (newest, season) => (newest = newest.to > season.to ? newest : season)
+    )
   }
 
   getSeasonById(seasonId) {

@@ -100,8 +100,8 @@ export default class AppDestination extends Destination {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/chaeserrugg.jpg'),
             require('@/assets/destinations/backgroundImage/chaeserrugg.jpg'),
-            '#A4AA78',
-            '#A4AA78'
+            '#909090',
+            '#909090'
           )
         } catch (e) {
           console.error(e)
@@ -128,6 +128,19 @@ export default class AppDestination extends Destination {
             require('@/assets/destinations/backgroundImage/nendaz.jpg'),
             '#1b3e5e',
             '#f7cdd0'
+          )
+        } catch (e) {
+          console.error(e)
+        }
+        break
+      // Männlichen
+      case definitions.destinations.maennlichen:
+        try {
+          this.setCustomDesign(
+            require('@/assets/destinations/headerImage/maennlichen.jpg'),
+            require('@/assets/destinations/backgroundImage/maennlichen.jpg'),
+            '#cc0000',
+            '#cc0000'
           )
         } catch (e) {
           console.error(e)

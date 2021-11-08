@@ -651,7 +651,6 @@ export default class Product {
    * @param attributeKey
    * @param productDefinition
    * @param excludeAttributeKeys
-   * @returns {Promise<[]>}
    */
   filterProductDefinitionsByProductDefinitionAndAttributeKey(
     attributeKey,
@@ -660,20 +659,20 @@ export default class Product {
   ) {
     let filteredProductDefinitions = []
 
-    let attributesInstance = productDefinition.getAttributes()
-    let requiredAttributeKeys = this.getRequiredAttributes(attributesInstance, [
-      attributeKey,
-      ...excludeAttributeKeys,
-    ])
+    const attributesInstance = productDefinition.getAttributes()
+    const requiredAttributeKeys = this.getRequiredAttributes(
+      attributesInstance,
+      [attributeKey, ...excludeAttributeKeys]
+    )
 
     // iterate product definitions
     for (let a = 0; a < this.productDefinitions.length; a++) {
-      let currentProductDefinition = this.productDefinitions[a]
+      const currentProductDefinition = this.productDefinitions[a]
 
       let containsAllRequiredKeys = true
       // iterate all required attribute keys
       for (let i = 0; i < requiredAttributeKeys.length; i++) {
-        let attributeKey = requiredAttributeKeys[i]
+        const attributeKey = requiredAttributeKeys[i]
 
         // check the attribute values equals the standard attributes instance
         if (

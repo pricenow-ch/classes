@@ -103,7 +103,10 @@ export default class UserData {
               swisspassAttribute.value ===
                 definitions.attributeValueContent.noSwisspass ||
               swisspassAttribute.value ===
-                definitions.attributeValueContent.withHalfFareOrGANoValidation
+                definitions.attributeValueContent
+                  .withHalfFareOrGANoValidation ||
+              swisspassAttribute.value ===
+                definitions.attributeValueContent.swissTravelPassNoValidation
             )
           ) {
             this.bookingState = definitions.basketBookingState.needsMedium
