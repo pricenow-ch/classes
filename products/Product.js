@@ -691,6 +691,10 @@ export default class Product {
       if (containsAllRequiredKeys)
         filteredProductDefinitions.push(currentProductDefinition)
     }
+    // remove maui (mitarbeiter-ui) only product definitions
+    filteredProductDefinitions = filteredProductDefinitions.filter(
+      (productDefinition) => !productDefinition.isMauiOnly()
+    )
 
     // sort filtered product definitions
     return filteredProductDefinitions.sort(
