@@ -1,3 +1,4 @@
+import { isDefined } from '../utils/is-defined'
 import { shopInstance } from '../utils/axiosInstance'
 
 export default class Destination {
@@ -11,6 +12,9 @@ export default class Destination {
     this.name = params.name
     this.taxNr = params.taxNr || null
     this.currency = params.currency
+    this.street = params.street
+    this.zip = params.zip
+    this.city = params.city
 
     // sub destination id of
     this.subDestinationOf = params.hasOwnProperty('subDestinationOf')
@@ -115,6 +119,10 @@ export default class Destination {
 
   getCurrency() {
     return this.currency
+  }
+
+  getAddress() {
+    return [this.street, this.zip, this.city].filter(isDefined).join(', ')
   }
 
   // setters
