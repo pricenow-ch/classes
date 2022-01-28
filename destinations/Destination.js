@@ -19,6 +19,8 @@ export default class Destination {
     this.logo = null
     // only set logo, if any slug is available
     if (this.slug) this.setLogo()
+
+    this.barcodeMode = params.barcode_mode || null
   }
 
   // set logo
@@ -144,5 +146,9 @@ export default class Destination {
 
     EventBus.$emit('notify', i18n.t('changeCurrency.changeSuccess'), 'success')
     return Promise.resolve(response)
+  }
+
+  getBarcodeMode() {
+    return this.barcodeMode
   }
 }
