@@ -178,6 +178,8 @@ export default class AppDestination extends Destination {
       if (data.hasOwnProperty('website')) this.website = data.website
       if (data.hasOwnProperty('tel')) this.tel = data.tel
       if (data.hasOwnProperty('currency')) this.currency = data.currency
+      if (data.hasOwnProperty('saferpay_paymentMethodes'))
+        this.saferpay_paymentMethods = data.saferpay_paymentMethodes
     } catch (e) {
       EventBus.$emit('notify', e.response)
     }
