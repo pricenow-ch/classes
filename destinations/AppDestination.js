@@ -210,6 +210,10 @@ export default class AppDestination extends Destination {
     return this.backgroundImage
   }
 
+  getPaymentMethods() {
+    return this.saferpay_paymentMethods || []
+  }
+
   getName() {
     return this.name
   }
