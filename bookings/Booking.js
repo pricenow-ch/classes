@@ -97,7 +97,7 @@ export default class Booking {
       else if (response.status === 201) return response.data
       else return false
     } catch (e) {
-      console.log(e)
+      console.error(e)
       return false
     } finally {
       EventBus.$emit('spinnerHide')
