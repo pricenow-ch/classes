@@ -436,8 +436,6 @@ export default class ProductDefinition {
    * @returns {boolean|boolean}
    */
   isIndependent() {
-    return !(
-      !this.nextHigherProductDefinitionId && !this.nextLowerProductDefinitionId
-    )
+    return Math.abs(this.minPrice - this.maxPrice) > 0
   }
 }
