@@ -61,8 +61,8 @@ export default class AppDestination extends Destination {
           this.setCustomDesign(
             require('@/assets/destinations/headerImage/bellwald.jpg'),
             require('@/assets/destinations/backgroundImage/bellwald.jpg'),
-            '#d50612',
-            '#f7cdd0'
+            '#0f4a63',
+            '#9bc8e7'
           )
         } catch (e) {
           console.error(e)
