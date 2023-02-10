@@ -52,9 +52,16 @@ export default class Seasons {
       return null
     }
 
-    return this.seasons.reduce(
+    // get currently active season or newest season
+    const activeSeason = this.seasons.find(
+      (season) => season.to >= new Date() && season.from <= new Date()
+    )
+
+    const newestSeason = this.seasons.reduce(
       (newest, season) => (newest = newest.to > season.to ? newest : season)
     )
+
+    return activeSeason || newestSeason
   }
 
   getSeasonById(seasonId) {
