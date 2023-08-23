@@ -36,7 +36,7 @@ export default class Product {
     this._oneTicketOnePerson = params.oneTicketOnePerson || null
 
     // to categorize products (frontend function only)
-    this._productCategory = params.productCategory || null
+    this._productCategory = params.productCategory.name || null
 
     // Type: ExtendedAttributes.js
     this._extendedAttributes = new ExtendedAttributes(
@@ -679,9 +679,9 @@ export default class Product {
           !currentProductDefinition.getAttributes()[attributeKey] ||
           !attributesInstance[attributeKey] ||
           currentProductDefinition.getAttributes()[attributeKey][
-            definitions.attributeValues.value
+          definitions.attributeValues.value
           ] !==
-            attributesInstance[attributeKey][definitions.attributeValues.value]
+          attributesInstance[attributeKey][definitions.attributeValues.value]
         ) {
           containsAllRequiredKeys = false
           break // performance!
@@ -701,10 +701,10 @@ export default class Product {
       (productDefinitionA, productDefinitionB) => {
         return (
           productDefinitionA.getAttributes()[attributeKey][
-            definitions.attributeValues.sortOrder
+          definitions.attributeValues.sortOrder
           ] -
           productDefinitionB.getAttributes()[attributeKey][
-            definitions.attributeValues.sortOrder
+          definitions.attributeValues.sortOrder
           ]
         )
       }
@@ -806,9 +806,9 @@ export default class Product {
           if (
             attribute !== null &&
             attribute[definitions.attributeValues.value] !==
-              originalAttributesInstance[currentRequiredAttributeKey][
-                definitions.attributeValues.value
-              ]
+            originalAttributesInstance[currentRequiredAttributeKey][
+            definitions.attributeValues.value
+            ]
           ) {
             newProductDefinition = null
             break
